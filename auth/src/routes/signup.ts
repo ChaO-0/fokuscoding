@@ -12,6 +12,9 @@ router.post(
   '/api/users/signup',
   [
     body('email').isEmail().withMessage('Email must be valid'),
+    body('username')
+      .isLength({ min: 4, max: 20 })
+      .withMessage('Username must be 4 or 20 characters'),
     body('password')
       .trim()
       .isLength({ min: 4, max: 20 })
@@ -19,15 +22,20 @@ router.post(
   ],
   validateRequest,
   async (req: Request, res: Response) => {
-    const { email, password } = req.body;
+    const { email, password, username } = req.body;
 
-    const existingUser = await User.findOne({ email });
+    const existingEmail = await User.findOne({ email });
+    const existingUsername = await User.findOne({ username });
 
-    if (existingUser) {
+    if (existingEmail) {
       throw new BadRequestError('Email in use');
     }
 
-    const user = User.build({ email, password });
+    if (existingUsername) {
+      throw new BadRequestError('Username in use');
+    }
+
+    const user = User.build({ email, password, username });
     await user.save();
 
     // Generate JWT

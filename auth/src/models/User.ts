@@ -5,6 +5,7 @@ import { hash } from 'bcrypt';
 interface UserAttrs {
   email: string;
   password: string;
+  username: string;
 }
 
 // An interface that describe the properties that a User Model has
@@ -16,11 +17,16 @@ interface UserModel extends mongoose.Model<UserDoc> {
 interface UserDoc extends mongoose.Document {
   email: string;
   password: string;
+  username: string;
 }
 
 const userSchema = new mongoose.Schema(
   {
     email: {
+      type: String,
+      required: true,
+    },
+    username: {
       type: String,
       required: true,
     },
