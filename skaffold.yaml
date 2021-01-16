@@ -24,3 +24,11 @@ build:
         manual:
           - src: '**/*.js'
             dest: .
+    - image: chao0/heapoverflow-posts
+      context: posts
+      docker:
+        dockerfile: Dockerfile
+      sync:
+        manual:
+          - src: 'src/**/*.ts'
+            dest: .
