@@ -4,8 +4,8 @@ import jwt from 'jsonwebtoken';
 
 import { compare } from 'bcrypt';
 import { User } from '../models/User';
-import { validateRequest } from '../middlewares/validate-request';
-import { BadRequestError } from '../errors/bad-request-error';
+import { validateRequest } from '@heapoverflow/common';
+import { BadRequestError } from '@heapoverflow/common';
 
 const router = express.Router();
 
