@@ -8,7 +8,7 @@ build:
   local:
     push: false
   artifacts:
-    - image: chao0/heapoverflow-auth
+    - image: you/heapoverflow-auth
       context: auth
       docker:
         dockerfile: Dockerfile
@@ -16,7 +16,7 @@ build:
         manual:
           - src: 'src/**/*.ts'
             dest: .
-    - image: chao0/heapoverflow-client
+    - image: you/heapoverflow-client
       context: client
       docker:
         dockerfile: Dockerfile
@@ -24,7 +24,7 @@ build:
         manual:
           - src: '**/*.js'
             dest: .
-    - image: chao0/heapoverflow-posts
+    - image: you/heapoverflow-posts
       context: posts
       docker:
         dockerfile: Dockerfile
