@@ -42,4 +42,4 @@ router.put(
 	}
 );
 
-export { router as deleteCommentRouter };
+export { router as updateCommentRouter };
