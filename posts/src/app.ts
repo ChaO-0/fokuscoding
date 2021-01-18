@@ -12,6 +12,7 @@ import { showPostRouter } from './routes/post/show';
 import { updatePostRouter } from './routes/post/update';
 import { newCommentRouter } from './routes/comment/new';
 import { deleteCommentRouter } from './routes/comment/delete';
+import { upvotePostRouter } from './routes/vote/up';
 
 const app = express();
 app.set('trust proxy', true);
@@ -31,6 +32,7 @@ app.use(showPostRouter);
 app.use(updatePostRouter);
 app.use(newCommentRouter);
 app.use(deleteCommentRouter);
+app.use(upvotePostRouter);
 
 app.all('*', async (req, res) => {
 	throw new NotFoundError();
