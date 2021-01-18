@@ -1,22 +1,19 @@
 import {
-  NotAuthorizedError,
   NotFoundError,
   requireAuth,
   validateRequest,
 } from '@heapoverflow/common';
 import express, { Request, Response } from 'express';
 import { body } from 'express-validator';
-import { Post } from '../models/Post';
+import { Post } from '../../models/Post';
+import { Comment } from '../../models/Comment';
 
 const router = express.Router();
 
-router.put(
+router.post(
   '/api/posts/:post_id',
   requireAuth,
-  [
-    body('title').not().isEmpty().withMessage('Title is required'),
-    body('body').not().isEmpty().withMessage('Body is required'),
-  ],
+  [body('text').not().isEmpty().withMessage('Text is required')],
   validateRequest,
   async (req: Request, res: Response) => {
     const post = await Post.findById(req.params.post_id);
@@ -25,19 +22,17 @@ router.put(
       throw new NotFoundError();
     }
 
-    if (req.currentUser!.username !== post.username) {
-      throw new NotAuthorizedError();
-    }
-
-    post.set({
-      title: req.body.title,
-      body: req.body.body,
+    const comment = Comment.build({
+      text: req.body.text,
+      username: req.currentUser!.username,
     });
+    await comment.save();
 
+    post.comments.push(comment.id);
     await post.save();
 
-    res.send(post);
+    res.status(201).send(post);
   }
 );
 
-export { router as updatePostRouter };
+export { router as newCommentRouter };

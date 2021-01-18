@@ -4,7 +4,7 @@ import {
   requireAuth,
 } from '@heapoverflow/common';
 import express, { Request, Response } from 'express';
-import { Post } from '../models/Post';
+import { Post } from '../../models/Post';
 
 const router = express.Router();
 
