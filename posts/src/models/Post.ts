@@ -1,5 +1,6 @@
 import mongoose from 'mongoose';
 import { CommentDoc } from './Comment';
+import { VoteDoc } from './Vote';
 
 // An interface that describes the properties that are required to create a new Post
 interface PostAttrs {
@@ -18,7 +19,8 @@ interface PostDoc extends mongoose.Document {
 	title: string;
 	body: string;
 	username: string;
-	comment?: CommentDoc;
+	comments?: CommentDoc;
+	votes?: VoteDoc;
 }
 
 const PostSchema = new mongoose.Schema(
