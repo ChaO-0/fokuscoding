@@ -19,12 +19,13 @@ router.post(
 			throw new NotFoundError();
 		}
 
+		// todo soon to be refactored
 		const voters = [...post.votes];
 		const alreadyVoted = voters.find((voter) => {
 			return voter.username === req.currentUser!.username;
 		});
 
-		if (alreadyVoted) {
+		if (alreadyVoted?.type === 'up') {
 			await Vote.findByIdAndDelete(alreadyVoted.id);
 			await Post.updateOne(
 				{ _id: req.params.post_id },
@@ -32,7 +33,17 @@ router.post(
 			);
 
 			return res.status(204).send(post);
+		} else if (alreadyVoted?.type === 'down') {
+			const vote = await Vote.findById(alreadyVoted.id);
+			vote.set({
+				type: 'up',
+			});
+
+			await vote.save();
+
+			return res.status(204).send(post);
 		}
+		// todo end todo
 
 		const vote = Vote.build({
 			type: 'up',

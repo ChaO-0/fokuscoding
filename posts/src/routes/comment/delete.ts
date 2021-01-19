@@ -28,13 +28,17 @@ router.delete(
 			throw new NotAuthorizedError();
 		}
 
-		await Comment.findByIdAndDelete(req.params.comment_id);
-		await Post.updateOne(
-			{ _id: req.params.post_id },
-			{ $pull: { comments: req.params.comment_id } }
-		);
+		if (!post.comments) {
+			throw new NotFoundError();
+		}
 
-		return res.status(204);
+		comment.pull(req.params.comment_id);
+		await comment.save();
+
+		post.comments.pull(req.params.comment_id);
+		await post.save();
+
+		return res.status(204).send(comment);
 	}
 );
 
