@@ -1,6 +1,6 @@
 import mongoose from 'mongoose';
-import { VoteDoc } from './Vote';
 import autopopulate from 'mongoose-autopopulate';
+import { VoteDoc } from './Vote';
 
 // An interface that describes the properties that are required to create a new Comment
 interface CommentAttrs {
@@ -13,7 +13,7 @@ interface CommentModel extends mongoose.Model<CommentDoc> {
 	build(attrs: CommentAttrs): CommentDoc;
 }
 
-// An interface that describe the properties that a Post Document has
+// An interface that describe the properties that a Comment Document has
 export interface CommentDoc extends mongoose.Document {
 	text: string;
 	username: string;
