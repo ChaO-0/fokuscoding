@@ -1,8 +1,8 @@
 import {
-  NotAuthorizedError,
-  NotFoundError,
-  requireAuth,
-  validateRequest,
+	NotAuthorizedError,
+	NotFoundError,
+	requireAuth,
+	validateRequest,
 } from '@heapoverflow/common';
 import express, { Request, Response } from 'express';
 import { body } from 'express-validator';
@@ -11,33 +11,38 @@ import { Post } from '../../models/Post';
 const router = express.Router();
 
 router.put(
-  '/api/posts/:post_id',
-  requireAuth,
-  [
-    body('title').not().isEmpty().withMessage('Title is required'),
-    body('body').not().isEmpty().withMessage('Body is required'),
-  ],
-  validateRequest,
-  async (req: Request, res: Response) => {
-    const post = await Post.findById(req.params.post_id);
+	'/api/posts/:post_id',
+	requireAuth,
+	[
+		body('title').not().isEmpty().withMessage('Title is required'),
+		body('body').not().isEmpty().withMessage('Body is required'),
+	],
+	validateRequest,
+	async (req: Request, res: Response) => {
+		// find post by id
+		const post = await Post.findById(req.params.post_id);
 
-    if (!post) {
-      throw new NotFoundError();
-    }
+		// check if the post is exist
+		if (!post) {
+			throw new NotFoundError();
+		}
 
-    if (req.currentUser!.username !== post.username) {
-      throw new NotAuthorizedError();
-    }
+		// check if the post is owned by the user
+		if (req.currentUser!.username !== post.username) {
+			throw new NotAuthorizedError();
+		}
 
-    post.set({
-      title: req.body.title,
-      body: req.body.body,
-    });
+		// edit the title and the body
+		post.set({
+			title: req.body.title,
+			body: req.body.body,
+		});
 
-    await post.save();
+		// save the post
+		await post.save();
 
-    res.send(post);
-  }
+		res.send(post);
+	}
 );
 
 export { router as updatePostRouter };

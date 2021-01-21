@@ -7,15 +7,10 @@ import { Comment } from '../../models/Comment';
 const router = express.Router();
 
 router.post(
-	'/api/posts/:post_id/comment/:comment_id/up',
+	'/api/posts/comment/:comment_id/up',
 	requireAuth,
 	async (req: Request, res: Response) => {
-		const post = await Post.findById(req.params.post_id);
 		const comment = await Comment.findById(req.params.comment_id);
-
-		if (!post) {
-			throw new NotFoundError();
-		}
 
 		if (!comment) {
 			throw new NotFoundError();
@@ -35,7 +30,7 @@ router.post(
 				{ $pull: { votes: alreadyVoted.id } }
 			);
 
-			return res.status(204).send(post);
+			return res.status(204).send(comment);
 		} else if (alreadyVoted?.type === 'down') {
 			const vote = await Vote.findById(alreadyVoted.id);
 			vote.set({

@@ -31,7 +31,7 @@ router.post(
 		post.comments.push(comment.id);
 		await post.save();
 
-		return res.status(201).send(post);
+		return res.status(201).send(comment);
 	}
 );
 

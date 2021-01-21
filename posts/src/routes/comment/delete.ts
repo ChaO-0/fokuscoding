@@ -32,11 +32,9 @@ router.delete(
 			throw new NotFoundError();
 		}
 
-		comment.pull(req.params.comment_id);
-		await comment.save();
+		comment.remove();
 
-		post.comments.pull(req.params.comment_id);
-		await post.save();
+		post.comments.remove(req.params.comment_id);
 
 		return res.status(204).send(comment);
 	}
