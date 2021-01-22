@@ -10,46 +10,47 @@ import { BadRequestError } from '@heapoverflow/common';
 const router = express.Router();
 
 router.post(
-  '/api/users/signin',
-  [
-    body('email').isEmail().withMessage('Email must be valid'),
-    body('password')
-      .trim()
-      .notEmpty()
-      .withMessage('You must supply a password'),
-  ],
-  validateRequest,
-  async (req: Request, res: Response) => {
-    const { email, password } = req.body;
+	'/api/users/signin',
+	[
+		body('email').isEmail().withMessage('Email must be valid'),
+		body('password')
+			.trim()
+			.notEmpty()
+			.withMessage('You must supply a password'),
+	],
+	validateRequest,
+	async (req: Request, res: Response) => {
+		const { email, password } = req.body;
 
-    const existingUser = await User.findOne({ email });
-    if (!existingUser) {
-      throw new BadRequestError('Invalid Credentials');
-    }
+		const existingUser = await User.findOne({ email });
+		if (!existingUser) {
+			throw new BadRequestError('Invalid Credentials');
+		}
 
-    const passwordsMatch = await compare(password, existingUser.password);
+		const passwordsMatch = await compare(password, existingUser.password);
 
-    if (!passwordsMatch) {
-      throw new BadRequestError('Invalid Credentials');
-    }
+		if (!passwordsMatch) {
+			throw new BadRequestError('Invalid Credentials');
+		}
 
-    // Generate JWT
-    const userJwt = jwt.sign(
-      {
-        id: existingUser.id,
-        username: existingUser.username,
-        email: existingUser.email,
-      },
-      process.env.JWT_KEY!
-    );
+		// Generate JWT
+		const userJwt = jwt.sign(
+			{
+				id: existingUser.id,
+				username: existingUser.username,
+				email: existingUser.email,
+				admin: existingUser.is_admin,
+			},
+			process.env.JWT_KEY!
+		);
 
-    // Store it on session object
-    req.session = {
-      jwt: userJwt,
-    };
+		// Store it on session object
+		req.session = {
+			jwt: userJwt,
+		};
 
-    res.status(200).send(existingUser);
-  }
+		res.status(200).send(existingUser);
+	}
 );
 
 export { router as signinRouter };

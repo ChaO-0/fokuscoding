@@ -9,52 +9,53 @@ import { BadRequestError } from '@heapoverflow/common';
 const router = express.Router();
 
 router.post(
-  '/api/users/signup',
-  [
-    body('email').isEmail().withMessage('Email must be valid'),
-    body('username')
-      .isLength({ min: 4, max: 20 })
-      .withMessage('Username must be 4 or 20 characters'),
-    body('password')
-      .trim()
-      .isLength({ min: 4, max: 20 })
-      .withMessage('Password must be 4 or 20 characters'),
-  ],
-  validateRequest,
-  async (req: Request, res: Response) => {
-    const { email, password, username } = req.body;
+	'/api/users/signup',
+	[
+		body('email').isEmail().withMessage('Email must be valid'),
+		body('username')
+			.isLength({ min: 4, max: 20 })
+			.withMessage('Username must be 4 or 20 characters'),
+		body('password')
+			.trim()
+			.isLength({ min: 4, max: 20 })
+			.withMessage('Password must be 4 or 20 characters'),
+	],
+	validateRequest,
+	async (req: Request, res: Response) => {
+		const { email, password, username } = req.body;
 
-    const existingEmail = await User.findOne({ email });
-    const existingUsername = await User.findOne({ username });
+		const existingEmail = await User.findOne({ email });
+		const existingUsername = await User.findOne({ username });
 
-    if (existingEmail) {
-      throw new BadRequestError('Email in use');
-    }
+		if (existingEmail) {
+			throw new BadRequestError('Email in use');
+		}
 
-    if (existingUsername) {
-      throw new BadRequestError('Username in use');
-    }
+		if (existingUsername) {
+			throw new BadRequestError('Username in use');
+		}
 
-    const user = User.build({ email, password, username });
-    await user.save();
+		const user = User.build({ email, password, username });
+		await user.save();
 
-    // Generate JWT
-    const userJwt = jwt.sign(
-      {
-        id: user.id,
-        username: user.username,
-        email: user.email,
-      },
-      process.env.JWT_KEY!
-    );
+		// Generate JWT
+		const userJwt = jwt.sign(
+			{
+				id: user.id,
+				username: user.username,
+				email: user.email,
+				admin: user.is_admin,
+			},
+			process.env.JWT_KEY!
+		);
 
-    // Store it on session object
-    req.session = {
-      jwt: userJwt,
-    };
+		// Store it on session object
+		req.session = {
+			jwt: userJwt,
+		};
 
-    res.status(201).send(user);
-  }
+		res.status(201).send(user);
+	}
 );
 
 export { router as signupRouter };
