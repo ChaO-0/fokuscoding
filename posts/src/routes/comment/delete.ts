@@ -13,27 +13,35 @@ router.delete(
 	'/api/posts/:post_id/comment/:comment_id',
 	requireAuth,
 	async (req: Request, res: Response) => {
+		// find post by id
 		const post = await Post.findById(req.params.post_id);
+		// find comment by id
 		const comment = await Comment.findById(req.params.comment_id);
 
+		//  check if the post is exist
 		if (!post) {
 			throw new NotFoundError();
 		}
 
+		// check if the comment is exist
 		if (!comment) {
 			throw new NotFoundError();
 		}
 
+		// check if the user owns the comment
 		if (req.currentUser!.username !== comment.username) {
 			throw new NotAuthorizedError();
 		}
 
+		// check if the post has comments
 		if (!post.comments) {
 			throw new NotFoundError();
 		}
 
+		// remove the comment if we pass through the checks
 		comment.remove();
 
+		// remove the comment id from the post
 		post.comments.remove(req.params.comment_id);
 
 		return res.status(204).send(comment);
