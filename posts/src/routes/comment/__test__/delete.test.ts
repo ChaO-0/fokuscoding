@@ -136,3 +136,32 @@ it('returns 401 if the user does not own it', async () => {
 	const deletedComment = await Comment.findById(comment.id);
 	expect(deletedComment).toBeDefined();
 });
+
+it('returns 401 if the user does not signed in', async () => {
+	const username = 'yudi';
+
+	const { body: post } = await request(app)
+		.post('/api/posts')
+		.set('Cookie', global.signin('pram'))
+		.send({
+			title: 'nggk bsa basa enggres',
+			body: 'mabar',
+		})
+		.expect(201);
+
+	const { body: comment } = await request(app)
+		.post(`/api/posts/${post.id}`)
+		.set('Cookie', global.signin(username))
+		.send({
+			text: 'nggk bisa basa tailan',
+		})
+		.expect(201);
+
+	await request(app)
+		.delete(`/api/posts/${post.id}/comment/${comment.id}`)
+		.send()
+		.expect(401);
+
+	const deletedComment = await Comment.findById(comment.id);
+	expect(deletedComment).toBeDefined();
+});
