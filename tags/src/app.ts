@@ -3,7 +3,9 @@ import 'express-async-errors';
 import cookieSession from 'cookie-session';
 import { NotFoundError, errorHandler, currentUser } from '@heapoverflow/common';
 
-import { indexRouter } from './routes/index';
+import { indexTagRouter } from './routes/index';
+import { newTagRouter } from './routes/new';
+import { deleteTagRouter } from './routes/delete';
 
 const app = express();
 app.set('trust proxy', true);
@@ -16,7 +18,9 @@ app.use(
 );
 
 app.use(currentUser);
-app.use(indexRouter);
+app.use(indexTagRouter);
+app.use(newTagRouter);
+app.use(deleteTagRouter);
 
 app.all('*', async (req, res) => {
 	throw new NotFoundError();

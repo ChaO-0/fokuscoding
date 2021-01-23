@@ -1,9 +1,13 @@
+import { requireAuth } from '@heapoverflow/common';
 import express, { Request, Response } from 'express';
+import { Tag } from '../models/Tag';
 
 const router = express.Router();
 
-router.get('/api/tags', async (req: Request, res: Response) => {
-	return res.send('success');
+router.get('/api/tags', requireAuth, async (req: Request, res: Response) => {
+	const tags = await Tag.find();
+
+	return res.send(tags);
 });
 
-export { router as indexRouter };
+export { router as indexTagRouter };

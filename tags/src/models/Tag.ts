@@ -3,6 +3,7 @@ import mongoose from 'mongoose';
 // An interface that describes the properties that are required to create a new Tag
 interface TagAttrs {
 	name: string;
+	status: string;
 }
 
 // An interface that describe the properties that a Tag Model has
@@ -13,11 +14,16 @@ interface TagModel extends mongoose.Model<TagDoc> {
 // An interface that describe the properties that a Tag Document has
 interface TagDoc extends mongoose.Document {
 	name: string;
+	status: string;
 }
 
 const tagSchema = new mongoose.Schema(
 	{
-		tag: {
+		name: {
+			type: String,
+			required: true,
+		},
+		status: {
 			type: String,
 			required: true,
 		},
