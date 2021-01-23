@@ -17,6 +17,7 @@ router.post(
 		const { title, body } = req.body;
 		const username = req.currentUser!.username;
 
+		// TODO: add tag attribute
 		const post = Post.build({ title, body, username });
 		await post.save();
 

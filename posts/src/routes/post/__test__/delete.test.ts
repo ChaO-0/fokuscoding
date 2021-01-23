@@ -26,6 +26,27 @@ it('deletes the post if the user owns it', async () => {
 	expect(posts.length).toEqual(0);
 });
 
+it('deletes the post if the user is an admin', async () => {
+	const { body: post } = await request(app)
+		.post('/api/posts')
+		.set('Cookie', global.signin('pram'))
+		.send({
+			title: 'horas',
+			body: 'prama',
+		})
+		.expect(201);
+
+	await request(app)
+		.delete(`/api/posts/${post.id}`)
+		.set('Cookie', global.signin('yudi', true))
+		.send()
+		.expect(204);
+
+	const posts = await Post.find();
+
+	expect(posts.length).toEqual(0);
+});
+
 it('returns 401 if the user does not own the post', async () => {
 	const { body: post } = await request(app)
 		.post('/api/posts')

@@ -16,13 +16,16 @@ router.delete(
 		// find post by Id
 		const post = await Post.findById(post_id);
 
-		// check if the post is exist
+		// make sure if the post is exist
 		if (!post) {
 			throw new NotFoundError();
 		}
 
-		// check if the post is made by the user
-		if (req.currentUser!.username !== post.username) {
+		// make sure if the post is made by the user or is an admin
+		if (
+			req.currentUser!.username !== post.username &&
+			!req.currentUser!.admin
+		) {
 			throw new NotAuthorizedError();
 		}
 

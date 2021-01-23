@@ -28,8 +28,11 @@ router.delete(
 			throw new NotFoundError();
 		}
 
-		// check if the user owns the comment
-		if (req.currentUser!.username !== comment.username) {
+		// check if the user owns the comment or is an admin
+		if (
+			req.currentUser!.username !== comment.username &&
+			!req.currentUser!.admin
+		) {
 			throw new NotAuthorizedError();
 		}
 
