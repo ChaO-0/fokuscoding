@@ -5,7 +5,10 @@ const router = express.Router();
 
 router.get('/api/posts', async (req: Request, res: Response) => {
 	// fetch all posts
-	const posts = await Post.find().populate('comments').populate('votes');
+	const posts = await Post.find()
+		.populate('comments')
+		.populate('votes')
+		.populate('tags');
 
 	return res.send(posts);
 });

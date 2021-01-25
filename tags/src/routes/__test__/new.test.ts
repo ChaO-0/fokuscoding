@@ -1,6 +1,7 @@
 import request from 'supertest';
 import { app } from '../../app';
 import { Tag } from '../../models/Tag';
+import { natsWrapper } from '../../nats-wrapper';
 import { TagStatus } from '../../types/tag-status';
 
 it('has accepted status if the user is an admin', async () => {
@@ -36,4 +37,18 @@ it('returns 401 if the user is not signed in', async () => {
 			name: 'php',
 		})
 		.expect(401);
+});
+
+it('emits an tag created event', async () => {
+	const { body: tag } = await request(app)
+		.post('/api/tags')
+		.set('Cookie', global.signin('pram', true))
+		.send({
+			name: 'php',
+		})
+		.expect(201);
+
+	const createdTag = await Tag.findById(tag.id);
+	expect(createdTag.status).toEqual(TagStatus.Accepted);
+	expect(natsWrapper.client.publish).toHaveBeenCalled();
 });

@@ -19,6 +19,8 @@ router.put(
 	],
 	validateRequest,
 	async (req: Request, res: Response) => {
+		const { title, body, tags } = req.body;
+
 		// find post by id
 		const post = await Post.findById(req.params.post_id);
 
@@ -34,8 +36,9 @@ router.put(
 
 		// edit the title and the body
 		post.set({
-			title: req.body.title,
-			body: req.body.body,
+			title,
+			body,
+			tags,
 		});
 
 		// save the post

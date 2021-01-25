@@ -1,9 +1,9 @@
 import mongoose from 'mongoose';
-import { updateIfCurrentPlugin } from 'mongoose-update-if-current';
 import { TagStatus } from '../types/tag-status';
 
 // An interface that describes the properties that are required to create a new Tag
 interface TagAttrs {
+	id: string;
 	name: string;
 	status: TagStatus;
 }
@@ -14,7 +14,7 @@ interface TagModel extends mongoose.Model<TagDoc> {
 }
 
 // An interface that describe the properties that a Tag Document has
-interface TagDoc extends mongoose.Document {
+export interface TagDoc extends mongoose.Document {
 	name: string;
 	status: TagStatus;
 	version: number;
@@ -43,11 +43,14 @@ const tagSchema = new mongoose.Schema(
 );
 
 tagSchema.set('versionKey', 'version');
-tagSchema.plugin(updateIfCurrentPlugin);
 
 // .statics is used to make a custom built in function
 tagSchema.statics.build = (attrs: TagAttrs) => {
-	return new Tag(attrs);
+	return new Tag({
+		_id: attrs.id,
+		name: attrs.name,
+		status: attrs.status,
+	});
 };
 
 const Tag = mongoose.model<TagDoc, TagModel>('Tag', tagSchema);

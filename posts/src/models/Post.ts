@@ -1,12 +1,14 @@
 import mongoose from 'mongoose';
 import { CommentDoc } from './Comment';
 import { VoteDoc } from './Vote';
+import { TagDoc } from './Tag';
 
 // An interface that describes the properties that are required to create a new Post
 interface PostAttrs {
 	title: string;
 	body: string;
 	username: string;
+	tags?: string[];
 }
 
 // An interface that describe the properties that a Post Model has
@@ -21,6 +23,7 @@ interface PostDoc extends mongoose.Document {
 	username: string;
 	comments?: CommentDoc;
 	votes?: VoteDoc;
+	tags?: TagDoc;
 }
 
 const PostSchema = new mongoose.Schema(
@@ -47,6 +50,12 @@ const PostSchema = new mongoose.Schema(
 			{
 				type: mongoose.Schema.Types.ObjectId,
 				ref: 'Comment',
+			},
+		],
+		tags: [
+			{
+				type: mongoose.Schema.Types.ObjectId,
+				ref: 'Tag',
 			},
 		],
 	},

@@ -14,11 +14,10 @@ router.post(
 	],
 	validateRequest,
 	async (req: Request, res: Response) => {
-		const { title, body } = req.body;
+		const { title, body, tags } = req.body;
 		const username = req.currentUser!.username;
 
-		// TODO: add tag attribute
-		const post = Post.build({ title, body, username });
+		const post = Post.build({ title, body, username, tags });
 		await post.save();
 
 		res.status(201).send(post);
