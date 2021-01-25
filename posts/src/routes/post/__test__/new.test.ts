@@ -64,3 +64,5 @@ it('does not returns 401 if user is signed in', async () => {
 
 	expect(response.status).not.toEqual(401);
 });
+
+// TODO: Create a new test for checking tags

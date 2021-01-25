@@ -16,3 +16,5 @@ it('can fetch a list of posts', async () => {
 
 	expect(response.body.length).toEqual(3);
 });
+
+// TODO: Create a new test for checking tags

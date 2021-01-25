@@ -7,8 +7,8 @@ const router = express.Router();
 router.get('/api/posts/:post_id', async (req: Request, res: Response) => {
 	// find post by id
 	const post = await Post.findById(req.params.post_id)
-		.populate('comments')
 		.populate('votes')
+		.populate('comments')
 		.populate('tags');
 
 	// check if the post is exist
