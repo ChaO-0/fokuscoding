@@ -6,7 +6,7 @@ import {
 import express, { Request, Response } from 'express';
 import { body } from 'express-validator';
 import { Post } from '../../models/Post';
-import { Comment } from '../../models/Comment';
+import { Comment, CommentDoc } from '../../models/Comment';
 
 const router = express.Router();
 
@@ -18,6 +18,7 @@ router.post(
 	async (req: Request, res: Response) => {
 		// find post by id
 		const post = await Post.findById(req.params.post_id);
+		// const comments = post.comments as CommentDoc;
 
 		// check if the post is exist
 		if (!post) {

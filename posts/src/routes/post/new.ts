@@ -35,6 +35,7 @@ router.post(
 
 		const post = Post.build({ title, body, username, tags });
 		await post.save();
+		// console.log('New discussion created :)');
 
 		res.status(201).send(post);
 	}

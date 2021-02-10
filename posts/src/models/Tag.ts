@@ -5,7 +5,6 @@ import { TagStatus } from '../types/tag-status';
 interface TagAttrs {
 	id: string;
 	name: string;
-	status: TagStatus;
 }
 
 // An interface that describe the properties that a Tag Model has
@@ -16,8 +15,6 @@ interface TagModel extends mongoose.Model<TagDoc> {
 // An interface that describe the properties that a Tag Document has
 export interface TagDoc extends mongoose.Document {
 	name: string;
-	status: TagStatus;
-	version: number;
 }
 
 const tagSchema = new mongoose.Schema(
@@ -25,11 +22,6 @@ const tagSchema = new mongoose.Schema(
 		name: {
 			type: String,
 			required: true,
-		},
-		status: {
-			type: String,
-			required: true,
-			enum: Object.values(TagStatus),
 		},
 	},
 	{
@@ -49,7 +41,6 @@ tagSchema.statics.build = (attrs: TagAttrs) => {
 	return new Tag({
 		_id: attrs.id,
 		name: attrs.name,
-		status: attrs.status,
 	});
 };
 

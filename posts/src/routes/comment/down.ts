@@ -32,7 +32,7 @@ router.post(
 			vote.remove();
 
 			// remove the votes subdocument from the comment document
-			comment.votes.remove(alreadyVoted.id);
+			// comment.votes.remove(alreadyVoted.id);
 			// save the comment
 			await comment.save();
 
@@ -41,12 +41,12 @@ router.post(
 			// find vote by id
 			const vote = await Vote.findById(alreadyVoted.id);
 			// updates the type of the vote
-			vote.set({
+			vote!.set({
 				type: 'down',
 			});
 
 			// save the vote
-			await vote.save();
+			await vote!.save();
 
 			return res.status(204).send(comment);
 		}

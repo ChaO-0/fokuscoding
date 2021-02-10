@@ -8,7 +8,7 @@ interface PostAttrs {
 	title: string;
 	body: string;
 	username: string;
-	tags?: string[];
+	tags?: TagDoc[];
 }
 
 // An interface that describe the properties that a Post Model has
@@ -21,9 +21,9 @@ interface PostDoc extends mongoose.Document {
 	title: string;
 	body: string;
 	username: string;
-	comments?: CommentDoc;
-	votes?: VoteDoc;
-	tags?: TagDoc;
+	comments: CommentDoc[];
+	votes: VoteDoc[];
+	tags?: TagDoc[];
 }
 
 const PostSchema = new mongoose.Schema(
@@ -40,35 +40,35 @@ const PostSchema = new mongoose.Schema(
 			type: String,
 			required: true,
 		},
-		votes: [
-			{
-				type: mongoose.Schema.Types.ObjectId,
-				ref: 'Vote',
-			},
-		],
-		comments: [
-			{
-				type: mongoose.Schema.Types.ObjectId,
-				ref: 'Comment',
-			},
-		],
-		tags: [
-			{
-				type: mongoose.Schema.Types.ObjectId,
-				ref: 'Tag',
-				default: [],
-			},
-		],
-	},
-	{
-		toJSON: {
-			transform(doc, ret) {
-				ret.id = ret._id;
-				delete ret._id;
-				delete ret.__v;
-			},
-		},
+		// votes: [
+		// 	{
+		// 		type: mongoose.Schema.Types.ObjectId,
+		// 		ref: 'Vote',
+		// 	},
+		// ],
+		// comments: [
+		// 	{
+		// 		type: mongoose.Schema.Types.ObjectId,
+		// 		ref: 'Comment',
+		// 	},
+		// ],
+		// tags: [
+		// 	{
+		// 		type: mongoose.Schema.Types.ObjectId,
+		// 		ref: 'Tag',
+		// 		default: [],
+		// 	},
+		// ],
 	}
+	// {
+	// 	toJSON: {
+	// 		transform(doc, ret) {
+	// 			ret.id = ret._id;
+	// 			delete ret._id;
+	// 			delete ret.__v;
+	// 		},
+	// 	},
+	// }
 );
 
 // .statics is used to make a custom built in function

@@ -20,6 +20,7 @@ router.post(
 		// copy the votes array from the post
 		// we copy the votes for the "find" function in js plain object
 		// not as a mongoose model
+
 		const voters = [...post.votes];
 		// find out if the current user has voted
 		const alreadyVoted = voters.find((voter) => {
@@ -31,10 +32,10 @@ router.post(
 			// find vote by id
 			const vote = await Vote.findById(alreadyVoted.id);
 			// remove the vote
-			vote.remove();
+			vote!.remove();
 
 			// remove the vote from the post
-			post.votes.remove(alreadyVoted.id);
+			// post.votes.remove(alreadyVoted.id);
 			// save the post
 			// ? .remove() is for TOP-LEVEL documents
 			// ? because we used .remove() for the the sub document, we have to use .save()
@@ -47,12 +48,12 @@ router.post(
 			// find vote by id
 			const vote = await Vote.findById(alreadyVoted.id);
 			// set the vote type to up
-			vote.set({
+			vote!.set({
 				type: 'up',
 			});
 
 			// save the vote;
-			await vote.save();
+			await vote!.save();
 
 			return res.status(204).send(post);
 		}

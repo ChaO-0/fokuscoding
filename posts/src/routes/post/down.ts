@@ -35,10 +35,10 @@ router.post(
 			// find vote by id
 			const vote = Vote.findById(alreadyVoted.id);
 			// remove the vote
-			vote.remove();
+			vote!.remove();
 
 			// remove the vote from the post
-			post.votes.remove(alreadyVoted.id);
+			// post.votes.remove(alreadyVoted.id);
 			// save the post
 			// ? .remove() is for TOP-LEVEL documents
 			// ? because we used .remove() for the the sub document, we have to use .save()
@@ -51,11 +51,11 @@ router.post(
 			// find vote by id
 			const vote = await Vote.findById(alreadyVoted.id);
 			// update the type of the vote
-			vote.set({
+			vote!.set({
 				type: 'down',
 			});
 			// save the vote
-			await vote.save();
+			await vote!.save();
 
 			return res.status(204).send(post);
 		}

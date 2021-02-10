@@ -45,7 +45,7 @@ router.delete(
 		comment.remove();
 
 		// remove the comment id from the post
-		post.comments.remove(req.params.comment_id);
+		// post.comments.remove(req.params.comment_id);
 
 		return res.status(204).send(comment);
 	}

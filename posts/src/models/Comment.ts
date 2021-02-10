@@ -17,7 +17,7 @@ interface CommentModel extends mongoose.Model<CommentDoc> {
 export interface CommentDoc extends mongoose.Document {
 	text: string;
 	username: string;
-	votes?: VoteDoc;
+	votes: VoteDoc[];
 }
 
 const commentSchema = new mongoose.Schema(

@@ -8,11 +8,10 @@ export class TagCreatedListener extends Listener<TagCreatedEvent> {
 	queueGroupName = queueGroupName;
 
 	async onMessage(data: TagCreatedEvent['data'], msg: Message) {
-		const { id, name, status } = data;
+		const { id, name } = data;
 		const tag = Tag.build({
 			id,
 			name,
-			status,
 		});
 		await tag.save();
 
