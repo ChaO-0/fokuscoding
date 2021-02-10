@@ -1,4 +1,4 @@
-import { requireAuth } from '@heapoverflow/common';
+import { requireAuth, validateRequest } from '@heapoverflow/common';
 import express, { Request, Response } from 'express';
 import { body } from 'express-validator';
 import { TagStatus } from '../types/tag-status';
@@ -12,6 +12,7 @@ router.post(
 	'/api/tags',
 	requireAuth,
 	[body('name').not().isEmpty().withMessage('Tag is required')],
+	validateRequest,
 	async (req: Request, res: Response) => {
 		const { name } = req.body;
 		const isAdmin = req.currentUser!.admin;
