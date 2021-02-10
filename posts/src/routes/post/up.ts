@@ -1,7 +1,7 @@
 import { NotFoundError, requireAuth } from '@heapoverflow/common';
 import express, { Request, Response } from 'express';
 import { Post } from '../../models/Post';
-import { Vote } from '../../models/Vote';
+import { Vote, VoteDoc } from '../../models/Vote';
 
 const router = express.Router();
 
@@ -21,7 +21,7 @@ router.post(
 		// we copy the votes for the "find" function in js plain object
 		// not as a mongoose model
 
-		const voters = [...post.votes];
+		const voters = [...(post.votes as VoteDoc[])];
 		// find out if the current user has voted
 		const alreadyVoted = voters.find((voter) => {
 			return voter.username === req.currentUser!.username;
@@ -35,7 +35,7 @@ router.post(
 			vote!.remove();
 
 			// remove the vote from the post
-			// post.votes.remove(alreadyVoted.id);
+			(post.votes as VoteDoc).remove(alreadyVoted.id);
 			// save the post
 			// ? .remove() is for TOP-LEVEL documents
 			// ? because we used .remove() for the the sub document, we have to use .save()
@@ -67,7 +67,7 @@ router.post(
 		await vote.save();
 
 		// push the vote to the votes array in post document
-		post.votes.push(vote.id);
+		(post.votes as VoteDoc[]).push(vote.id);
 		// save the post
 		await post.save();
 

@@ -1,6 +1,6 @@
 import { NotFoundError, requireAuth } from '@heapoverflow/common';
 import express, { Request, Response } from 'express';
-import { Vote } from '../../models/Vote';
+import { Vote, VoteDoc } from '../../models/Vote';
 import { Comment } from '../../models/Comment';
 
 const router = express.Router();
@@ -19,7 +19,7 @@ router.post(
 
 		// if the check passed
 		// copy votes subdocument to the voters variable as a plain javascript array
-		const voters = [...comment.votes];
+		const voters = [...(comment.votes as VoteDoc[])];
 		// findout if the user has voted
 		const alreadyVoted = voters.find((voter) => {
 			return voter.username === req.currentUser!.username;
@@ -33,7 +33,7 @@ router.post(
 			vote!.remove();
 
 			// remove the vote from the comment document
-			// comment.votes.remove(alreadyVoted.id);
+			(comment.votes as VoteDoc).remove(alreadyVoted.id);
 			// save the comment
 			await comment.save();
 
@@ -62,7 +62,7 @@ router.post(
 		await vote.save();
 
 		// push the vote to the comment document
-		// comment.votes.push(vote.id);
+		(comment.votes as VoteDoc[]).push(vote.id);
 		// save the comment
 		await comment.save();
 
