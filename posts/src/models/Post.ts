@@ -1,4 +1,5 @@
 import mongoose from 'mongoose';
+import { updateIfCurrentPlugin } from 'mongoose-update-if-current';
 import { CommentDoc } from './Comment';
 import { VoteDoc } from './Vote';
 import { TagDoc } from './Tag';
@@ -24,6 +25,7 @@ export interface PostDoc extends mongoose.Document {
 	comments: CommentDoc[];
 	votes: VoteDoc[] | VoteDoc;
 	tags?: TagDoc[];
+	version: number;
 }
 
 const PostSchema = new mongoose.Schema(
@@ -70,6 +72,9 @@ const PostSchema = new mongoose.Schema(
 		},
 	}
 );
+
+PostSchema.set('versionKey', 'version');
+PostSchema.plugin(updateIfCurrentPlugin);
 
 // .statics is used to make a custom built in function
 PostSchema.statics.build = (attrs: PostAttrs) => {
