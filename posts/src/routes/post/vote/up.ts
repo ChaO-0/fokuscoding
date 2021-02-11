@@ -1,7 +1,9 @@
 import { NotFoundError, requireAuth } from '@heapoverflow/common';
 import express, { Request, Response } from 'express';
-import { Post } from '../../../models/Post';
+import { VoteUpdatedPublisher } from '../../../events/publisher/vote-updated-publisher';
+import { Post, PostDoc } from '../../../models/Post';
 import { Vote, VoteDoc } from '../../../models/Vote';
+import { natsWrapper } from '../../../nats-wrapper';
 
 const router = express.Router();
 
@@ -90,6 +92,12 @@ router.post(
 		const downVote = votes.filter((vote) => vote.type === 'down').length;
 
 		const countVote = upVote - downVote;
+
+		await new VoteUpdatedPublisher(natsWrapper.client).publish({
+			id: post!._id,
+			vote: countVote,
+			version: post!.version,
+		});
 
 		return res.status(status).send({ data, countVote });
 	}
