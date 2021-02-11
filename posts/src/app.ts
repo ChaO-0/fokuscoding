@@ -13,8 +13,8 @@ import { updatePostRouter } from './routes/post/update';
 import { newCommentRouter } from './routes/comment/new';
 import { updateCommentRouter } from './routes/comment/update';
 import { deleteCommentRouter } from './routes/comment/delete';
-import { upvotePostRouter } from './routes/post/up';
-import { downvotePostRouter } from './routes/post/down';
+import { upvotePostRouter } from './routes/post/vote/up';
+import { downvotePostRouter } from './routes/post/vote/down';
 import { upvoteCommentRouter } from './routes/comment/up';
 import { downvoteCommentRouter } from './routes/comment/down';
 
