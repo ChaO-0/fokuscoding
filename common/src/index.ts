@@ -19,3 +19,5 @@ export * from './events/tag-created-event';
 export * from './events/post-created-event';
 export * from './events/post-updated-event';
 export * from './events/post-deleted-event';
+
+export * from './events/vote-updated-event';
