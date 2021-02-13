@@ -1,6 +1,8 @@
 import request from 'supertest';
+import mongoose from 'mongoose';
 import { app } from '../../../app';
 import { Post } from '../../../models/Post';
+import { Tag } from '../../../models/Tag';
 
 it('creates a post if input is valid', async () => {
 	const cookie = await global.signin('prama');
@@ -65,4 +67,37 @@ it('does not returns 401 if user is signed in', async () => {
 	expect(response.status).not.toEqual(401);
 });
 
-// TODO: Create a new test for checking tags
+it('have tags if the user add post with tags', async () => {
+	const cookie = await global.signin('prama');
+	const id1 = mongoose.Types.ObjectId().toHexString();
+	const id2 = mongoose.Types.ObjectId().toHexString();
+	// console.log(id);
+
+	const tag1 = Tag.build({
+		id: id1,
+		name: 'javascript',
+	});
+
+	await tag1.save();
+
+	const tag2 = Tag.build({
+		id: id2,
+		name: 'php',
+	});
+
+	await tag2.save();
+
+	await request(app)
+		.post('/api/posts')
+		.set('Cookie', cookie)
+		.send({
+			body: 'pram',
+			title: 'pram',
+			tags: [tag1.id, tag2.id],
+		})
+		.expect(201);
+
+	const post = await Post.find({});
+	expect(post.length).toEqual(1);
+	expect(post[0].tags.length).toEqual(2);
+});
