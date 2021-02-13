@@ -1,6 +1,8 @@
 import mongoose from 'mongoose';
 import { app } from './app';
 import { PostCreatedListener } from './events/listener/post-created-listener';
+import { PostDeletedListener } from './events/listener/post-deleted-listener';
+import { PostUpdatedListener } from './events/listener/post-updated-listener';
 import { VoteUpdatedListener } from './events/listener/vote-updated-listener';
 import { natsWrapper } from './nats-wrapper';
 
@@ -41,6 +43,8 @@ const start = async () => {
 		process.on('SIGTERM', () => natsWrapper.client.close());
 
 		new PostCreatedListener(natsWrapper.client).listen();
+		new PostUpdatedListener(natsWrapper.client).listen();
+		new PostDeletedListener(natsWrapper.client).listen();
 		new VoteUpdatedListener(natsWrapper.client).listen();
 
 		await mongoose.connect(process.env.MONGO_URI, {
