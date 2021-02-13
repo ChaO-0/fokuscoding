@@ -54,6 +54,8 @@ const Voting = async (req: Request, res: Response) => {
 		// save the vote;
 		await vote!.save();
 
+		await post.save();
+
 		return { status: 204, data: post };
 	}
 
