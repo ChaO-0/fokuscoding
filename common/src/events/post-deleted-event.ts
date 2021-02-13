@@ -4,6 +4,5 @@ export interface PostDeletedEvent {
 	subject: Subjects.PostDeleted;
 	data: {
 		id: string;
-		version: number;
 	};
 }
