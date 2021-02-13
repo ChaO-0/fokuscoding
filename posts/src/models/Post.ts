@@ -23,9 +23,9 @@ export interface PostDoc extends mongoose.Document {
 	body: string;
 	username: string;
 	comments: CommentDoc[];
+	version: number;
 	votes: VoteDoc[] | VoteDoc;
 	tags?: TagDoc[];
-	version: number;
 }
 
 const PostSchema = new mongoose.Schema(
