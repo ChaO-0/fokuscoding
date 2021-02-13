@@ -17,14 +17,14 @@ export class VoteUpdatedListener extends Listener<VoteUpdatedEvent> {
 
 		const post = await Post.findByEvent({
 			id,
-			version: version,
+			version,
 		});
 
 		if (!post) {
-			throw new NotFoundError();
+			throw new Error('Vote Not Found!');
 		}
 
-		post.set({ vote });
+		post.set({ votes: vote });
 
 		await post.save();
 
