@@ -6,7 +6,11 @@ import {
 } from '@heapoverflow/common';
 import express, { Request, Response } from 'express';
 import { body } from 'express-validator';
-import { Post } from '../../models/Post';
+import { PostUpdatedPublisher } from '../../events/publisher/post-updated-publisher';
+import { VoteUpdatedPublisher } from '../../events/publisher/vote-updated-publisher';
+import { Post, PostDoc } from '../../models/Post';
+import { Tag, TagDoc } from '../../models/Tag';
+import { natsWrapper } from '../../nats-wrapper';
 
 const router = express.Router();
 
@@ -22,8 +26,7 @@ router.put(
 		const { title, body, tags } = req.body;
 
 		// find post by id
-		const post = await Post.findById(req.params.post_id);
-
+		const post: PostDoc = await Post.findById(req.params.post_id);
 		// check if the post is exist
 		if (!post) {
 			throw new NotFoundError();
@@ -43,6 +46,22 @@ router.put(
 
 		// save the post
 		await post.save();
+		let postTag: TagDoc[] = await Tag.find({
+			_id: {
+				$in: tags,
+			},
+		});
+
+		let tagList = postTag.map((tag) => tag.name);
+
+		await new PostUpdatedPublisher(natsWrapper.client).publish({
+			id: post._id,
+			title: post.title,
+			body: post.body,
+			username: post.username,
+			tags: tagList,
+			version: post.version,
+		});
 
 		res.send(post);
 	}

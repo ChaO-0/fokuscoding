@@ -4,7 +4,9 @@ import {
 	requireAuth,
 } from '@heapoverflow/common';
 import express, { Request, Response } from 'express';
+import { PostDeletedPublisher } from '../../events/publisher/post-deleted-publisher';
 import { Post } from '../../models/Post';
+import { natsWrapper } from '../../nats-wrapper';
 
 const router = express.Router();
 
@@ -31,6 +33,10 @@ router.delete(
 
 		// remove the post
 		post.remove();
+
+		await new PostDeletedPublisher(natsWrapper.client).publish({
+			id: post.id,
+		});
 
 		res.status(204).send(post);
 	}
