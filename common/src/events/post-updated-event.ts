@@ -5,7 +5,7 @@ export interface PostUpdatedEvent {
 	data: {
 		id: string;
 		title: string;
-		votes: number;
+		body: string;
 		username: string;
 		tags: string[];
 		version: number;
