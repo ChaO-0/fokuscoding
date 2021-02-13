@@ -6,6 +6,7 @@ import { NotFoundError, errorHandler, currentUser } from '@heapoverflow/common';
 import { indexTagRouter } from './routes/index';
 import { newTagRouter } from './routes/new';
 import { deleteTagRouter } from './routes/delete';
+import { acceptTagRouter } from './routes/accept';
 
 const app = express();
 app.set('trust proxy', true);
@@ -21,6 +22,7 @@ app.use(currentUser);
 app.use(indexTagRouter);
 app.use(newTagRouter);
 app.use(deleteTagRouter);
+app.use(acceptTagRouter);
 
 app.all('*', async (req, res) => {
 	throw new NotFoundError();
