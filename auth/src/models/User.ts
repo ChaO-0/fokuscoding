@@ -19,6 +19,7 @@ interface UserDoc extends mongoose.Document {
 	password: string;
 	username: string;
 	is_admin: boolean;
+	banned: boolean;
 }
 
 const userSchema = new mongoose.Schema(
@@ -36,6 +37,10 @@ const userSchema = new mongoose.Schema(
 			required: true,
 		},
 		is_admin: {
+			type: Boolean,
+			default: false,
+		},
+		banned: {
 			type: Boolean,
 			default: false,
 		},
