@@ -1,21 +1,44 @@
-import express from 'express';
+import { NotFoundError, validateRequest } from '@heapoverflow/common';
+import express, { Request, Response } from 'express';
+import { body } from 'express-validator';
 import { User } from '../models/User';
-import jwt from 'jsonwebtoken';
 
 const router = express.Router();
 
-router.put('/api/users/:user_id', async (req, res) => {
-	const user = await User.findById(req.params.user_id);
-	const { email, password } = req.body;
+router.put(
+	'/api/users/:username',
+	[
+		body('email').isEmail().withMessage('Email must be valid'),
+		body('password')
+			.optional()
+			.trim()
+			.isLength({ min: 4, max: 20 })
+			.withMessage('Password must be 4 or 20 characters'),
+	],
+	validateRequest,
+	async (req: Request, res: Response) => {
+		const user = await User.findOne({ username: req.params.username });
+		const { email, password } = req.body;
 
-	user.set({
-		email,
-		password,
-	});
+		if (!user) {
+			throw new NotFoundError();
+		}
 
-	await user.save();
+		if (password) {
+			user.set({
+				email,
+				password,
+			});
+		} else {
+			user.set({
+				email,
+			});
+		}
 
-	res.send(user);
-});
+		await user.save();
+
+		res.send(user);
+	}
+);
 
 export { router as updateUserRouter };
