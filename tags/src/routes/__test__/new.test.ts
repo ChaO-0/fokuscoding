@@ -39,7 +39,7 @@ it('returns 401 if the user is not signed in', async () => {
 		.expect(401);
 });
 
-it('emits an tag created event if tag status is accepted', async () => {
+it('emits a tag created event if tag status is accepted', async () => {
 	const { body: tag } = await request(app)
 		.post('/api/tags')
 		.set('Cookie', global.signin('pram', true))
@@ -53,7 +53,7 @@ it('emits an tag created event if tag status is accepted', async () => {
 	expect(natsWrapper.client.publish).toHaveBeenCalled();
 });
 
-it('does not emits an tag created event if tag status is awaiting', async () => {
+it('does not emits a tag created event if tag status is awaiting', async () => {
 	const { body: tag } = await request(app)
 		.post('/api/tags')
 		.set('Cookie', global.signin('pram'))
