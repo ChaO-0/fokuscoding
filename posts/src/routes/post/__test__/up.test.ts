@@ -2,6 +2,7 @@ import request from 'supertest';
 import { app } from '../../../app';
 import { Post } from '../../../models/Post';
 import mongoose from 'mongoose';
+import { natsWrapper } from '../../../nats-wrapper';
 
 it('creates upvote if the user has not voted the post', async () => {
 	const user1 = 'pram';
@@ -130,4 +131,58 @@ it('returns 404 if the post does not exist', async () => {
 	const id = mongoose.Schema.Types.ObjectId;
 
 	await request(app).post(`/api/posts/${id}/up`).expect(404);
+});
+
+it('emits a vote updated event if the user voted', async () => {
+	const user1 = 'pram';
+	const user2 = 'bukanpram';
+
+	const { body: post1 } = await request(app)
+		.post('/api/posts')
+		.set('Cookie', global.signin(user1))
+		.send({
+			title: 'nggak bisa',
+			body: 'basa enggrees',
+		})
+		.expect(201);
+
+	await request(app)
+		.post(`/api/posts/${post1.id}/up`)
+		.set('Cookie', global.signin(user2))
+		.send()
+		.expect(201);
+
+	await request(app)
+		.post(`/api/posts/${post1.id}/up`)
+		.set('Cookie', global.signin(user1))
+		.send()
+		.expect(201);
+
+	const { body: post2 } = await request(app)
+		.post('/api/posts')
+		.set('Cookie', global.signin(user2))
+		.send({
+			title: 'nggak bisa',
+			body: 'basa enggrees',
+		})
+		.expect(201);
+
+	await request(app)
+		.post(`/api/posts/${post2.id}/up`)
+		.set('Cookie', global.signin(user1))
+		.send()
+		.expect(201);
+
+	await request(app)
+		.post(`/api/posts/${post2.id}/up`)
+		.set('Cookie', global.signin(user2))
+		.send()
+		.expect(201);
+
+	const firstPost = await Post.findById(post1.id);
+	const secondPost = await Post.findById(post2.id);
+
+	expect(firstPost.votes.length).toEqual(2);
+	expect(secondPost.votes.length).toEqual(2);
+	expect(natsWrapper.client.publish).toHaveBeenCalled();
 });
