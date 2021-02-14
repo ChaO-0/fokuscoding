@@ -9,7 +9,7 @@ interface PostAttrs {
 	tags: string[];
 }
 
-export interface PostDoc extends mongoose.Document {
+interface PostDoc extends mongoose.Document {
 	title: string;
 	votes: number;
 	username: string;
