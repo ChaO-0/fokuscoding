@@ -6,6 +6,7 @@ import { TagStatus } from '../types/tag-status';
 interface TagAttrs {
 	name: string;
 	status: TagStatus;
+	desc: string;
 }
 
 // An interface that describe the properties that a Tag Model has
@@ -18,6 +19,7 @@ interface TagDoc extends mongoose.Document {
 	name: string;
 	status: TagStatus;
 	version: number;
+	desc: string;
 }
 
 const tagSchema = new mongoose.Schema(
@@ -30,6 +32,10 @@ const tagSchema = new mongoose.Schema(
 			type: String,
 			required: true,
 			enum: Object.values(TagStatus),
+		},
+		desc: {
+			type: String,
+			required: true,
 		},
 	},
 	{

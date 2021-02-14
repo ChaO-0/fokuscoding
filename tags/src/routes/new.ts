@@ -14,13 +14,14 @@ router.post(
 	[body('name').not().isEmpty().withMessage('Tag is required')],
 	validateRequest,
 	async (req: Request, res: Response) => {
-		const { name } = req.body;
+		const { name, desc } = req.body;
 		const isAdmin = req.currentUser!.admin;
 		const status = isAdmin ? TagStatus.Accepted : TagStatus.Awaiting;
 
 		const tag = Tag.build({
 			name,
 			status,
+			desc,
 		});
 
 		await tag.save();
