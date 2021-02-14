@@ -46,6 +46,7 @@ const commentSchema = new mongoose.Schema(
 				delete ret.__v;
 			},
 		},
+		timestamps: true,
 	}
 );
 

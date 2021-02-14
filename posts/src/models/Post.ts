@@ -70,6 +70,7 @@ const PostSchema = new mongoose.Schema(
 				delete ret.__v;
 			},
 		},
+		timestamps: true,
 	}
 );
 
