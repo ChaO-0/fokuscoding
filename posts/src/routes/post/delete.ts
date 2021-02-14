@@ -4,7 +4,7 @@ import {
 	requireAuth,
 } from '@heapoverflow/common';
 import express, { Request, Response } from 'express';
-import { PostDeletedPublisher } from '../../events/publisher/post-deleted-publisher';
+import { PostDeletedPublisher } from '../../events/publishers/post-deleted-publisher';
 import { Post } from '../../models/Post';
 import { natsWrapper } from '../../nats-wrapper';
 

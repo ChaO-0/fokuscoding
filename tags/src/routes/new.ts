@@ -3,7 +3,7 @@ import express, { Request, Response } from 'express';
 import { body } from 'express-validator';
 import { TagStatus } from '../types/tag-status';
 import { Tag } from '../models/Tag';
-import { TagCreatedPublisher } from '../events/tag-created-publisher';
+import { TagCreatedPublisher } from '../events/publishers/tag-created-publisher';
 import { natsWrapper } from '../nats-wrapper';
 
 const router = express.Router();
@@ -24,12 +24,14 @@ router.post(
 		});
 
 		await tag.save();
-		await new TagCreatedPublisher(natsWrapper.client).publish({
-			id: tag.id,
-			name: tag.name,
-			status: tag.status,
-			version: tag.version,
-		});
+
+		if (tag.status === TagStatus.Accepted) {
+			await new TagCreatedPublisher(natsWrapper.client).publish({
+				id: tag.id,
+				name: tag.name,
+				version: tag.version,
+			});
+		}
 
 		res.status(201).send(tag);
 	}

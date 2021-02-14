@@ -1,7 +1,13 @@
-import { NotAuthorizedError, requireAuth } from '@heapoverflow/common';
+import {
+	NotAuthorizedError,
+	NotFoundError,
+	requireAuth,
+} from '@heapoverflow/common';
 import express, { Request, Response } from 'express';
 import { Tag } from '../models/Tag';
 import { TagStatus } from '../types/tag-status';
+import { TagCreatedPublisher } from '../events/publishers/tag-created-publisher';
+import { natsWrapper } from '../nats-wrapper';
 
 const router = express.Router();
 
@@ -16,11 +22,21 @@ router.post(
 			throw new NotAuthorizedError();
 		}
 
+		if (!tag) {
+			throw new NotFoundError();
+		}
+
 		tag.set({
 			status: TagStatus.Accepted,
 		});
 
-		tag.save();
+		await tag.save();
+
+		await new TagCreatedPublisher(natsWrapper.client).publish({
+			id: tag.id,
+			name: tag.name,
+			version: tag.version,
+		});
 
 		return res.send(tag);
 	}

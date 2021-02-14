@@ -14,7 +14,9 @@ export * from './middlewares/validate-request';
 export * from './events/base-listener';
 export * from './events/base-publisher';
 export * from './events/subjects';
+
 export * from './events/tag-created-event';
+export * from './events/tag-deleted-event';
 
 export * from './events/post-created-event';
 export * from './events/post-updated-event';

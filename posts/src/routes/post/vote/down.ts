@@ -8,7 +8,7 @@ import { Post } from '../../../models/Post';
 import { Vote, VoteDoc } from '../../../models/Vote';
 
 import { natsWrapper } from '../../../nats-wrapper';
-import { VoteUpdatedPublisher } from '../../../events/publisher/vote-updated-publisher';
+import { VoteUpdatedPublisher } from '../../../events/publishers/vote-updated-publisher';
 
 const router = express.Router();
 

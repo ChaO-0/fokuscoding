@@ -1,6 +1,6 @@
 import { NotFoundError, requireAuth } from '@heapoverflow/common';
 import express, { Request, Response } from 'express';
-import { VoteUpdatedPublisher } from '../../../events/publisher/vote-updated-publisher';
+import { VoteUpdatedPublisher } from '../../../events/publishers/vote-updated-publisher';
 import { Post, PostDoc } from '../../../models/Post';
 import { Vote, VoteDoc } from '../../../models/Vote';
 import { natsWrapper } from '../../../nats-wrapper';

@@ -1,5 +1,4 @@
 import { Subjects } from './subjects';
-import { TagStatus } from './types/tag-status';
 
 export interface TagCreatedEvent {
 	subject: Subjects.TagCreated;
@@ -7,6 +6,5 @@ export interface TagCreatedEvent {
 		id: string;
 		version: number;
 		name: string;
-		status: TagStatus;
 	};
 }

@@ -8,7 +8,7 @@ import { body } from 'express-validator';
 import { Post } from '../../models/Post';
 import { Tag } from '../../models/Tag';
 import { natsWrapper } from '../../nats-wrapper';
-import { PostCreatedPublisher } from '../../events/publisher/post-created-publisher';
+import { PostCreatedPublisher } from '../../events/publishers/post-created-publisher';
 const router = express.Router();
 
 router.post(

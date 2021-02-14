@@ -6,8 +6,8 @@ import {
 } from '@heapoverflow/common';
 import express, { Request, Response } from 'express';
 import { body } from 'express-validator';
-import { PostUpdatedPublisher } from '../../events/publisher/post-updated-publisher';
-import { VoteUpdatedPublisher } from '../../events/publisher/vote-updated-publisher';
+import { PostUpdatedPublisher } from '../../events/publishers/post-updated-publisher';
+import { VoteUpdatedPublisher } from '../../events/publishers/vote-updated-publisher';
 import { Post, PostDoc } from '../../models/Post';
 import { Tag, TagDoc } from '../../models/Tag';
 import { natsWrapper } from '../../nats-wrapper';
