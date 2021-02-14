@@ -18,4 +18,4 @@ router.put('/api/users/:user_id', async (req, res) => {
 	res.send(user);
 });
 
-export { router as signoutRouter };
+export { router as updateUserRouter };
