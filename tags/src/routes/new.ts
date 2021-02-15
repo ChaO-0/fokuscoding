@@ -18,8 +18,7 @@ router.post(
 	validateRequest,
 	async (req: Request, res: Response) => {
 		const { name, desc } = req.body;
-		const isAdmin = req.currentUser!.admin;
-		const status = isAdmin ? TagStatus.Accepted : TagStatus.Awaiting;
+		const status = TagStatus.Awaiting;
 
 		const tag = Tag.build({
 			name,
@@ -28,15 +27,6 @@ router.post(
 		});
 
 		await tag.save();
-
-		if (tag.status === TagStatus.Accepted) {
-			await new TagCreatedPublisher(natsWrapper.client).publish({
-				id: tag.id,
-				name: tag.name,
-				version: tag.version,
-			});
-		}
-
 		res.status(201).send(tag);
 	}
 );

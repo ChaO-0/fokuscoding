@@ -1,5 +1,5 @@
 import mongoose from 'mongoose';
-import { TagStatus } from '../types/tag-status';
+import { updateIfCurrentPlugin } from 'mongoose-update-if-current';
 
 // An interface that describes the properties that are required to create a new Tag
 interface TagAttrs {
@@ -10,6 +10,7 @@ interface TagAttrs {
 // An interface that describe the properties that a Tag Model has
 interface TagModel extends mongoose.Model<TagDoc> {
 	build(attrs: TagAttrs): TagDoc;
+	findByEvent(event: { id: string; version: number }): Promise<TagDoc | null>;
 }
 
 // An interface that describe the properties that a Tag Document has
@@ -35,6 +36,14 @@ const tagSchema = new mongoose.Schema(
 );
 
 tagSchema.set('versionKey', 'version');
+tagSchema.plugin(updateIfCurrentPlugin);
+
+tagSchema.statics.findByEvent = (event: { id: string; version: number }) => {
+	return Tag.findOne({
+		_id: event.id,
+		version: event.version - 1,
+	});
+};
 
 // .statics is used to make a custom built in function
 tagSchema.statics.build = (attrs: TagAttrs) => {

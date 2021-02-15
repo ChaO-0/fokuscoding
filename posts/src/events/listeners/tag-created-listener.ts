@@ -15,6 +15,8 @@ export class TagCreatedListener extends Listener<TagCreatedEvent> {
 		});
 		await tag.save();
 
+		console.log(tag);
+
 		msg.ack();
 	}
 }

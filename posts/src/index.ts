@@ -3,6 +3,7 @@ import { app } from './app';
 import { natsWrapper } from './nats-wrapper';
 import { TagCreatedListener } from './events/listeners/tag-created-listener';
 import { TagDeletedListener } from './events/listeners/tag-deleted-listener';
+import { TagUpdatedListener } from './events/listeners/tag-updated-listener';
 
 const start = async () => {
 	if (!process.env.JWT_KEY) {
@@ -42,6 +43,7 @@ const start = async () => {
 
 		new TagCreatedListener(natsWrapper.client).listen();
 		new TagDeletedListener(natsWrapper.client).listen();
+		new TagUpdatedListener(natsWrapper.client).listen();
 
 		await mongoose.connect(process.env.MONGO_URI, {
 			useNewUrlParser: true,

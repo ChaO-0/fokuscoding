@@ -4,7 +4,7 @@ export interface TagCreatedEvent {
 	subject: Subjects.TagCreated;
 	data: {
 		id: string;
-		version: number;
 		name: string;
+		version?: number;
 	};
 }

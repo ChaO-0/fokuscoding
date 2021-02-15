@@ -35,7 +35,6 @@ router.post(
 		await new TagCreatedPublisher(natsWrapper.client).publish({
 			id: tag.id,
 			name: tag.name,
-			version: tag.version,
 		});
 
 		return res.send(tag);
