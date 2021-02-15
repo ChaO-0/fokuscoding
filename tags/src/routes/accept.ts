@@ -1,4 +1,5 @@
 import {
+	BadRequestError,
 	NotAuthorizedError,
 	NotFoundError,
 	requireAuth,
@@ -24,6 +25,10 @@ router.post(
 
 		if (!tag) {
 			throw new NotFoundError();
+		}
+
+		if (tag.status === TagStatus.Accepted) {
+			throw new BadRequestError('Tag already accepted');
 		}
 
 		tag.set({
