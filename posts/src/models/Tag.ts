@@ -41,7 +41,7 @@ tagSchema.plugin(updateIfCurrentPlugin);
 tagSchema.statics.findByEvent = (event: { id: string; version: number }) => {
 	return Tag.findOne({
 		_id: event.id,
-		version: event.version - 1,
+		version: event.version - 2,
 	});
 };
 
