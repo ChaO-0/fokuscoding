@@ -17,6 +17,7 @@ export * from './events/subjects';
 
 export * from './events/tag-created-event';
 export * from './events/tag-deleted-event';
+export * from './events/tag-updated-event';
 
 export * from './events/post-created-event';
 export * from './events/post-updated-event';
