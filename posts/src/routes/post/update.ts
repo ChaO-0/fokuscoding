@@ -52,7 +52,7 @@ router.put(
 			},
 		});
 
-		let tagList = postTag.map((tag) => tag.name);
+		let tagList = postTag.map((tag) => tag.id);
 
 		await new PostUpdatedPublisher(natsWrapper.client).publish({
 			id: post._id,

@@ -10,8 +10,6 @@ export class TagUpdatedListener extends Listener<TagUpdatedEvent> {
 	async onMessage(data: TagUpdatedEvent['data'], msg: Message) {
 		const { id, name, version } = data;
 
-		console.log(version);
-		console.log(await Tag.find({}));
 		const tag = await Tag.findByEvent({ id, version });
 
 		if (!tag) {

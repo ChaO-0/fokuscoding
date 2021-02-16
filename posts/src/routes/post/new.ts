@@ -37,7 +37,7 @@ router.post(
 		const post = Post.build({ title, body, username, tags });
 		await post.save();
 
-		let tagList = post.tags?.map((tag) => tag.name);
+		let tagList = post.tags?.map((tag) => tag.id);
 		if (!tagList) {
 			tagList = [];
 		}
