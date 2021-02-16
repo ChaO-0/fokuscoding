@@ -36,10 +36,12 @@ const postSchema = new mongoose.Schema(
 			type: String,
 			required: true,
 		},
-		tags: {
-			type: [],
-			required: true,
-		},
+		tags: [
+			{
+				type: mongoose.Schema.Types.ObjectId,
+				ref: 'Tag',
+			},
+		],
 	},
 	{
 		toJSON: {

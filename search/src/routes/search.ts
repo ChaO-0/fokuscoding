@@ -20,7 +20,7 @@ router.post(
 				$regex: `.*${query}.*`,
 				$options: 'i',
 			},
-		});
+		}).populate('tags');
 
 		return res.send(search);
 	}
