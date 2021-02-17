@@ -1,6 +1,6 @@
 import buildClient from '../api/build-client';
 import 'bootstrap/dist/css/bootstrap.min.css';
-import '../assets/css/style.css';
+import '../assets/css/global.css';
 
 function MyApp({ Component, pageProps }) {
 	return <Component {...pageProps} />;

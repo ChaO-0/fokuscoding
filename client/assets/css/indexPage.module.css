@@ -1,0 +1,56 @@
+.logo {
+	color: #56e6ca;
+	font-size: 35px;
+	font-weight: bold;
+}
+
+.vote {
+	color: #56e6ca;
+}
+
+.vote .voteCount {
+	font-size: 30px;
+	font-weight: bold;
+}
+
+.discussion {
+	width: 70%;
+	font-size: 18px;
+	font-weight: bold;
+}
+
+.tags {
+	margin-top: -10px;
+}
+
+.postFooter {
+	font-size: 10px;
+	font-style: italic;
+}
+
+.loginText {
+	color: #4cc9b0;
+	font-weight: bold;
+}
+
+.btnLogin {
+	background-color: #4cc9b0;
+	padding: 5px 50px;
+	color: #fff;
+	border-radius: 10px;
+	font-weight: bold;
+	text-transform: uppercase;
+}
+
+.btnLogin:hover {
+	color: #fff;
+}
+
+.regLink {
+	text-decoration: underline;
+	color: inherit;
+}
+
+.regLink:hover {
+	color: inherit;
+}
