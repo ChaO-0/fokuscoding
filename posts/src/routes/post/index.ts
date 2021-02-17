@@ -13,7 +13,6 @@ router.get('/api/posts', async (req: Request, res: Response) => {
 		.populate('votes')
 		.limit(limit ? parseInt(limit as string) : 0)
 		.skip(offset ? parseInt(offset as string) : 0);
-	console.log(count);
 
 	return res.send({
 		entries: posts,
