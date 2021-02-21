@@ -2,21 +2,21 @@ import {
 	Listener,
 	NotFoundError,
 	Subjects,
-	VoteUpdatedEvent,
+	VoteUpdatedCountEvent,
 } from '@heapoverflow/common';
 import { Message } from 'node-nats-streaming';
 import { queueGroupName } from './queue-group-name';
 import { Post } from '../../models/Post';
 
-export class VoteUpdatedListener extends Listener<VoteUpdatedEvent> {
+export class VoteCountUpdatedListener extends Listener<VoteUpdatedCountEvent> {
 	readonly subject = Subjects.VoteUpdated;
 	queueGroupName = queueGroupName;
 
-	async onMessage(data: VoteUpdatedEvent['data'], msg: Message) {
-		const { id, vote, version } = data;
+	async onMessage(data: VoteUpdatedCountEvent['data'], msg: Message) {
+		const { postId, voteCount, updatedAt, version } = data;
 
 		const post = await Post.findByEvent({
-			id,
+			id: postId,
 			version,
 		});
 
@@ -24,7 +24,7 @@ export class VoteUpdatedListener extends Listener<VoteUpdatedEvent> {
 			throw new Error('Vote Not Found!');
 		}
 
-		post.set({ votes: vote });
+		post.set({ voteCount: voteCount, updatedAt });
 
 		await post.save();
 
