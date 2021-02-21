@@ -3,11 +3,13 @@ import { app } from './app';
 import { PostCreatedListener } from './events/listener/post-created-listener';
 import { PostDeletedListener } from './events/listener/post-deleted-listener';
 import { PostUpdatedListener } from './events/listener/post-updated-listener';
-import { VoteUpdatedListener } from './events/listener/vote-updated-listener';
+import { VoteCountUpdatedListener } from './events/listener/vote-count-updated-listener';
 import { TagCreatedListener } from './events/listener/tag-created-listener';
 import { TagDeletedListener } from './events/listener/tag-deleted-listener';
 import { TagUpdatedListener } from './events/listener/tag-updated-listener';
 import { natsWrapper } from './nats-wrapper';
+import { CommentCountUpdatedListener } from './events/listener/comment-count-updated-listener';
+import { SolutionUpdatedListener } from './events/listener/solution-updated-listener';
 
 const start = async () => {
 	if (!process.env.JWT_KEY) {
@@ -48,7 +50,9 @@ const start = async () => {
 		new PostCreatedListener(natsWrapper.client).listen();
 		new PostUpdatedListener(natsWrapper.client).listen();
 		new PostDeletedListener(natsWrapper.client).listen();
-		new VoteUpdatedListener(natsWrapper.client).listen();
+		new VoteCountUpdatedListener(natsWrapper.client).listen();
+		new CommentCountUpdatedListener(natsWrapper.client).listen();
+		new SolutionUpdatedListener(natsWrapper.client).listen();
 		new TagCreatedListener(natsWrapper.client).listen();
 		new TagUpdatedListener(natsWrapper.client).listen();
 		new TagDeletedListener(natsWrapper.client).listen();
