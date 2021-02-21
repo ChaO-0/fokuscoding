@@ -15,12 +15,15 @@ export * from './events/base-listener';
 export * from './events/base-publisher';
 export * from './events/subjects';
 
-export * from './events/tag-created-event';
-export * from './events/tag-deleted-event';
-export * from './events/tag-updated-event';
+export * from './events/tags/tag-created-event';
+export * from './events/tags/tag-deleted-event';
+export * from './events/tags/tag-updated-event';
 
-export * from './events/post-created-event';
-export * from './events/post-updated-event';
-export * from './events/post-deleted-event';
+export * from './events/post/post-created-event';
+export * from './events/post/post-updated-event';
+export * from './events/post/post-deleted-event';
 
-export * from './events/vote-updated-event';
+export * from './events/post/vote-count-updated-event';
+
+export * from './events/post/comment-count-updated-event';
+export * from './events/post/solution-updated-event';

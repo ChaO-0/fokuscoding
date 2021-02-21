@@ -7,4 +7,6 @@ export enum Subjects {
 	PostUpdated = 'post:updated',
 	PostDeleted = 'post:deleted',
 	VoteUpdated = 'vote:updated',
+	CommentUpdated = 'comment:updated',
+	SolutionUpdated = 'solution:updated',
 }
