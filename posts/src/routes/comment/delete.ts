@@ -6,6 +6,8 @@ import {
 import express, { Request, Response } from 'express';
 import { Comment } from '../../models/Comment';
 import { Post } from '../../models/Post';
+import { CommentCountUpdatedPublisher } from '../../events/publishers/comment-count-updated-publisher';
+import { natsWrapper } from '../../nats-wrapper';
 
 const router = express.Router();
 
@@ -46,6 +48,14 @@ router.delete(
 
 		// remove the comment id from the post
 		// post.comments.remove(req.params.comment_id);
+		await post.save();
+
+		await new CommentCountUpdatedPublisher(natsWrapper.client).publish({
+			postId: post._id,
+			commentCount: post.comments.length,
+			updatedAt: post.updatedAt,
+			version: post.version,
+		});
 
 		return res.status(204).send(comment);
 	}

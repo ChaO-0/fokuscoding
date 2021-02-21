@@ -5,8 +5,10 @@ import {
 } from '@heapoverflow/common';
 import express, { Request, Response } from 'express';
 import { body } from 'express-validator';
-import { Post } from '../../models/Post';
+import { Post, PostDoc } from '../../models/Post';
 import { Comment, CommentDoc } from '../../models/Comment';
+import { CommentCountUpdatedPublisher } from '../../events/publishers/comment-count-updated-publisher';
+import { natsWrapper } from '../../nats-wrapper';
 
 const router = express.Router();
 
@@ -17,7 +19,7 @@ router.post(
 	validateRequest,
 	async (req: Request, res: Response) => {
 		// find post by id
-		const post = await Post.findById(req.params.post_id);
+		const post: PostDoc = await Post.findById(req.params.post_id);
 		// const comments = post.comments as CommentDoc;
 
 		// check if the post is exist
@@ -37,6 +39,15 @@ router.post(
 		post.comments.push(comment.id);
 		// save the post
 		await post.save();
+
+		console.log(post.comments.length);
+
+		await new CommentCountUpdatedPublisher(natsWrapper.client).publish({
+			postId: post._id,
+			commentCount: post.comments.length,
+			updatedAt: post.updatedAt,
+			version: post.version,
+		});
 
 		return res.status(201).send(comment);
 	}
