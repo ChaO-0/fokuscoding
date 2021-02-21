@@ -26,6 +26,10 @@ export interface PostDoc extends mongoose.Document {
 	version: number;
 	votes: VoteDoc[] | VoteDoc;
 	tags?: TagDoc[];
+	solution: CommentDoc;
+	has_solution: boolean;
+	createdAt: Date;
+	updatedAt: Date;
 }
 
 const PostSchema = new mongoose.Schema(
@@ -61,6 +65,15 @@ const PostSchema = new mongoose.Schema(
 				default: [],
 			},
 		],
+		solution: {
+			type: mongoose.Schema.Types.ObjectId,
+			ref: 'Comment',
+			default: null,
+		},
+		has_solution: {
+			type: Boolean,
+			default: false,
+		},
 	},
 	{
 		toJSON: {

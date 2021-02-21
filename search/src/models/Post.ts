@@ -4,16 +4,23 @@ import { updateIfCurrentPlugin } from 'mongoose-update-if-current';
 interface PostAttrs {
 	id: string;
 	title: string;
-	votes: number;
+	voteCount: number;
+	commentCount: number;
 	username: string;
+	createdAt: Date;
+	updatedAt: Date;
 	tags: string[];
 }
 
 interface PostDoc extends mongoose.Document {
 	title: string;
-	votes: number;
+	voteCount: number;
+	commentCount: number;
 	username: string;
 	tags: string[];
+	has_solution: boolean;
+	createdAt: Date;
+	updatedAt: Date;
 	version: number;
 }
 
@@ -28,9 +35,25 @@ const postSchema = new mongoose.Schema(
 			type: String,
 			required: true,
 		},
-		votes: {
+		voteCount: {
 			type: Number,
 			required: true,
+		},
+		commentCount: {
+			type: Number,
+			required: true,
+		},
+		createdAt: {
+			type: Date,
+			required: true,
+		},
+		updatedAt: {
+			type: Date,
+			required: true,
+		},
+		hasSolution: {
+			type: Boolean,
+			default: false,
 		},
 		username: {
 			type: String,
@@ -50,7 +73,6 @@ const postSchema = new mongoose.Schema(
 				delete ret._id;
 			},
 		},
-		timestamps: true,
 	}
 );
 
@@ -68,9 +90,12 @@ postSchema.statics.build = (attrs: PostAttrs) => {
 	return new Post({
 		_id: attrs.id,
 		title: attrs.title,
-		votes: attrs.votes,
+		voteCount: attrs.voteCount,
+		commentCount: attrs.commentCount,
 		username: attrs.username,
 		tags: attrs.tags,
+		createdAt: attrs.createdAt,
+		updatedAt: attrs.updatedAt,
 	});
 };
 
