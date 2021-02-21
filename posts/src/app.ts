@@ -17,6 +17,7 @@ import { upvotePostRouter } from './routes/post/vote/up';
 import { downvotePostRouter } from './routes/post/vote/down';
 import { upvoteCommentRouter } from './routes/comment/up';
 import { downvoteCommentRouter } from './routes/comment/down';
+import { solutionRouter } from './routes/post/solution';
 
 const app = express();
 app.set('trust proxy', true);
@@ -41,6 +42,8 @@ app.use(upvotePostRouter);
 app.use(downvotePostRouter);
 app.use(upvoteCommentRouter);
 app.use(downvoteCommentRouter);
+
+app.use(solutionRouter);
 
 app.all('*', async (req, res) => {
 	throw new NotFoundError();
