@@ -1,4 +1,5 @@
 import mongoose from 'mongoose';
+import autopopulate from 'mongoose-autopopulate';
 
 // An interface that describes the properties that are required to create a new Vote
 interface VoteAttrs {
@@ -43,6 +44,8 @@ const voteSchema = new mongoose.Schema(
 voteSchema.statics.build = (attrs: VoteAttrs) => {
 	return new Vote(attrs);
 };
+
+voteSchema.plugin(autopopulate);
 
 const Vote = mongoose.model<VoteDoc, VoteModel>('Vote', voteSchema);
 
