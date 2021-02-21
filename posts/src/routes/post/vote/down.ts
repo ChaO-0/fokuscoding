@@ -8,7 +8,7 @@ import { Post } from '../../../models/Post';
 import { Vote, VoteDoc } from '../../../models/Vote';
 
 import { natsWrapper } from '../../../nats-wrapper';
-import { VoteUpdatedPublisher } from '../../../events/publishers/vote-updated-publisher';
+import { VoteUpdatedPublisher } from '../../../events/publishers/vote-count-updated-publisher';
 
 const router = express.Router();
 
@@ -98,8 +98,9 @@ router.post(
 		const countVote = upVote - downVote;
 
 		await new VoteUpdatedPublisher(natsWrapper.client).publish({
-			id: post!._id,
-			vote: countVote,
+			postId: post!._id,
+			voteCount: countVote,
+			updatedAt: post.updatedAt,
 			version: post!.version,
 		});
 

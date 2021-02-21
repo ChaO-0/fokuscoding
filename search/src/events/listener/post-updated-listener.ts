@@ -8,7 +8,7 @@ export class PostUpdatedListener extends Listener<PostUpdatedEvent> {
 	queueGroupName = queueGroupName;
 
 	async onMessage(data: PostUpdatedEvent['data'], msg: Message) {
-		const { id, title, body, username, tags, version } = data;
+		const { id, title, body, username, tags, updatedAt, version } = data;
 
 		const post = await Post.findByEvent({
 			id,
@@ -23,6 +23,7 @@ export class PostUpdatedListener extends Listener<PostUpdatedEvent> {
 			body,
 			username,
 			tags,
+			updatedAt,
 		});
 
 		await post.save();

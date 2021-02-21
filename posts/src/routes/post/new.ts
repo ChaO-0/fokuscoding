@@ -46,9 +46,12 @@ router.post(
 		await new PostCreatedPublisher(natsWrapper.client).publish({
 			id: post.id,
 			title: post.title,
-			votes: 0,
+			voteCount: 0,
 			username: post.username,
 			tags: tagList,
+			commentCount: 0,
+			createdAt: post.createdAt,
+			updatedAt: post.updatedAt,
 		});
 
 		res.status(201).send(post);
