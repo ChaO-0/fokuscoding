@@ -53,8 +53,6 @@ MyApp.getInitialProps = async (appContext) => {
 		);
 	}
 
-	console.log(pageProps);
-
 	return { pageProps, ...data };
 };
 

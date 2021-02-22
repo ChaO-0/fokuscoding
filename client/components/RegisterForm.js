@@ -1,38 +1,42 @@
 import {
-	Card,
-	CardContent,
 	Typography,
 	Box,
+	makeStyles,
 	Container,
+	Card,
+	CardContent,
 	FormGroup,
 	FormControl,
-	Button,
-	makeStyles,
 	InputLabel,
 	InputBase,
+	Button,
 } from '@material-ui/core';
-import NextLink from 'next/link';
 import { useState } from 'react';
+import NextLink from 'next/link';
+import useRequest from '../hooks/useRequest';
 
 const useStyles = makeStyles((theme) => ({
-	loginButton: {
+	registerButton: {
 		color: theme.palette.common.white,
 		width: theme.spacing(20),
 		borderRadius: 10,
 		fontWeight: 'bold',
 		fontSize: 16,
 	},
-	loginFooterTypography: {
+	cardMargin: {
+		marginTop: theme.spacing(3.5),
+	},
+	registerLogo: {
+		fontSize: 35,
+		textAlign: 'center',
+	},
+	registerFooterTypography: {
 		textAlign: 'center',
 		color: '#919191',
 	},
-	register: {
+	login: {
 		textDecoration: 'underline',
 		cursor: 'pointer',
-	},
-	container: {
-		maxWidth: '80%',
-		margin: 'auto',
 	},
 	input: {
 		marginTop: theme.spacing(3),
@@ -46,10 +50,28 @@ const useStyles = makeStyles((theme) => ({
 	},
 }));
 
-const loginForm = () => {
+const RegisterForm = () => {
 	const classes = useStyles();
+
 	const [username, setUsername] = useState('');
 	const [password, setPassword] = useState('');
+	const [email, setEmail] = useState('');
+	const { doRequest, errors } = useRequest({
+		url: '/api/users/signup',
+		method: 'post',
+		body: {
+			username,
+			password,
+			email,
+		},
+		onSuccess: (e) => console.log(e),
+	});
+
+	const handleSubmit = async (e) => {
+		e.preventDefault();
+
+		await doRequest();
+	};
 
 	const handleUsername = (e) => {
 		setUsername(e.target.value);
@@ -59,19 +81,34 @@ const loginForm = () => {
 		setPassword(e.target.value);
 	};
 
-	const handleSubmit = (e) => {
-		e.preventDefault();
+	const handleEmail = (e) => {
+		setEmail(e.target.value);
 	};
 
 	return (
-		<Card className={classes.container}>
+		<Card className={classes.cardMargin}>
 			<CardContent>
-				<Typography variant="h4" align="center" color="secondary">
-					<Box fontWeight="bold">Login</Box>
+				<Typography
+					component="div"
+					className={classes.registerLogo}
+					color="secondary"
+				>
+					<Box fontWeight={600}>Register</Box>
 				</Typography>
 				<Container maxWidth="xs">
 					<form onSubmit={handleSubmit}>
-						<FormGroup className={classes.formPad}>
+						<FormGroup>
+							<FormControl className={classes.formPad}>
+								<InputLabel shrink htmlFor="email">
+									Email
+								</InputLabel>
+								<InputBase
+									type="email"
+									className={classes.input}
+									value={email}
+									onChange={handleEmail}
+								></InputBase>
+							</FormControl>
 							<FormControl className={classes.formPad}>
 								<InputLabel shrink htmlFor="username">
 									Username
@@ -80,7 +117,6 @@ const loginForm = () => {
 									className={classes.input}
 									value={username}
 									onChange={handleUsername}
-									id="username"
 								></InputBase>
 							</FormControl>
 							<FormControl className={classes.formPad}>
@@ -92,39 +128,35 @@ const loginForm = () => {
 									value={password}
 									onChange={handlePassword}
 									type="password"
-									id="password"
 								></InputBase>
 							</FormControl>
-							<Box m="auto" py={3}>
+							<Box m="auto" pt={3} pb={2}>
 								<Button
 									variant="contained"
 									color="secondary"
-									className={classes.loginButton}
+									className={classes.registerButton}
 									size="small"
 									type="submit"
 								>
-									LOGIN
+									REGISTER
 								</Button>
-								<Box className={classes.loginFooterTypography} pt={2}>
+							</Box>
+							<Box className={classes.registerFooterTypography}>
+								<Typography variant="caption" component="div" display="inline">
+									Or{' '}
+								</Typography>
+								<NextLink href="/">
 									<Typography
 										variant="caption"
 										component="div"
 										display="inline"
+										className={classes.login}
 									>
-										Or{' '}
+										Login
 									</Typography>
-									<NextLink href="/register">
-										<Typography
-											variant="caption"
-											component="div"
-											display="inline"
-											className={classes.register}
-										>
-											Register
-										</Typography>
-									</NextLink>
-								</Box>
+								</NextLink>
 							</Box>
+							{errors}
 						</FormGroup>
 					</form>
 				</Container>
@@ -133,4 +165,4 @@ const loginForm = () => {
 	);
 };
 
-export default loginForm;
+export default RegisterForm;
