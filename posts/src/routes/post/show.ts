@@ -6,7 +6,7 @@ const router = express.Router();
 
 router.get('/api/posts/:post_id', async (req: Request, res: Response) => {
 	// find post by id
-	const post = await Post.findById(req.params.post_id)
+	const post: PostDoc = await Post.findById(req.params.post_id)
 		.populate('votes')
 		.populate('comments')
 		.populate('tags')

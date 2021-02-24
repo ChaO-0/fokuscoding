@@ -7,7 +7,6 @@ import {
 import express, { Request, Response } from 'express';
 import { body } from 'express-validator';
 import { PostUpdatedPublisher } from '../../events/publishers/post-updated-publisher';
-import { VoteUpdatedPublisher } from '../../events/publishers/vote-count-updated-publisher';
 import { Post, PostDoc } from '../../models/Post';
 import { Tag, TagDoc } from '../../models/Tag';
 import { natsWrapper } from '../../nats-wrapper';
@@ -52,7 +51,7 @@ router.put(
 			},
 		});
 
-		let tagList = postTag.map((tag) => tag.id);
+		let tagList: string[] = postTag.map((tag) => tag.id);
 
 		await new PostUpdatedPublisher(natsWrapper.client).publish({
 			id: post._id,

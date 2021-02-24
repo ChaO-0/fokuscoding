@@ -5,7 +5,7 @@ import {
 } from '@heapoverflow/common';
 import express, { Request, Response } from 'express';
 import { PostDeletedPublisher } from '../../events/publishers/post-deleted-publisher';
-import { Post } from '../../models/Post';
+import { Post, PostDoc } from '../../models/Post';
 import { natsWrapper } from '../../nats-wrapper';
 
 const router = express.Router();
@@ -16,7 +16,7 @@ router.delete(
 	async (req: Request, res: Response) => {
 		const { post_id } = req.params;
 		// find post by Id
-		const post = await Post.findById(post_id);
+		const post: PostDoc = await Post.findById(post_id);
 
 		// make sure if the post is exist
 		if (!post) {
