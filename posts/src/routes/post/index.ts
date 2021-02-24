@@ -4,22 +4,19 @@ import { Post } from '../../models/Post';
 const router = express.Router();
 
 router.get('/api/posts', async (req: Request, res: Response) => {
-	// fetch all posts
-	const { limit, offset } = req.query;
+	const limit = parseInt(req.query.limit as string);
+	const offset = parseInt(req.query.offset as string);
 
-	const count = await Post.estimatedDocumentCount();
-	const posts = await Post.find()
-		.populate('tags')
-		.populate('votes')
-		.limit(limit ? parseInt(limit as string) : 0)
-		.skip(offset ? parseInt(offset as string) : 0);
+	const posts = await Post.paginate(
+		{},
+		{
+			populate: ['votes', 'comments', 'tags'],
+			offset: offset || 0,
+			limit: limit || 10,
+		}
+	);
 
-	return res.send({
-		entries: posts,
-		limit: req.query.limit,
-		offset: req.query.offset,
-		total_count: count,
-	});
+	res.send(posts);
 });
 
 export { router as indexPostRouter };
