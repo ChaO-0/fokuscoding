@@ -7,29 +7,31 @@ import { natsWrapper } from '../../../nats-wrapper';
 
 const router = express.Router();
 
-const Voting = async (req: Request, res: Response) => {
+interface IVote {
+	status: number;
+	data: PostDoc;
+}
+
+const Voting = async (req: Request, res: Response): Promise<IVote> => {
 	// find the post by id
-	const post = await Post.findById(req.params.post_id).populate('votes');
+	const post: PostDoc = await Post.findById(req.params.post_id).populate(
+		'votes'
+	);
 
 	// check if the post is exist
 	if (!post) {
 		throw new NotFoundError();
 	}
 
-	// copy the votes array from the post
-	// we copy the votes for the "find" function in js plain object
-	// not as a mongoose model
-
-	const voters = [...(post.votes as VoteDoc[])];
 	// find out if the current user has voted
-	const alreadyVoted = voters.find((voter) => {
+	const alreadyVoted = (post.votes as VoteDoc[]).find((voter) => {
 		return voter.username === req.currentUser!.username;
 	});
 
 	// check the type of the user's vote
 	if (alreadyVoted?.type === 'up') {
 		// find vote by id
-		const vote = await Vote.findById(alreadyVoted.id);
+		const vote: VoteDoc = await Vote.findById(alreadyVoted.id);
 		// remove the vote
 		vote!.remove();
 
@@ -45,7 +47,7 @@ const Voting = async (req: Request, res: Response) => {
 		return { status: 204, data: post };
 	} else if (alreadyVoted?.type === 'down') {
 		// find vote by id
-		const vote = await Vote.findById(alreadyVoted.id);
+		const vote: VoteDoc = await Vote.findById(alreadyVoted.id);
 		// set the vote type to up
 		vote!.set({
 			type: 'up',
@@ -80,7 +82,7 @@ router.post(
 	requireAuth,
 	async (req: Request, res: Response) => {
 		const { status, data } = await Voting(req, res);
-		const post = await Post.findById(req.params.post_id);
+		const post: PostDoc = await Post.findById(req.params.post_id);
 
 		const postVote = post!.votes;
 

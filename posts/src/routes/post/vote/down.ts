@@ -1,10 +1,6 @@
-import {
-	BadRequestError,
-	NotFoundError,
-	requireAuth,
-} from '@heapoverflow/common';
+import { NotFoundError, requireAuth } from '@heapoverflow/common';
 import express, { Request, Response } from 'express';
-import { Post } from '../../../models/Post';
+import { Post, PostDoc } from '../../../models/Post';
 import { Vote, VoteDoc } from '../../../models/Vote';
 
 import { natsWrapper } from '../../../nats-wrapper';
@@ -12,28 +8,30 @@ import { VoteUpdatedPublisher } from '../../../events/publishers/vote-count-upda
 
 const router = express.Router();
 
-const Voting = async (req: Request, res: Response) => {
+interface IVote {
+	status: number;
+	data: PostDoc;
+}
+
+const Voting = async (req: Request, res: Response): Promise<IVote> => {
 	// find post by id
-	const post = await Post.findById(req.params.post_id).populate('votes');
+	const post: PostDoc = await Post.findById(req.params.post_id).populate(
+		'votes'
+	);
 
 	// check if the post is exist
 	if (!post) {
 		throw new NotFoundError();
 	}
-
-	// copy the document as a plain array of objects
-	// we copy the votes for the "find" function in js plain object
-	// not as a mongoose model
-	const voters = [...(post.votes as VoteDoc[])];
 	// find out if the user has voted
-	const alreadyVoted = voters.find((voter) => {
+	const alreadyVoted = (post.votes as VoteDoc[]).find((voter) => {
 		return voter.username === req.currentUser!.username;
 	});
 
 	// check the type of the vote if the user is already voted
 	if (alreadyVoted?.type === 'down') {
 		// find vote by id
-		const vote = Vote.findById(alreadyVoted.id);
+		const vote: VoteDoc = Vote.findById(alreadyVoted.id);
 		// remove the vote
 		vote!.remove();
 
@@ -49,7 +47,7 @@ const Voting = async (req: Request, res: Response) => {
 		return { status: 204, data: post };
 	} else if (alreadyVoted?.type === 'up') {
 		// find vote by id
-		const vote = await Vote.findById(alreadyVoted.id);
+		const vote: VoteDoc = await Vote.findById(alreadyVoted.id);
 		// update the type of the vote
 		vote!.set({
 			type: 'down',
