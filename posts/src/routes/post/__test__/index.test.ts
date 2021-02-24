@@ -14,7 +14,7 @@ it('can fetch a list of posts', async () => {
 
 	const response = await request(app).get('/api/posts').send().expect(200);
 
-	expect(response.body.length).toEqual(3);
+	expect(response.body.entries.length).toEqual(3);
 });
 
 // TODO: Create a new test for checking tags
