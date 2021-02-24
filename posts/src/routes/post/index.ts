@@ -4,8 +4,8 @@ import { Post } from '../../models/Post';
 const router = express.Router();
 
 router.get('/api/posts', async (req: Request, res: Response) => {
-	const limit = parseInt(req.query.limit as string);
-	const offset = parseInt(req.query.offset as string);
+	const limit: number = parseInt(req.query.limit as string);
+	const offset: number = parseInt(req.query.offset as string);
 
 	const posts = await Post.paginate(
 		{},
