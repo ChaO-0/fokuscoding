@@ -1,5 +1,6 @@
-import mongoose from 'mongoose';
+import mongoose, { PaginateModel } from 'mongoose';
 import { updateIfCurrentPlugin } from 'mongoose-update-if-current';
+import mongoosePaginate from 'mongoose-paginate-v2';
 import { CommentDoc } from './Comment';
 import { VoteDoc } from './Vote';
 import { TagDoc } from './Tag';
@@ -13,7 +14,7 @@ interface PostAttrs {
 }
 
 // An interface that describe the properties that a Post Model has
-interface PostModel extends mongoose.Model<PostDoc> {
+interface PostModel<T extends mongoose.Document> extends PaginateModel<T> {
 	build(attrs: PostAttrs): PostDoc;
 }
 
@@ -88,6 +89,7 @@ const PostSchema = new mongoose.Schema(
 );
 
 PostSchema.set('versionKey', 'version');
+PostSchema.plugin(mongoosePaginate);
 PostSchema.plugin(updateIfCurrentPlugin);
 
 // .statics is used to make a custom built in function
@@ -95,6 +97,9 @@ PostSchema.statics.build = (attrs: PostAttrs) => {
 	return new Post(attrs);
 };
 
-const Post = mongoose.model<PostDoc, PostModel>('Post', PostSchema);
+const Post: PostModel<PostDoc> = mongoose.model<PostDoc, PostModel<PostDoc>>(
+	'Post',
+	PostSchema
+) as PostModel<PostDoc>;
 
 export { Post };
