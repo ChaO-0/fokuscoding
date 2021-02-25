@@ -67,7 +67,12 @@ const TextInput = ({ label, ...props }) => {
 			<InputLabel shrink htmlFor={props.id || props.name}>
 				{label}
 			</InputLabel>
-			<InputBase {...field} {...props} className={classes.input} />
+			<InputBase
+				{...field}
+				{...props}
+				className={classes.input}
+				error={meta.touched && Boolean(meta.error)}
+			/>
 			{meta.touched && meta.error ? (
 				<FormHelperText className={classes.error}>{meta.error}</FormHelperText>
 			) : null}
