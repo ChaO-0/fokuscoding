@@ -7,13 +7,14 @@ import {
 	CardContent,
 	FormGroup,
 	FormControl,
+	FormHelperText,
 	InputLabel,
 	InputBase,
 	Button,
 } from '@material-ui/core';
-import { useState } from 'react';
+import { useFormik } from 'formik';
+import * as yup from 'yup';
 import NextLink from 'next/link';
-import useRequest from '../hooks/useRequest';
 
 const useStyles = makeStyles((theme) => ({
 	registerButton: {
@@ -44,6 +45,12 @@ const useStyles = makeStyles((theme) => ({
 		borderRadius: 4,
 		padding: theme.spacing(0.3, 2),
 		width: 'auto',
+		'&.Mui-error': {
+			border: 'solid 1px #FF7171',
+		},
+	},
+	error: {
+		color: '#FF0D39',
 	},
 	formPad: {
 		margin: theme.spacing(1, 0),
@@ -52,38 +59,31 @@ const useStyles = makeStyles((theme) => ({
 
 const RegisterForm = () => {
 	const classes = useStyles();
-
-	const [username, setUsername] = useState('');
-	const [password, setPassword] = useState('');
-	const [email, setEmail] = useState('');
-	const { doRequest, errors } = useRequest({
-		url: '/api/users/signup',
-		method: 'post',
-		body: {
-			username,
-			password,
-			email,
-		},
-		onSuccess: (e) => console.log(e),
+	const validationSchema = yup.object({
+		email: yup
+			.string('Enter your email')
+			.email('Enter a valid email')
+			.required('Email is required'),
+		password: yup
+			.string('Enter your password')
+			.min(4, 'Password should be of minimum 4 characters')
+			.required('Password is required'),
+		username: yup
+			.string('Enter your username')
+			.min(4, 'Username should be of minimum 4 characters')
+			.required('Username is required'),
 	});
-
-	const handleSubmit = async (e) => {
-		e.preventDefault();
-
-		await doRequest();
-	};
-
-	const handleUsername = (e) => {
-		setUsername(e.target.value);
-	};
-
-	const handlePassword = (e) => {
-		setPassword(e.target.value);
-	};
-
-	const handleEmail = (e) => {
-		setEmail(e.target.value);
-	};
+	const formik = useFormik({
+		initialValues: {
+			email: '',
+			username: '',
+			password: '',
+		},
+		validationSchema,
+		onSubmit: (values) => alert(JSON.stringify(values)),
+	});
+	const isError = (target) =>
+		formik.touched[target] && Boolean(formik.errors[target]);
 
 	return (
 		<Card className={classes.cardMargin}>
@@ -96,7 +96,7 @@ const RegisterForm = () => {
 					<Box fontWeight={600}>Register</Box>
 				</Typography>
 				<Container maxWidth="xs">
-					<form onSubmit={handleSubmit}>
+					<form onSubmit={formik.handleSubmit}>
 						<FormGroup>
 							<FormControl className={classes.formPad}>
 								<InputLabel shrink htmlFor="email">
@@ -104,10 +104,17 @@ const RegisterForm = () => {
 								</InputLabel>
 								<InputBase
 									type="email"
+									name="email"
 									className={classes.input}
-									value={email}
-									onChange={handleEmail}
+									value={formik.values.email}
+									onChange={formik.handleChange}
+									error={isError('email')}
 								></InputBase>
+								{isError('email') && (
+									<FormHelperText className={classes.error}>
+										{formik.errors.email}
+									</FormHelperText>
+								)}
 							</FormControl>
 							<FormControl className={classes.formPad}>
 								<InputLabel shrink htmlFor="username">
@@ -115,9 +122,16 @@ const RegisterForm = () => {
 								</InputLabel>
 								<InputBase
 									className={classes.input}
-									value={username}
-									onChange={handleUsername}
+									name="username"
+									value={formik.values.username}
+									onChange={formik.handleChange}
+									error={isError('username')}
 								></InputBase>
+								{isError('username') && (
+									<FormHelperText className={classes.error}>
+										{formik.errors.username}
+									</FormHelperText>
+								)}
 							</FormControl>
 							<FormControl className={classes.formPad}>
 								<InputLabel shrink htmlFor="password">
@@ -125,10 +139,17 @@ const RegisterForm = () => {
 								</InputLabel>
 								<InputBase
 									className={classes.input}
-									value={password}
-									onChange={handlePassword}
 									type="password"
+									name="password"
+									value={formik.values.password}
+									onChange={formik.handleChange}
+									error={isError('password')}
 								></InputBase>
+								{isError('password') && (
+									<FormHelperText className={classes.error}>
+										{formik.errors.password}
+									</FormHelperText>
+								)}
 							</FormControl>
 							<Box m="auto" pt={3} pb={2}>
 								<Button
@@ -156,7 +177,6 @@ const RegisterForm = () => {
 									</Typography>
 								</NextLink>
 							</Box>
-							{errors}
 						</FormGroup>
 					</form>
 				</Container>
