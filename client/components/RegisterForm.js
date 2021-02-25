@@ -12,7 +12,7 @@ import {
 	InputBase,
 	Button,
 } from '@material-ui/core';
-import { useFormik } from 'formik';
+import { Formik, useField, Form, useFormik } from 'formik';
 import * as yup from 'yup';
 import NextLink from 'next/link';
 import { useSelector, useDispatch } from 'react-redux';
@@ -59,6 +59,22 @@ const useStyles = makeStyles((theme) => ({
 	},
 }));
 
+const TextInput = ({ label, ...props }) => {
+	const [field, meta] = useField(props);
+	const classes = useStyles();
+	return (
+		<>
+			<InputLabel shrink htmlFor={props.id || props.name}>
+				{label}
+			</InputLabel>
+			<InputBase {...field} {...props} className={classes.input} />
+			{meta.touched && meta.error ? (
+				<FormHelperText className={classes.error}>{meta.error}</FormHelperText>
+			) : null}
+		</>
+	);
+};
+
 const RegisterForm = () => {
 	const classes = useStyles();
 	const validationSchema = yup.object({
@@ -75,19 +91,6 @@ const RegisterForm = () => {
 			.min(4, 'Username should be of minimum 4 characters')
 			.required('Username is required'),
 	});
-	const formik = useFormik({
-		initialValues: {
-			email: '',
-			username: '',
-			password: '',
-		},
-		validationSchema,
-		onSubmit: (values) => {
-			dispatch(fetchUserRegister(values));
-		},
-	});
-	const isError = (target) =>
-		formik.touched[target] && Boolean(formik.errors[target]);
 
 	const user = useSelector((state) => state.user);
 	const loading = useSelector((state) => state.loading);
@@ -107,89 +110,58 @@ const RegisterForm = () => {
 					<Box fontWeight={600}>Register</Box>
 				</Typography>
 				<Container maxWidth="xs">
-					<form onSubmit={formik.handleSubmit}>
-						<FormGroup>
-							<FormControl className={classes.formPad}>
-								<InputLabel shrink htmlFor="email">
-									Email
-								</InputLabel>
-								<InputBase
-									type="email"
-									name="email"
-									className={classes.input}
-									value={formik.values.email}
-									onChange={formik.handleChange}
-									error={isError('email')}
-								></InputBase>
-								{isError('email') && (
-									<FormHelperText className={classes.error}>
-										{formik.errors.email}
-									</FormHelperText>
-								)}
-							</FormControl>
-							<FormControl className={classes.formPad}>
-								<InputLabel shrink htmlFor="username">
-									Username
-								</InputLabel>
-								<InputBase
-									className={classes.input}
-									name="username"
-									value={formik.values.username}
-									onChange={formik.handleChange}
-									error={isError('username')}
-								></InputBase>
-								{isError('username') && (
-									<FormHelperText className={classes.error}>
-										{formik.errors.username}
-									</FormHelperText>
-								)}
-							</FormControl>
-							<FormControl className={classes.formPad}>
-								<InputLabel shrink htmlFor="password">
-									Password
-								</InputLabel>
-								<InputBase
-									className={classes.input}
-									type="password"
-									name="password"
-									value={formik.values.password}
-									onChange={formik.handleChange}
-									error={isError('password')}
-								></InputBase>
-								{isError('password') && (
-									<FormHelperText className={classes.error}>
-										{formik.errors.password}
-									</FormHelperText>
-								)}
-							</FormControl>
-							<Box m="auto" pt={3} pb={2}>
-								<Button
-									variant="contained"
-									color="secondary"
-									className={classes.registerButton}
-									size="small"
-									type="submit"
-								>
-									REGISTER
-								</Button>
-							</Box>
-							<Box className={classes.registerFooterTypography}>
-								<Typography variant="caption" component="div" display="inline">
-									Or{' '}
-								</Typography>
-								<NextLink href="/">
+					<Formik
+						initialValues={{ email: '', username: '', password: '' }}
+						validationSchema={validationSchema}
+						onSubmit={(values, { resetForm }) => {
+							dispatch(fetchUserRegister(values));
+							resetForm({});
+						}}
+					>
+						<Form>
+							<FormGroup>
+								<FormControl className={classes.formPad}>
+									<TextInput label="Email" name="email" type="email" />
+								</FormControl>
+								<FormControl className={classes.formPad}>
+									<TextInput label="Username" name="username" />
+								</FormControl>
+								<FormControl className={classes.formPad}>
+									<TextInput label="Password" name="password" type="password" />
+								</FormControl>
+								<Box m="auto" pt={3} pb={2}>
+									<Button
+										variant="contained"
+										color="secondary"
+										className={classes.registerButton}
+										size="small"
+										type="submit"
+									>
+										REGISTER
+									</Button>
+								</Box>
+								<Box className={classes.registerFooterTypography}>
 									<Typography
 										variant="caption"
 										component="div"
 										display="inline"
-										className={classes.login}
 									>
-										Login
+										Or{' '}
 									</Typography>
-								</NextLink>
-							</Box>
-						</FormGroup>
-					</form>
+									<NextLink href="/">
+										<Typography
+											variant="caption"
+											component="div"
+											display="inline"
+											className={classes.login}
+										>
+											Login
+										</Typography>
+									</NextLink>
+								</Box>
+							</FormGroup>
+						</Form>
+					</Formik>
 				</Container>
 			</CardContent>
 		</Card>
