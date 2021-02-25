@@ -15,6 +15,8 @@ import {
 import { useFormik } from 'formik';
 import * as yup from 'yup';
 import NextLink from 'next/link';
+import { useSelector, useDispatch } from 'react-redux';
+import { fetchUserRegister } from '../redux/actions/authActions';
 
 const useStyles = makeStyles((theme) => ({
 	registerButton: {
@@ -80,10 +82,18 @@ const RegisterForm = () => {
 			password: '',
 		},
 		validationSchema,
-		onSubmit: (values) => alert(JSON.stringify(values)),
+		onSubmit: (values) => {
+			dispatch(fetchUserRegister(values));
+		},
 	});
 	const isError = (target) =>
 		formik.touched[target] && Boolean(formik.errors[target]);
+
+	const user = useSelector((state) => state.user);
+	const loading = useSelector((state) => state.loading);
+	const dispatch = useDispatch();
+
+	console.log(user);
 
 	return (
 		<Card className={classes.cardMargin}>
@@ -93,6 +103,7 @@ const RegisterForm = () => {
 					className={classes.registerLogo}
 					color="secondary"
 				>
+					{loading ? 'loading' : null}
 					<Box fontWeight={600}>Register</Box>
 				</Typography>
 				<Container maxWidth="xs">

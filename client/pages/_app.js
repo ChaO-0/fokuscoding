@@ -5,6 +5,7 @@ import { ThemeProvider } from '@material-ui/core/styles';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import theme from '../src/theme';
 import buildClient from '../api/build-client';
+import { wrapper } from '../redux/store';
 
 function MyApp(props) {
 	const { Component, pageProps } = props;
@@ -56,4 +57,4 @@ MyApp.getInitialProps = async (appContext) => {
 	return { pageProps, ...data };
 };
 
-export default MyApp;
+export default wrapper.withRedux(MyApp);
