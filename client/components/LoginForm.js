@@ -13,6 +13,7 @@ import {
 } from '@material-ui/core';
 import NextLink from 'next/link';
 import { useState } from 'react';
+import { Formik, useField, Form } from 'formik';
 
 const useStyles = makeStyles((theme) => ({
 	loginButton: {
@@ -46,22 +47,29 @@ const useStyles = makeStyles((theme) => ({
 	},
 }));
 
+const TextInput = ({ label, ...props }) => {
+	const [field, meta] = useField(props);
+	const classes = useStyles();
+	return (
+		<>
+			<InputLabel shrink htmlFor={props.id || props.name}>
+				{label}
+			</InputLabel>
+			<InputBase
+				{...field}
+				{...props}
+				className={classes.input}
+				error={meta.touched && Boolean(meta.error)}
+			/>
+			{meta.touched && meta.error ? (
+				<FormHelperText>{meta.error}</FormHelperText>
+			) : null}
+		</>
+	);
+};
+
 const loginForm = () => {
 	const classes = useStyles();
-	const [username, setUsername] = useState('');
-	const [password, setPassword] = useState('');
-
-	const handleUsername = (e) => {
-		setUsername(e.target.value);
-	};
-
-	const handlePassword = (e) => {
-		setPassword(e.target.value);
-	};
-
-	const handleSubmit = (e) => {
-		e.preventDefault();
-	};
 
 	return (
 		<Card className={classes.container}>
@@ -70,63 +78,54 @@ const loginForm = () => {
 					<Box fontWeight="bold">Login</Box>
 				</Typography>
 				<Container maxWidth="xs">
-					<form onSubmit={handleSubmit}>
-						<FormGroup className={classes.formPad}>
-							<FormControl className={classes.formPad}>
-								<InputLabel shrink htmlFor="username">
-									Username
-								</InputLabel>
-								<InputBase
-									className={classes.input}
-									value={username}
-									onChange={handleUsername}
-									id="username"
-								></InputBase>
-							</FormControl>
-							<FormControl className={classes.formPad}>
-								<InputLabel shrink htmlFor="password">
-									Password
-								</InputLabel>
-								<InputBase
-									className={classes.input}
-									value={password}
-									onChange={handlePassword}
-									type="password"
-									id="password"
-								></InputBase>
-							</FormControl>
-							<Box m="auto" py={3}>
-								<Button
-									variant="contained"
-									color="secondary"
-									className={classes.loginButton}
-									size="small"
-									type="submit"
-								>
-									LOGIN
-								</Button>
-								<Box className={classes.loginFooterTypography} pt={2}>
-									<Typography
-										variant="caption"
-										component="div"
-										display="inline"
+					<Formik
+						initialValues={{ username: '', password: '' }}
+						onSubmit={(values, { resetForm }) => {
+							alert(JSON.stringify(values));
+							resetForm({});
+						}}
+					>
+						<Form>
+							<FormGroup>
+								<FormControl className={classes.formPad}>
+									<TextInput label="Username" name="username" />
+								</FormControl>
+								<FormControl className={classes.formPad}>
+									<TextInput label="Password" name="password" type="password" />
+								</FormControl>
+								<Box m="auto" py={3}>
+									<Button
+										variant="contained"
+										color="secondary"
+										className={classes.loginButton}
+										size="small"
+										type="submit"
 									>
-										Or{' '}
-									</Typography>
-									<NextLink href="/register">
+										LOGIN
+									</Button>
+									<Box className={classes.loginFooterTypography} pt={2}>
 										<Typography
 											variant="caption"
 											component="div"
 											display="inline"
-											className={classes.register}
 										>
-											Register
+											Or{' '}
 										</Typography>
-									</NextLink>
+										<NextLink href="/register">
+											<Typography
+												variant="caption"
+												component="div"
+												display="inline"
+												className={classes.register}
+											>
+												Register
+											</Typography>
+										</NextLink>
+									</Box>
 								</Box>
-							</Box>
-						</FormGroup>
-					</form>
+							</FormGroup>
+						</Form>
+					</Formik>
 				</Container>
 			</CardContent>
 		</Card>
