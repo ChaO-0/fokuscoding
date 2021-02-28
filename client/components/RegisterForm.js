@@ -13,13 +13,14 @@ import {
 	InputBase,
 	Button,
 } from '@material-ui/core';
-import { Formik, useField, Form } from 'formik';
+import { Formik, Form } from 'formik';
 import * as yup from 'yup';
 import NextLink from 'next/link';
 import useRequest from '../hooks/use-request';
 import { useRouter } from 'next/router';
 import { useSelector, useDispatch } from 'react-redux';
 import { fetchUserRegister } from '../redux/actions/authActions';
+import TextInput from './TextInput';
 
 const useStyles = makeStyles((theme) => ({
 	registerButton: {
@@ -64,27 +65,6 @@ const useStyles = makeStyles((theme) => ({
 		position: 'absolute',
 	},
 }));
-
-const TextInput = ({ label, ...props }) => {
-	const [field, meta] = useField(props);
-	const classes = useStyles();
-	return (
-		<>
-			<InputLabel shrink htmlFor={props.id || props.name}>
-				{label}
-			</InputLabel>
-			<InputBase
-				{...field}
-				{...props}
-				className={classes.input}
-				error={meta.touched && Boolean(meta.error)}
-			/>
-			{meta.touched && meta.error ? (
-				<FormHelperText className={classes.error}>{meta.error}</FormHelperText>
-			) : null}
-		</>
-	);
-};
 
 const RegisterForm = () => {
 	const classes = useStyles();
