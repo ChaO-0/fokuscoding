@@ -6,13 +6,6 @@ import {
 	createMuiTheme,
 	ThemeProvider,
 	Box,
-	Card,
-	CardContent,
-	FormControl,
-	FormGroup,
-	InputLabel,
-	InputBase,
-	Button,
 } from '@material-ui/core';
 import PostList from '../components/PostList';
 import Loginform from '../components/LoginForm';
@@ -51,7 +44,7 @@ const theme = createMuiTheme({
 	},
 });
 
-function Home() {
+function Index() {
 	const classes = useStyles();
 	return (
 		<ThemeProvider theme={theme}>
@@ -80,10 +73,4 @@ function Home() {
 	);
 }
 
-Home.getInitialProps = async (context, client, currentUser) => {
-	const { data } = await client.get('/api/posts');
-
-	return {};
-};
-
-export default Home;
+export default Index;
