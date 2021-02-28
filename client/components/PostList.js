@@ -4,11 +4,12 @@ import {
 	Box,
 	Card,
 	CardContent,
+	Chip,
 	ThemeProvider,
 	createMuiTheme,
 } from '@material-ui/core';
 
-const useStyles = makeStyles({
+const useStyles = makeStyles((theme) => ({
 	voteFont: {
 		fontSize: 12,
 	},
@@ -21,7 +22,13 @@ const useStyles = makeStyles({
 		fontStyle: 'italic',
 		color: '#707070',
 	},
-});
+	chip: {
+		backgroundColor: '#4CC9B040',
+		color: '#4CC9B0',
+		borderRadius: 0,
+		margin: theme.spacing(0, 0.3),
+	},
+}));
 
 const theme = createMuiTheme({
 	palette: {
@@ -41,22 +48,6 @@ const theme = createMuiTheme({
 		},
 	},
 });
-
-const Badge = ({ children }) => {
-	return (
-		<div
-			style={{
-				display: 'inline',
-				backgroundColor: '#4CC9B040',
-				color: '#4CC9B0',
-				margin: '0 2px',
-				padding: '4px 7px',
-			}}
-		>
-			{children}
-		</div>
-	);
-};
 
 const PostList = () => {
 	const classes = useStyles();
@@ -90,11 +81,11 @@ const PostList = () => {
 							>
 								<Typography variant="caption">5 menit yang lalu</Typography>
 								<Box>
-									<Badge>Tags</Badge>
-									<Badge>Tags</Badge>
-									<Badge>Tags</Badge>
-									<Badge>Tags</Badge>
-									<Badge>Tags</Badge>
+									<Chip className={classes.chip} label="Tags" />
+									<Chip className={classes.chip} label="Tags" />
+									<Chip className={classes.chip} label="Tags" />
+									<Chip className={classes.chip} label="Tags" />
+									<Chip className={classes.chip} label="Tags" />
 								</Box>
 							</Box>
 							<Box py={1}>
