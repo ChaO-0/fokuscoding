@@ -4,7 +4,6 @@ import Head from 'next/head';
 import { ThemeProvider } from '@material-ui/core/styles';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import theme from '../src/theme';
-import buildClient from '../api/build-client';
 import { wrapper } from '../redux/store';
 
 function MyApp(props) {
@@ -41,20 +40,28 @@ MyApp.propTypes = {
 	pageProps: PropTypes.object.isRequired,
 };
 
-MyApp.getInitialProps = async (appContext) => {
-	const client = buildClient(appContext.ctx);
-	const { data } = await client.get('/api/users/currentuser');
+// MyApp.getInitialProps = async (appContext) => {
+// 	const client = buildClient(appContext.ctx);
+// 	// const { data } = await client.get('/api/users/currentuser');
 
-	let pageProps = {};
-	if (appContext.Component.getInitialProps) {
-		pageProps = await appContext.Component.getInitialProps(
-			appContext.ctx,
-			client,
-			data.currentUser
-		);
-	}
+// 	if (typeof window === 'undefined') {
+// 		await axios.get(`${process.env.INGRESS_URI}/api/users/currentuser`, {
+// 			headers: appContext.ctx.req.headers,
+// 		});
+// 		console.log('asd');
+// 		// console.log(data);
+// 	}
+// 	// console.log(data);
+// 	let pageProps = {};
+// 	if (appContext.Component.getInitialProps) {
+// 		pageProps = await appContext.Component.getInitialProps(
+// 			appContext.ctx,
+// 			client
+// 			// data.currentUser
+// 		);
+// 	}
 
-	return { pageProps, ...data };
-};
+// 	return { pageProps };
+// };
 
 export default wrapper.withRedux(MyApp);

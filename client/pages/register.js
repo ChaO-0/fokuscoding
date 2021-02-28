@@ -36,4 +36,15 @@ const Register = () => {
 	);
 };
 
+export const getServerSideProps = async () => {
+	if (typeof window === 'undefined') console.log('Server');
+	else console.log('Browser');
+
+	return {
+		props: {
+			test: 1,
+		},
+	};
+};
+
 export default Register;
