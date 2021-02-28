@@ -5,6 +5,7 @@ import {
 	Container,
 	Card,
 	CardContent,
+	CircularProgress,
 	FormGroup,
 	FormControl,
 	FormHelperText,
@@ -12,9 +13,11 @@ import {
 	InputBase,
 	Button,
 } from '@material-ui/core';
-import { Formik, useField, Form, useFormik } from 'formik';
+import { Formik, useField, Form } from 'formik';
 import * as yup from 'yup';
 import NextLink from 'next/link';
+import useRequest from '../hooks/use-request';
+import { useRouter } from 'next/router';
 import { useSelector, useDispatch } from 'react-redux';
 import { fetchUserRegister } from '../redux/actions/authActions';
 
@@ -57,6 +60,9 @@ const useStyles = makeStyles((theme) => ({
 	formPad: {
 		margin: theme.spacing(1, 0),
 	},
+	circular: {
+		position: 'absolute',
+	},
 }));
 
 const TextInput = ({ label, ...props }) => {
@@ -96,12 +102,14 @@ const RegisterForm = () => {
 			.min(4, 'Username should be of minimum 4 characters')
 			.required('Username is required'),
 	});
-
-	const user = useSelector((state) => state.user);
-	const loading = useSelector((state) => state.loading);
+	const router = useRouter();
+	const loading = useSelector((state) => state.authReducer.loading);
 	const dispatch = useDispatch();
-
-	console.log(user);
+	const { doRequest } = useRequest({
+		url: '/api/users/signup',
+		method: 'post',
+		onSuccess: () => router.push('/home'),
+	});
 
 	return (
 		<Card className={classes.cardMargin}>
@@ -120,6 +128,9 @@ const RegisterForm = () => {
 						validationSchema={validationSchema}
 						onSubmit={(values, { resetForm }) => {
 							dispatch(fetchUserRegister(values));
+							setTimeout(() => {
+								router.push('/home');
+							}, 300);
 							resetForm({});
 						}}
 					>
@@ -134,7 +145,7 @@ const RegisterForm = () => {
 								<FormControl className={classes.formPad}>
 									<TextInput label="Password" name="password" type="password" />
 								</FormControl>
-								<Box m="auto" pt={3} pb={2}>
+								<Box m="auto" pt={3} pb={2} style={{ position: 'relative' }}>
 									<Button
 										variant="contained"
 										color="secondary"
@@ -144,6 +155,7 @@ const RegisterForm = () => {
 									>
 										REGISTER
 									</Button>
+									<CircularProgress className={classes.ciruclar} />
 								</Box>
 								<Box className={classes.registerFooterTypography}>
 									<Typography

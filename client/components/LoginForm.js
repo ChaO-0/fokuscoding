@@ -10,9 +10,12 @@ import {
 	makeStyles,
 	InputLabel,
 	InputBase,
+	CircularProgress,
 } from '@material-ui/core';
-import NextLink from 'next/link';
 import { useState } from 'react';
+import NextLink from 'next/link';
+import { useRouter } from 'next/router';
+import useRequest from '../hooks/use-request';
 import { Formik, useField, Form } from 'formik';
 
 const useStyles = makeStyles((theme) => ({
@@ -45,6 +48,14 @@ const useStyles = makeStyles((theme) => ({
 	formPad: {
 		margin: theme.spacing(1, 0),
 	},
+	circular: {
+		position: 'absolute',
+		right: '39%',
+		top: '23%',
+	},
+	wrapper: {
+		position: 'relative',
+	},
 }));
 
 const TextInput = ({ label, ...props }) => {
@@ -70,6 +81,13 @@ const TextInput = ({ label, ...props }) => {
 
 const loginForm = () => {
 	const classes = useStyles();
+	const router = useRouter();
+	const [loading, setLoading] = useState(false);
+	const { doRequest } = useRequest({
+		url: '/api/users/signin',
+		method: 'post',
+		onSuccess: () => router.push('/home'),
+	});
 
 	return (
 		<Card className={classes.container}>
@@ -79,30 +97,42 @@ const loginForm = () => {
 				</Typography>
 				<Container maxWidth="xs">
 					<Formik
-						initialValues={{ username: '', password: '' }}
+						initialValues={{ email: '', password: '' }}
 						onSubmit={(values, { resetForm }) => {
-							alert(JSON.stringify(values));
+							setLoading(true);
+							setTimeout(() => {
+								doRequest(values);
+								setLoading(false);
+							}, 1000);
 							resetForm({});
 						}}
 					>
 						<Form>
 							<FormGroup>
 								<FormControl className={classes.formPad}>
-									<TextInput label="Username" name="username" />
+									<TextInput label="Email" name="email" />
 								</FormControl>
 								<FormControl className={classes.formPad}>
 									<TextInput label="Password" name="password" type="password" />
 								</FormControl>
-								<Box m="auto" py={3}>
+								<Box m="auto" py={3} className={classes.wrapper}>
 									<Button
 										variant="contained"
 										color="secondary"
 										className={classes.loginButton}
+										disabled={loading}
 										size="small"
 										type="submit"
 									>
 										LOGIN
 									</Button>
+									{loading ? (
+										<CircularProgress
+											size={30}
+											color="secondary"
+											className={classes.circular}
+										/>
+									) : null}
 									<Box className={classes.loginFooterTypography} pt={2}>
 										<Typography
 											variant="caption"
