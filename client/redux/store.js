@@ -1,12 +1,15 @@
-import { createStore, applyMiddleware, compose, combineReducers } from 'redux';
+import { createStore, applyMiddleware, combineReducers } from 'redux';
+import { composeWithDevTools } from 'redux-devtools-extension';
 import { createWrapper, HYDRATE } from 'next-redux-wrapper';
 import thunk from 'redux-thunk';
 import authReducer from './reducers/authReducer';
 
-const composeEnhancers =
-	(typeof window != 'undefined' &&
-		window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__) ||
-	compose;
+const bindMiddleware = (middleware) => {
+	if (process.env.NODE_ENV !== 'production') {
+		return composeWithDevTools(applyMiddleware(...middleware));
+	}
+	return applyMiddleware(...middleware);
+};
 
 const combinedReducer = combineReducers({
 	authReducer,
@@ -24,7 +27,6 @@ const reducer = (state, action) => {
 	}
 };
 
-const makeStore = () =>
-	createStore(reducer, composeEnhancers(applyMiddleware(thunk)));
+const initStore = () => createStore(reducer, bindMiddleware([thunk]));
 
-export const wrapper = createWrapper(makeStore);
+export const wrapper = createWrapper(initStore);

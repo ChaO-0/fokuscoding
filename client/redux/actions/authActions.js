@@ -26,6 +26,7 @@ export const fetchUserRegister = (data) => (dispatch) => {
 				password,
 			});
 			const user = res.data;
+			localStorage.setItem('userInfo', JSON.stringify(res.data));
 			dispatch(userRegisterSuccess(user));
 		} catch (err) {
 			const error = err.message;

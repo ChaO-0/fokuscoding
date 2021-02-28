@@ -3,15 +3,22 @@ import {
 	USER_REGISTER_REQUEST,
 	USER_REGISTER_SUCCESS,
 } from '../actions/types';
+import { HYDRATE } from 'next-redux-wrapper';
 
 const initState = {
 	user: {},
+	isAuth: false,
 	error: '',
 	loading: false,
 };
 
 const authReducer = (state = initState, action) => {
 	switch (action.type) {
+		case HYDRATE:
+			return {
+				...state,
+				...action.payload,
+			};
 		case USER_REGISTER_REQUEST:
 			return {
 				...state,
