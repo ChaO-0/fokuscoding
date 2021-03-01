@@ -14,24 +14,25 @@ const Home = ({ currentUser }) => {
 };
 
 export const getServerSideProps = async ({ req, res }) => {
-	const { data } = await axios.get(
-		`${process.env.INGRESS_URI}/api/users/currentuser`,
-		{
-			headers: req.headers,
-		}
-	);
-	console.log(data);
-	if (!data.currentUser) {
-		return {
-			redirect: {
-				destination: '/',
-				permanent: false,
-			},
-		};
-	}
+	console.log(req.headers);
+	// const { data } = await axios.get(
+	// 	`${process.env.INGRESS_URI}/api/users/currentuser`,
+	// 	{
+	// 		headers: req.headers,
+	// 	}
+	// );
+	// console.log(data);
+	// if (!data.currentUser) {
+	// 	return {
+	// 		redirect: {
+	// 			destination: '/',
+	// 			permanent: false,
+	// 		},
+	// 	};
+	// }
 	return {
 		props: {
-			currentUser: data.currentUser,
+			currentUser: 1,
 		},
 	};
 };
