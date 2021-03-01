@@ -1,13 +1,12 @@
 import {
-	USER_REGISTER_FAIL,
-	USER_REGISTER_REQUEST,
-	USER_REGISTER_SUCCESS,
+	USER_LOGIN_FAIL,
+	USER_LOGIN_REQUEST,
+	USER_LOGIN_SUCCESS,
 } from '../actions/types';
 import { HYDRATE } from 'next-redux-wrapper';
 
 const initState = {
 	user: {},
-	isAuth: false,
 	error: '',
 	loading: false,
 };
@@ -19,18 +18,18 @@ const authReducer = (state = initState, action) => {
 				...state,
 				...action.payload,
 			};
-		case USER_REGISTER_REQUEST:
+		case USER_LOGIN_REQUEST:
 			return {
 				...state,
 				loading: true,
 			};
-		case USER_REGISTER_SUCCESS:
+		case USER_LOGIN_SUCCESS:
 			return {
 				...state,
 				user: action.payload,
 				loading: false,
 			};
-		case USER_REGISTER_FAIL:
+		case USER_LOGIN_FAIL:
 			return {
 				...state,
 				loading: false,
