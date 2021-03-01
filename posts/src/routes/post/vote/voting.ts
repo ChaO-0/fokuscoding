@@ -1,23 +1,26 @@
-import { NotFoundError, requireAuth } from '@heapoverflow/common';
-import express, { Request, Response } from 'express';
+import { NotFoundError } from '@heapoverflow/common';
+import { Request, Response } from 'express';
 import { Post, PostDoc } from '../../../models/Post';
 import { Vote, VoteDoc } from '../../../models/Vote';
 
-import { natsWrapper } from '../../../nats-wrapper';
-import { VoteUpdatedPublisher } from '../../../events/publishers/vote-count-updated-publisher';
-
-const router = express.Router();
+import { VoteType } from './vote-type';
 
 interface IVote {
 	status: number;
 	data: PostDoc;
 }
 
-const Voting = async (req: Request, res: Response): Promise<IVote> => {
+const voting = async (
+	req: Request,
+	res: Response,
+	voteType: string
+): Promise<IVote> => {
 	// find post by id
 	const post: PostDoc = await Post.findById(req.params.post_id).populate(
 		'votes'
 	);
+
+	const voteOpp = voteType === VoteType.Down ? VoteType.Up : VoteType.Down;
 
 	// check if the post is exist
 	if (!post) {
@@ -29,7 +32,7 @@ const Voting = async (req: Request, res: Response): Promise<IVote> => {
 	});
 
 	// check the type of the vote if the user is already voted
-	if (alreadyVoted?.type === 'down') {
+	if (alreadyVoted?.type === voteType) {
 		// find vote by id
 		const vote: VoteDoc = Vote.findById(alreadyVoted.id);
 		// remove the vote
@@ -44,24 +47,24 @@ const Voting = async (req: Request, res: Response): Promise<IVote> => {
 		// ? ref: https://stackoverflow.com/questions/18553946/remove-sub-document-from-mongo-with-mongoose
 		await post.save();
 
-		return { status: 204, data: post };
-	} else if (alreadyVoted?.type === 'up') {
+		return { status: 201, data: post };
+	} else if (alreadyVoted?.type === voteOpp) {
 		// find vote by id
 		const vote: VoteDoc = await Vote.findById(alreadyVoted.id);
 		// update the type of the vote
 		vote!.set({
-			type: 'down',
+			type: voteType,
 		});
 		// save the vote
 		await vote!.save();
 
 		await post.save();
-		return { status: 204, data: post };
+		return { status: 201, data: post };
 	}
 
 	// build down the vote if the user has not voted
 	const vote = Vote.build({
-		type: 'down',
+		type: voteType,
 		username: req.currentUser!.username,
 	});
 	// save the vote
@@ -75,35 +78,4 @@ const Voting = async (req: Request, res: Response): Promise<IVote> => {
 	return { status: 201, data: post };
 };
 
-router.post(
-	'/api/posts/:post_id/down',
-	requireAuth,
-	async (req: Request, res: Response) => {
-		const { status, data } = await Voting(req, res);
-		const post = await Post.findById(req.params.post_id);
-
-		const postVote = post!.votes;
-
-		const votes: VoteDoc[] = await Vote.find({
-			_id: {
-				$in: postVote,
-			},
-		});
-
-		const upVote = votes.filter((vote) => vote.type === 'up').length;
-		const downVote = votes.filter((vote) => vote.type === 'down').length;
-
-		const countVote = upVote - downVote;
-
-		await new VoteUpdatedPublisher(natsWrapper.client).publish({
-			postId: post!._id,
-			voteCount: countVote,
-			updatedAt: post.updatedAt,
-			version: post!.version,
-		});
-
-		return res.status(status).send({ data, countVote });
-	}
-);
-
-export { router as downvotePostRouter };
+export { voting };

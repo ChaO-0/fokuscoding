@@ -17,6 +17,7 @@ import NextLink from 'next/link';
 import { useRouter } from 'next/router';
 import useRequest from '../hooks/use-request';
 import { Formik, useField, Form } from 'formik';
+import TextInput from './TextInput';
 
 const useStyles = makeStyles((theme) => ({
 	loginButton: {
@@ -57,27 +58,6 @@ const useStyles = makeStyles((theme) => ({
 		position: 'relative',
 	},
 }));
-
-const TextInput = ({ label, ...props }) => {
-	const [field, meta] = useField(props);
-	const classes = useStyles();
-	return (
-		<>
-			<InputLabel shrink htmlFor={props.id || props.name}>
-				{label}
-			</InputLabel>
-			<InputBase
-				{...field}
-				{...props}
-				className={classes.input}
-				error={meta.touched && Boolean(meta.error)}
-			/>
-			{meta.touched && meta.error ? (
-				<FormHelperText>{meta.error}</FormHelperText>
-			) : null}
-		</>
-	);
-};
 
 const loginForm = () => {
 	const classes = useStyles();
