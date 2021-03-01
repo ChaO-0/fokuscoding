@@ -16,10 +16,9 @@ import {
 import { Formik, useField, Form } from 'formik';
 import * as yup from 'yup';
 import NextLink from 'next/link';
-import useRequest from '../hooks/use-request';
 import { useRouter } from 'next/router';
 import { useSelector, useDispatch } from 'react-redux';
-import { fetchUserRegister } from '../redux/actions/authActions';
+import { authRegister } from '../redux/actions/authActions';
 
 const useStyles = makeStyles((theme) => ({
 	registerButton: {
@@ -62,6 +61,11 @@ const useStyles = makeStyles((theme) => ({
 	},
 	circular: {
 		position: 'absolute',
+		right: '39%',
+		top: '35%',
+	},
+	wrapper: {
+		position: 'relative',
 	},
 }));
 
@@ -105,12 +109,6 @@ const RegisterForm = () => {
 	const router = useRouter();
 	const loading = useSelector((state) => state.authReducer.loading);
 	const dispatch = useDispatch();
-	const { doRequest } = useRequest({
-		url: '/api/users/signup',
-		method: 'post',
-		onSuccess: () => router.push('/home'),
-	});
-
 	return (
 		<Card className={classes.cardMargin}>
 			<CardContent>
@@ -119,18 +117,15 @@ const RegisterForm = () => {
 					className={classes.registerLogo}
 					color="secondary"
 				>
-					{loading ? 'loading' : null}
 					<Box fontWeight={600}>Register</Box>
 				</Typography>
 				<Container maxWidth="xs">
 					<Formik
 						initialValues={{ email: '', username: '', password: '' }}
 						validationSchema={validationSchema}
-						onSubmit={(values, { resetForm }) => {
-							dispatch(fetchUserRegister(values));
-							setTimeout(() => {
-								router.push('/home');
-							}, 300);
+						onSubmit={async (values, { resetForm }) => {
+							await dispatch(authRegister(values));
+							router.push('/home');
 							resetForm({});
 						}}
 					>
@@ -145,17 +140,24 @@ const RegisterForm = () => {
 								<FormControl className={classes.formPad}>
 									<TextInput label="Password" name="password" type="password" />
 								</FormControl>
-								<Box m="auto" pt={3} pb={2} style={{ position: 'relative' }}>
+								<Box m="auto" pt={3} pb={2} className={classes.wrapper}>
 									<Button
 										variant="contained"
 										color="secondary"
 										className={classes.registerButton}
 										size="small"
 										type="submit"
+										disabled={loading}
 									>
 										REGISTER
 									</Button>
-									<CircularProgress className={classes.ciruclar} />
+									{loading && (
+										<CircularProgress
+											size={30}
+											color="secondary"
+											className={classes.circular}
+										/>
+									)}
 								</Box>
 								<Box className={classes.registerFooterTypography}>
 									<Typography
