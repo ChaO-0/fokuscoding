@@ -1,33 +1,29 @@
 import { NotFoundError } from '@heapoverflow/common';
 import { Request, Response } from 'express';
-import { Post, PostDoc } from '../../../models/Post';
-import { Vote, VoteDoc } from '../../../models/Vote';
+import { CommentDoc } from '../models/Comment';
+import { PostDoc } from '../models/Post';
+import { Vote, VoteDoc } from '../models/Vote';
 
 import { VoteType } from './vote-type';
 
 interface IVote {
 	status: number;
-	data: PostDoc;
+	data: PostDoc | CommentDoc;
 }
 
 const voting = async (
 	req: Request,
-	res: Response,
-	voteType: string
+	voteType: string,
+	doc?: PostDoc | CommentDoc
 ): Promise<IVote> => {
-	// find post by id
-	const post: PostDoc = await Post.findById(req.params.post_id).populate(
-		'votes'
-	);
-
 	const voteOpp = voteType === VoteType.Down ? VoteType.Up : VoteType.Down;
 
-	// check if the post is exist
-	if (!post) {
+	if (!doc) {
 		throw new NotFoundError();
 	}
+
 	// find out if the user has voted
-	const alreadyVoted = (post.votes as VoteDoc[]).find((voter) => {
+	const alreadyVoted = (doc.votes as VoteDoc[]).find((voter) => {
 		return voter.username === req.currentUser!.username;
 	});
 
@@ -39,15 +35,15 @@ const voting = async (
 		vote!.remove();
 
 		// remove the vote from the post
-		(post.votes as VoteDoc).remove(alreadyVoted.id);
+		(doc.votes as VoteDoc).remove(alreadyVoted.id);
 		// save the post
 		// ? .remove() is for TOP-LEVEL documents
 		// ? because we used .remove() for the the sub document, we have to use .save()
 		// ? to save the TOP-LEVEL document
 		// ? ref: https://stackoverflow.com/questions/18553946/remove-sub-document-from-mongo-with-mongoose
-		await post.save();
+		await doc.save();
 
-		return { status: 201, data: post };
+		return { status: 201, data: doc };
 	} else if (alreadyVoted?.type === voteOpp) {
 		// find vote by id
 		const vote: VoteDoc = await Vote.findById(alreadyVoted.id);
@@ -58,8 +54,8 @@ const voting = async (
 		// save the vote
 		await vote!.save();
 
-		await post.save();
-		return { status: 201, data: post };
+		await doc.save();
+		return { status: 201, data: doc };
 	}
 
 	// build down the vote if the user has not voted
@@ -71,11 +67,11 @@ const voting = async (
 	await vote.save();
 
 	// push the vote to the post document
-	(post.votes as VoteDoc[]).push(vote.id);
+	(doc.votes as VoteDoc[]).push(vote.id);
 	// save the post
-	await post.save();
+	await doc.save();
 
-	return { status: 201, data: post };
+	return { status: 201, data: doc };
 };
 
 export { voting };

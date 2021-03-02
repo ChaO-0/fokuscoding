@@ -14,8 +14,7 @@ import { newCommentRouter } from './routes/comment/new';
 import { updateCommentRouter } from './routes/comment/update';
 import { deleteCommentRouter } from './routes/comment/delete';
 import { votePostRouter } from './routes/post/vote';
-import { upvoteCommentRouter } from './routes/comment/up';
-import { downvoteCommentRouter } from './routes/comment/down';
+import { voteCommentRouter } from './routes/comment/vote';
 import { solutionRouter } from './routes/post/solution';
 
 const app = express();
@@ -38,8 +37,7 @@ app.use(newCommentRouter);
 app.use(updateCommentRouter);
 app.use(deleteCommentRouter);
 app.use(votePostRouter);
-app.use(upvoteCommentRouter);
-app.use(downvoteCommentRouter);
+app.use(voteCommentRouter);
 
 app.use(solutionRouter);
 
