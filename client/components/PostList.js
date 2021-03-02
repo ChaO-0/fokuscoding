@@ -49,7 +49,7 @@ const theme = createMuiTheme({
 	},
 });
 
-const PostList = () => {
+const PostList = ({ title, voteCount, tags, createdBy }) => {
 	const classes = useStyles();
 	return (
 		<ThemeProvider theme={theme}>
@@ -58,7 +58,7 @@ const PostList = () => {
 					<Box display="flex" flexDirection="row" justifyContent="flex-start">
 						<Box flexDirection="column" marginRight={3}>
 							<Typography variant="h5" color="secondary" align="center">
-								<Box fontWeight={600}>0</Box>
+								<Box fontWeight={600}>{voteCount}</Box>
 							</Typography>
 							<Typography
 								color="secondary"
@@ -66,7 +66,9 @@ const PostList = () => {
 								className={classes.voteFont}
 								align="center"
 							>
-								<Box fontWeight={600}>VOTE</Box>
+								<Box fontWeight={600} my="auto">
+									VOTE
+								</Box>
 							</Typography>
 						</Box>
 						<Box
@@ -81,19 +83,18 @@ const PostList = () => {
 							>
 								<Typography variant="caption">5 menit yang lalu</Typography>
 								<Box>
-									<Chip className={classes.chip} label="Tags" />
-									<Chip className={classes.chip} label="Tags" />
-									<Chip className={classes.chip} label="Tags" />
-									<Chip className={classes.chip} label="Tags" />
-									<Chip className={classes.chip} label="Tags" />
+									{tags.map((tag) => (
+										<Chip
+											label={tag.name}
+											key={tag.id}
+											className={classes.chip}
+										/>
+									))}
 								</Box>
 							</Box>
 							<Box py={1}>
 								<Typography component="div">
-									<Box fontWeight="bold">
-										Judul sebuah diskusi yang dibuat oleh user sebagai judul
-										yang ada pada forum Diskusi
-									</Box>
+									<Box fontWeight="bold">{title}</Box>
 								</Typography>
 							</Box>
 							<Box
@@ -101,7 +102,7 @@ const PostList = () => {
 								justifyContent="flex-end"
 								className={classes.createdBy}
 							>
-								Oleh: UserDoc
+								Oleh: {createdBy}
 							</Box>
 						</Box>
 					</Box>
