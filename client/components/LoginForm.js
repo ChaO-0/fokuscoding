@@ -8,16 +8,15 @@ import {
 	FormControl,
 	Button,
 	makeStyles,
-	InputLabel,
-	InputBase,
 	CircularProgress,
 } from '@material-ui/core';
 import { useState } from 'react';
 import NextLink from 'next/link';
 import { useRouter } from 'next/router';
 import useRequest from '../hooks/use-request';
-import { Formik, useField, Form } from 'formik';
+import { Formik, Form } from 'formik';
 import TextInput from './TextInput';
+import * as Yup from 'yup';
 
 const useStyles = makeStyles((theme) => ({
 	loginButton: {
@@ -66,7 +65,14 @@ const loginForm = () => {
 	const { doRequest } = useRequest({
 		url: '/api/users/signin',
 		method: 'post',
-		onSuccess: () => router.push('/home'),
+	});
+	const validationSchema = Yup.object({
+		email: Yup.string('Enter your email')
+			.email('Enter a valid email')
+			.required('Email is required'),
+		password: Yup.string('Enter your password').required(
+			'Password is required'
+		),
 	});
 
 	return (
@@ -78,12 +84,12 @@ const loginForm = () => {
 				<Container maxWidth="xs">
 					<Formik
 						initialValues={{ email: '', password: '' }}
-						onSubmit={(values, { resetForm }) => {
+						validationSchema={validationSchema}
+						onSubmit={async (values, { resetForm }) => {
 							setLoading(true);
-							setTimeout(() => {
-								doRequest(values);
-								setLoading(false);
-							}, 1000);
+							await doRequest(values);
+							await router.push('/home');
+							setLoading(false);
 							resetForm({});
 						}}
 					>
@@ -106,13 +112,13 @@ const loginForm = () => {
 									>
 										LOGIN
 									</Button>
-									{loading ? (
+									{loading && (
 										<CircularProgress
 											size={30}
 											color="secondary"
 											className={classes.circular}
 										/>
-									) : null}
+									)}
 									<Box className={classes.loginFooterTypography} pt={2}>
 										<Typography
 											variant="caption"
