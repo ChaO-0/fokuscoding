@@ -8,17 +8,15 @@ import {
 	CircularProgress,
 	FormGroup,
 	FormControl,
-	FormHelperText,
-	InputLabel,
-	InputBase,
 	Button,
 } from '@material-ui/core';
-import { Formik, useField, Form } from 'formik';
+import { Formik, Form } from 'formik';
 import * as yup from 'yup';
 import NextLink from 'next/link';
-import { useRouter } from 'next/router';
-import { useSelector, useDispatch } from 'react-redux';
-import { authRegister } from '../redux/actions/authActions';
+import { useRouter, Router } from 'next/router';
+import useRequest from '../hooks/use-request';
+import { useState } from 'react';
+import TextInput from './TextInput';
 
 const useStyles = makeStyles((theme) => ({
 	registerButton: {
@@ -69,27 +67,6 @@ const useStyles = makeStyles((theme) => ({
 	},
 }));
 
-const TextInput = ({ label, ...props }) => {
-	const [field, meta] = useField(props);
-	const classes = useStyles();
-	return (
-		<>
-			<InputLabel shrink htmlFor={props.id || props.name}>
-				{label}
-			</InputLabel>
-			<InputBase
-				{...field}
-				{...props}
-				className={classes.input}
-				error={meta.touched && Boolean(meta.error)}
-			/>
-			{meta.touched && meta.error ? (
-				<FormHelperText className={classes.error}>{meta.error}</FormHelperText>
-			) : null}
-		</>
-	);
-};
-
 const RegisterForm = () => {
 	const classes = useStyles();
 	const validationSchema = yup.object({
@@ -107,8 +84,12 @@ const RegisterForm = () => {
 			.required('Username is required'),
 	});
 	const router = useRouter();
-	const loading = useSelector((state) => state.authReducer.loading);
-	const dispatch = useDispatch();
+	const [loading, setLoading] = useState(false);
+	const { doRequest } = useRequest({
+		url: '/api/users/signup',
+		method: 'post',
+	});
+
 	return (
 		<Card className={classes.cardMargin}>
 			<CardContent>
@@ -124,8 +105,10 @@ const RegisterForm = () => {
 						initialValues={{ email: '', username: '', password: '' }}
 						validationSchema={validationSchema}
 						onSubmit={async (values, { resetForm }) => {
-							await dispatch(authRegister(values));
-							router.push('/home');
+							setLoading(true);
+							await doRequest(values);
+							await router.push('/home');
+							setLoading(false);
 							resetForm({});
 						}}
 					>

@@ -9,6 +9,8 @@ import {
 } from '@material-ui/core';
 import PostList from '../components/PostList';
 import Loginform from '../components/LoginForm';
+import { useEffect, useState } from 'react';
+import axios from 'axios';
 
 const useStyles = makeStyles((theme) => ({
 	containerPad: {
@@ -46,6 +48,13 @@ const theme = createMuiTheme({
 
 function Index() {
 	const classes = useStyles();
+	const [posts, setPosts] = useState([]);
+	useEffect(async () => {
+		const { data } = await axios.get('/api/posts?offset=0&limit=4');
+		setPosts(data.docs);
+		console.log(data.docs);
+	}, []);
+
 	return (
 		<ThemeProvider theme={theme}>
 			<Container className={classes.containerPad}>
@@ -59,10 +68,22 @@ function Index() {
 					justify="center"
 				>
 					<Grid item sm={12} md={6} className={classes.postList}>
+						{posts.map((post) => (
+							<PostList
+								key={post.id}
+								title={post.title}
+								voteCount={
+									post.votes.filter((vote) => vote.type === 'up').length -
+									post.votes.filter((vote) => vote.type === 'down').length
+								}
+								tags={post.tags}
+								createdBy={post.username}
+							/>
+						))}
+						{/* <PostList />
 						<PostList />
 						<PostList />
-						<PostList />
-						<PostList />
+						<PostList /> */}
 					</Grid>
 					<Grid item sm={12} md={6}>
 						<Loginform />
