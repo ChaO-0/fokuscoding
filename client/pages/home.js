@@ -7,6 +7,7 @@ import {
 	InputBase,
 	Box,
 	Button,
+	CssBaseline,
 } from '@material-ui/core';
 import { Search as SearchIcon } from '@material-ui/icons';
 import axios from 'axios';
@@ -15,29 +16,53 @@ const useStyles = makeStyles({
 	paper: {
 		background: '#4C72C9',
 	},
+	root: {
+		display: 'flex',
+	},
+	drawer: {
+		flexShrink: 0,
+		width: '30%',
+	},
+	content: {
+		flexGrow: 1,
+	},
 });
 
 const Home = ({ currentUser }) => {
 	const classes = useStyles();
+	console.log(currentUser);
 	return (
-		<>
-			<Drawer variant="permanent" classes={{ paper: classes.paper }}>
+		<Box className={classes.root}>
+			<CssBaseline />
+			<Drawer
+				variant="permanent"
+				classes={{ paper: classes.paper }}
+				className={classes.drawer}
+				anchor="left"
+				// style={{ flexShrink: 0 }}
+				flexShrink={0}
+			>
 				<List>
 					<ListItem>
 						<ListItemText
 							primary="Mulai Diskusi"
-							style={{ color: 'white', textAlign: 'center' }}
+							style={{
+								color: 'white',
+								textAlign: 'center',
+								cursor: 'pointer',
+							}}
 						/>
 					</ListItem>
 					<ListItem style={{ margin: 'auto', width: '40%' }}>
 						<ListItemText
-							primary="User"
+							primary={currentUser.username}
 							style={{
 								color: 'white',
 								textAlign: 'center',
-								border: '1px solid white',
+								border: '3px solid white',
 								borderRadius: 100,
 								padding: '5px 0',
+								cursor: 'pointer',
 							}}
 						/>
 					</ListItem>
@@ -76,7 +101,8 @@ const Home = ({ currentUser }) => {
 					</ListItem>
 				</List>
 			</Drawer>
-		</>
+			<main className={classes.content}>asdasdsadasd</main>
+		</Box>
 	);
 };
 
