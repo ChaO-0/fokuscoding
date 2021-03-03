@@ -5,7 +5,12 @@ import { ThemeProvider } from '@material-ui/core/styles';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import theme from '../src/theme';
 import { wrapper } from '../redux/store';
+import Router from 'next/router';
+import NProgress from 'nprogress';
 
+Router.events.on('routeChangeStart', () => NProgress.start());
+Router.events.on('routeChangeComplete', () => NProgress.done());
+Router.events.on('routeChangeError', () => NProgress.done());
 function MyApp(props) {
 	const { Component, pageProps } = props;
 
@@ -20,10 +25,14 @@ function MyApp(props) {
 	return (
 		<React.Fragment>
 			<Head>
-				<title>My page</title>
+				<title>HeapOverflow</title>
 				<meta
 					name="viewport"
 					content="minimum-scale=1, initial-scale=1, width=device-width"
+				/>
+				<link
+					rel="stylesheet"
+					href="https://cdnjs.cloudflare.com/ajax/libs/nprogress/0.2.0/nprogress.min.css"
 				/>
 			</Head>
 			<ThemeProvider theme={theme}>
