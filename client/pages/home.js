@@ -6,6 +6,7 @@ import {
 	makeStyles,
 	InputBase,
 	Box,
+	Button,
 } from '@material-ui/core';
 import { Search as SearchIcon } from '@material-ui/icons';
 import axios from 'axios';
@@ -41,23 +42,27 @@ const Home = ({ currentUser }) => {
 						/>
 					</ListItem>
 					<ListItem>
-						<Box px={0.3} style={{ position: 'relative' }}>
+						<Box px={0.3} display="flex">
 							<InputBase
 								style={{
 									width: 300,
-									borderRadius: 50,
+									borderTopLeftRadius: 50,
+									borderBottomLeftRadius: 50,
 									backgroundColor: 'white',
 									padding: '5px 15px',
 								}}
 								placeholder="Cari diskusi"
 							/>
-							<SearchIcon
+							<Button
 								style={{
-									position: 'absolute',
-									top: '20%',
-									right: '5%',
+									borderRadius: '0px 50px 50px 0px',
+									boxShadow: 'none',
 								}}
-							/>
+								variant="contained"
+								color="primary"
+							>
+								<SearchIcon />
+							</Button>
 						</Box>
 					</ListItem>
 					<ListItem button>
