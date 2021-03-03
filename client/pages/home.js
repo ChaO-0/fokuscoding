@@ -1,49 +1,65 @@
+import React from 'react';
 import {
+	makeStyles,
 	Drawer,
+	Box,
 	List,
 	ListItem,
+	ListItemIcon,
 	ListItemText,
-	makeStyles,
 	InputBase,
-	Box,
 	Button,
-	CssBaseline,
 } from '@material-ui/core';
-import { Search as SearchIcon } from '@material-ui/icons';
+import {
+	Home as HomeIcon,
+	Search as SearchIcon,
+	Chat as ChatIcon,
+	Loyalty as LoyaltyIcon,
+} from '@material-ui/icons';
 import axios from 'axios';
+import PostList from '../components/PostList';
 
-const useStyles = makeStyles({
-	paper: {
-		background: '#4C72C9',
-	},
+const drawerWidth = '20%';
+
+const useStyles = makeStyles((theme) => ({
 	root: {
 		display: 'flex',
 	},
-	drawer: {
-		flexShrink: 0,
-		width: '30%',
+	appBar: {
+		width: `calc(100% - ${drawerWidth}px)`,
+		marginLeft: drawerWidth,
 	},
+	drawer: {
+		width: drawerWidth,
+		flexShrink: 0,
+	},
+	drawerPaper: {
+		width: drawerWidth,
+		backgroundColor: '#4C72C9',
+	},
+	// necessary for content to be below app bar
 	content: {
 		flexGrow: 1,
+		backgroundColor: theme.palette.background.default,
+		padding: theme.spacing(3),
 	},
-});
+}));
 
 const Home = ({ currentUser }) => {
 	const classes = useStyles();
-	console.log(currentUser);
+
 	return (
 		<Box className={classes.root}>
-			<CssBaseline />
 			<Drawer
-				variant="permanent"
-				classes={{ paper: classes.paper }}
 				className={classes.drawer}
+				variant="permanent"
+				classes={{
+					paper: classes.drawerPaper,
+				}}
 				anchor="left"
-				// style={{ flexShrink: 0 }}
-				flexShrink={0}
 			>
 				<List>
-					<ListItem>
+					<ListItem style={{ padding: '25px 0' }}>
 						<ListItemText
 							primary="Mulai Diskusi"
 							style={{
@@ -53,24 +69,29 @@ const Home = ({ currentUser }) => {
 							}}
 						/>
 					</ListItem>
-					<ListItem style={{ margin: 'auto', width: '40%' }}>
+					<ListItem
+						style={{
+							width: '40%',
+							border: '3px solid white',
+							padding: '1px 0',
+							margin: '20px auto',
+							borderRadius: 100,
+							cursor: 'pointer',
+						}}
+					>
 						<ListItemText
 							primary={currentUser.username}
 							style={{
 								color: 'white',
 								textAlign: 'center',
-								border: '3px solid white',
-								borderRadius: 100,
-								padding: '5px 0',
-								cursor: 'pointer',
 							}}
 						/>
 					</ListItem>
 					<ListItem>
-						<Box px={0.3} display="flex">
+						<Box display="flex" py={1}>
 							<InputBase
 								style={{
-									width: 300,
+									width: '100%',
 									borderTopLeftRadius: 50,
 									borderBottomLeftRadius: 50,
 									backgroundColor: 'white',
@@ -91,17 +112,29 @@ const Home = ({ currentUser }) => {
 						</Box>
 					</ListItem>
 					<ListItem button>
+						<ListItemIcon>
+							<HomeIcon style={{ color: 'white' }} />
+						</ListItemIcon>
 						<ListItemText primary="Beranda" style={{ color: 'white' }} />
 					</ListItem>
 					<ListItem button>
+						<ListItemIcon>
+							<LoyaltyIcon style={{ color: 'white' }} />
+						</ListItemIcon>
 						<ListItemText primary="Tags" style={{ color: 'white' }} />
 					</ListItem>
 					<ListItem button>
+						<ListItemIcon>
+							<ChatIcon style={{ color: 'white' }} />
+						</ListItemIcon>
 						<ListItemText primary="Diskusi saya" style={{ color: 'white' }} />
 					</ListItem>
 				</List>
 			</Drawer>
-			<main className={classes.content}>asdasdsadasd</main>
+			<main className={classes.content}>
+				<Box>test</Box>
+				<PostList />
+			</main>
 		</Box>
 	);
 };
