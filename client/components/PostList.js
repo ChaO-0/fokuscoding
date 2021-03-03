@@ -49,7 +49,7 @@ const theme = createMuiTheme({
 	},
 });
 
-const PostList = ({ title, voteCount, tags, createdBy }) => {
+const PostList = ({ title, voteCount, tags = [], createdBy }) => {
 	const classes = useStyles();
 	return (
 		<ThemeProvider theme={theme}>
