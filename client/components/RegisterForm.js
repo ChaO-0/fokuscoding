@@ -88,6 +88,7 @@ const RegisterForm = () => {
 	const { doRequest } = useRequest({
 		url: '/api/users/signup',
 		method: 'post',
+		onSuccess: () => router.push('/home'),
 	});
 
 	return (
@@ -107,8 +108,8 @@ const RegisterForm = () => {
 						onSubmit={async (values, { resetForm }) => {
 							setLoading(true);
 							await doRequest(values);
-							await router.push('/home');
 							setLoading(false);
+							// router.push('/home');
 							resetForm({});
 						}}
 					>

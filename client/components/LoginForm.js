@@ -65,6 +65,7 @@ const loginForm = () => {
 	const { doRequest } = useRequest({
 		url: '/api/users/signin',
 		method: 'post',
+		onSuccess: () => router.push('/home'),
 	});
 	const validationSchema = Yup.object({
 		email: Yup.string('Enter your email')
@@ -88,7 +89,6 @@ const loginForm = () => {
 						onSubmit={async (values, { resetForm }) => {
 							setLoading(true);
 							await doRequest(values);
-							await router.push('/home');
 							setLoading(false);
 							resetForm({});
 						}}
