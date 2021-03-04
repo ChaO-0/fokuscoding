@@ -7,16 +7,11 @@ import Layout from '../components/Layout';
 
 const Home = ({ currentUser }) => {
 	return (
-		<Box display="flex">
-			<Layout currentUser={currentUser}>
-				<>
-					<Box display="flex" justifyContent="flex-end">
-						HeapOverFlow
-					</Box>
-					<PostList title="lorem ipsum dolor sit amet hahahah" />
-				</>
-			</Layout>
-		</Box>
+		<Layout currentUser={currentUser}>
+			<>
+				<PostList title="lorem ipsum dolor sit amet hahahah" />
+			</>
+		</Layout>
 	);
 };
 
