@@ -49,7 +49,7 @@ const theme = createMuiTheme({
 	},
 });
 
-const PostList = ({ title, voteCount, tags = [], createdBy }) => {
+const PostList = ({ title, voteCount, tags = [], createdBy, time }) => {
 	const classes = useStyles();
 	return (
 		<ThemeProvider theme={theme}>
@@ -81,7 +81,7 @@ const PostList = ({ title, voteCount, tags = [], createdBy }) => {
 								justifyContent="space-between"
 								flexDirection="row"
 							>
-								<Typography variant="caption">5 menit yang lalu</Typography>
+								<Typography variant="caption">{time}</Typography>
 								<Box>
 									{tags.map((tag) => (
 										<Chip
