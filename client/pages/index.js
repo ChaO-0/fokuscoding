@@ -9,7 +9,7 @@ import {
 } from '@material-ui/core';
 import PostList from '../components/PostList';
 import Loginform from '../components/LoginForm';
-import { useEffect, useState } from 'react';
+import moment from 'moment';
 import axios from 'axios';
 
 const useStyles = makeStyles((theme) => ({
@@ -46,14 +46,10 @@ const theme = createMuiTheme({
 	},
 });
 
-function Index() {
+const Index = ({ posts }) => {
 	const classes = useStyles();
-	const [posts, setPosts] = useState([]);
-	useEffect(async () => {
-		const { data } = await axios.get('/api/posts?offset=0&limit=4');
-		setPosts(data.docs);
-		console.log(data.docs);
-	}, []);
+	moment.locale('id');
+	console.log(moment(posts.docs[0].updatedAt).fromNow());
 
 	return (
 		<ThemeProvider theme={theme}>
@@ -68,7 +64,7 @@ function Index() {
 					justify="center"
 				>
 					<Grid item sm={12} md={6} className={classes.postList}>
-						{posts.map((post) => (
+						{posts.docs.map((post) => (
 							<PostList
 								key={post.id}
 								title={post.title}
@@ -78,12 +74,9 @@ function Index() {
 								}
 								tags={post.tags}
 								createdBy={post.username}
+								time={moment(post.updatedAt).fromNow()}
 							/>
 						))}
-						{/* <PostList />
-						<PostList />
-						<PostList />
-						<PostList /> */}
 					</Grid>
 					<Grid item sm={12} md={6}>
 						<Loginform />
@@ -92,6 +85,18 @@ function Index() {
 			</Container>
 		</ThemeProvider>
 	);
-}
+};
+
+export const getServerSideProps = async ({ req }) => {
+	const { data } = await axios.get(`${process.env.INGRESS_URI}/api/posts`, {
+		headers: req.headers,
+	});
+
+	return {
+		props: {
+			posts: data,
+		},
+	};
+};
 
 export default Index;

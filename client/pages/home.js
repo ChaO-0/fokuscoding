@@ -1,15 +1,26 @@
 import React from 'react';
-import { Box } from '@material-ui/core';
-
+import moment from 'moment';
 import axios from 'axios';
 import PostList from '../components/PostList';
 import Layout from '../components/Layout';
 
-const Home = ({ currentUser }) => {
+const Home = ({ currentUser, posts }) => {
 	return (
 		<Layout currentUser={currentUser}>
 			<>
-				<PostList title="lorem ipsum dolor sit amet hahahah" />
+				{posts.docs.map((post) => (
+					<PostList
+						key={post.id}
+						title={post.title}
+						voteCount={
+							post.votes.filter((vote) => vote.type === 'up').length -
+							post.votes.filter((vote) => vote.type === 'down').length
+						}
+						tags={post.tags}
+						createdBy={post.username}
+						time={moment(post.updatedAt).fromNow()}
+					/>
+				))}
 			</>
 		</Layout>
 	);
@@ -22,7 +33,14 @@ export const getServerSideProps = async ({ req }) => {
 			headers: req.headers,
 		}
 	);
-	console.log(data);
+
+	const { data: posts } = await axios.get(
+		`${process.env.INGRESS_URI}/api/posts`,
+		{
+			headers: req.headers,
+		}
+	);
+
 	if (!data.currentUser) {
 		return {
 			redirect: {
@@ -34,6 +52,7 @@ export const getServerSideProps = async ({ req }) => {
 	return {
 		props: {
 			currentUser: data.currentUser,
+			posts,
 		},
 	};
 };
