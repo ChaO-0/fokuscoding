@@ -1,6 +1,6 @@
 import SideBar from './SideBar';
 import PropTypes from 'prop-types';
-import { makeStyles, Box } from '@material-ui/core';
+import { makeStyles, Box, Typography } from '@material-ui/core';
 
 const useStyles = makeStyles((theme) => ({
 	// necessary for content to be below app bar
@@ -16,8 +16,10 @@ const Layout = (props) => {
 		<Box display="flex">
 			<SideBar currentUser={props.currentUser} />
 			<main className={classes.content}>
-				<Box display="flex" justifyContent="flex-end">
-					HeapOverFlow
+				<Box display="flex" justifyContent="flex-end" pb={4}>
+					<Typography variant="h3" color="primary" style={{ fontWeight: 600 }}>
+						HeapOverflow
+					</Typography>
 				</Box>
 				{props.children}
 			</main>
