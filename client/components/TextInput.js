@@ -12,6 +12,9 @@ const useStyles = makeStyles((theme) => ({
 		'&.Mui-error': {
 			border: 'solid 1px #FF7171',
 		},
+		'&.Mui-focused': {
+			border: 'solid 1px #56E6CA',
+		},
 	},
 	error: {
 		color: '#FF0D39',
