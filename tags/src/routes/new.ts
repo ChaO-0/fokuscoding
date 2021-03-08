@@ -12,21 +12,32 @@ router.post(
 	'/api/tags',
 	requireAuth,
 	[
-		body('name').not().isEmpty().withMessage('Tag is required'),
-		body('desc').not().isEmpty().withMessage('Desc is required'),
+		body('tags').not().isEmpty().withMessage('Tag is required'),
+		body('description').not().isEmpty().withMessage('Desc is required'),
 	],
 	validateRequest,
 	async (req: Request, res: Response) => {
-		const { name, desc } = req.body;
-		const status = TagStatus.Awaiting;
+		const { tags, description } = req.body;
+		let status = TagStatus.Awaiting;
+
+		if (req.currentUser?.admin) {
+			status = TagStatus.Accepted;
+		}
 
 		const tag = Tag.build({
-			name,
+			name: tags,
 			status,
-			desc,
+			description,
 		});
 
 		await tag.save();
+
+		if (req.currentUser?.admin) {
+			await new TagCreatedPublisher(natsWrapper.client).publish({
+				id: tag.id,
+				name: tag.name,
+			});
+		}
 		res.status(201).send(tag);
 	}
 );
