@@ -48,8 +48,6 @@ const theme = createMuiTheme({
 
 const Index = ({ posts }) => {
 	const classes = useStyles();
-	moment.locale('id');
-	console.log(moment(posts.docs[0].updatedAt).fromNow());
 
 	return (
 		<ThemeProvider theme={theme}>
