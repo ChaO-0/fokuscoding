@@ -51,7 +51,7 @@ const SideBar = ({ currentUser }) => {
 			anchor="left"
 		>
 			<List>
-				<NextLink href="/post/createPost">
+				<NextLink href="/post/createpost">
 					<ListItem style={{ padding: '25px 0' }}>
 						<ListItemText
 							primary="Mulai Diskusi"
@@ -108,12 +108,14 @@ const SideBar = ({ currentUser }) => {
 					</Box>
 				</ListItem>
 
-				<ListItem button>
-					<ListItemIcon>
-						<HomeIcon style={{ color: 'white' }} />
-					</ListItemIcon>
-					<ListItemText primary="Beranda" style={{ color: 'white' }} />
-				</ListItem>
+				<NextLink href="/home">
+					<ListItem button>
+						<ListItemIcon>
+							<HomeIcon style={{ color: 'white' }} />
+						</ListItemIcon>
+						<ListItemText primary="Beranda" style={{ color: 'white' }} />
+					</ListItem>
+				</NextLink>
 
 				<NextLink href="/tags/createTag">
 					<ListItem button>
