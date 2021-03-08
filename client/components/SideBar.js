@@ -17,7 +17,7 @@ import {
 	Loyalty as LoyaltyIcon,
 } from '@material-ui/icons';
 
-import axios from 'axios';
+import NextLink from 'next/link';
 
 const drawerWidth = '20%';
 
@@ -51,16 +51,19 @@ const SideBar = ({ currentUser }) => {
 			anchor="left"
 		>
 			<List>
-				<ListItem style={{ padding: '25px 0' }}>
-					<ListItemText
-						primary="Mulai Diskusi"
-						style={{
-							color: 'white',
-							textAlign: 'center',
-							cursor: 'pointer',
-						}}
-					/>
-				</ListItem>
+				<NextLink href="/post/createPost">
+					<ListItem style={{ padding: '25px 0' }}>
+						<ListItemText
+							primary="Mulai Diskusi"
+							style={{
+								color: 'white',
+								textAlign: 'center',
+								cursor: 'pointer',
+							}}
+						/>
+					</ListItem>
+				</NextLink>
+
 				<ListItem
 					style={{
 						width: '40%',
@@ -104,18 +107,23 @@ const SideBar = ({ currentUser }) => {
 						</Button>
 					</Box>
 				</ListItem>
+
 				<ListItem button>
 					<ListItemIcon>
 						<HomeIcon style={{ color: 'white' }} />
 					</ListItemIcon>
 					<ListItemText primary="Beranda" style={{ color: 'white' }} />
 				</ListItem>
-				<ListItem button>
-					<ListItemIcon>
-						<LoyaltyIcon style={{ color: 'white' }} />
-					</ListItemIcon>
-					<ListItemText primary="Tags" style={{ color: 'white' }} />
-				</ListItem>
+
+				<NextLink href="/tags/createTag">
+					<ListItem button>
+						<ListItemIcon>
+							<LoyaltyIcon style={{ color: 'white' }} />
+						</ListItemIcon>
+						<ListItemText primary="Tags" style={{ color: 'white' }} />
+					</ListItem>
+				</NextLink>
+
 				<ListItem button>
 					<ListItemIcon>
 						<ChatIcon style={{ color: 'white' }} />
