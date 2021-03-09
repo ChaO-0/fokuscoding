@@ -8,6 +8,7 @@ import { wrapper } from '../redux/store';
 import Router from 'next/router';
 import NProgress from 'nprogress';
 import moment from 'moment';
+import '../assets/css/nprogress.css';
 
 moment.locale('id');
 Router.events.on('routeChangeStart', () => NProgress.start());
@@ -31,10 +32,6 @@ function MyApp(props) {
 				<meta
 					name="viewport"
 					content="minimum-scale=1, initial-scale=1, width=device-width"
-				/>
-				<link
-					rel="stylesheet"
-					href="https://cdnjs.cloudflare.com/ajax/libs/nprogress/0.2.0/nprogress.min.css"
 				/>
 			</Head>
 			<ThemeProvider theme={theme}>
