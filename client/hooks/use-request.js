@@ -11,6 +11,7 @@ const useRequest = ({ url, method, onSuccess }) => {
 
 			if (onSuccess) {
 				onSuccess(response.data);
+				localStorage.setItem('currentUser', JSON.stringify(response.data));
 			}
 
 			return response.data;
