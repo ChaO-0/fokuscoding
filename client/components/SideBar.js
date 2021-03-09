@@ -19,7 +19,7 @@ import {
 
 import NextLink from 'next/link';
 
-const drawerWidth = '20%';
+const drawerWidth = '25%';
 
 const useStyles = makeStyles((theme) => ({
 	drawer: {
@@ -85,7 +85,7 @@ const SideBar = ({ currentUser }) => {
 					/>
 				</ListItem>
 				<ListItem>
-					<Box display="flex" py={1}>
+					<Box display="flex" py={1} width="100%">
 						<InputBase
 							style={{
 								width: '100%',
