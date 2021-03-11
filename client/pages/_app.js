@@ -9,7 +9,8 @@ import Router from 'next/router';
 import NProgress from 'nprogress';
 import moment from 'moment';
 import '../assets/css/nprogress.css';
-
+import store from '../redux/configureStore';
+import { Provider } from 'react-redux';
 moment.locale('id');
 Router.events.on('routeChangeStart', () => NProgress.start());
 Router.events.on('routeChangeComplete', () => NProgress.done());
@@ -37,7 +38,9 @@ function MyApp(props) {
 			<ThemeProvider theme={theme}>
 				{/* CssBaseline kickstart an elegant, consistent, and simple baseline to build upon. */}
 				<CssBaseline />
-				<Component {...pageProps} />
+				<Provider store={store}>
+					<Component {...pageProps} />
+				</Provider>
 			</ThemeProvider>
 		</React.Fragment>
 	);
