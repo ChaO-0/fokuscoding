@@ -44,7 +44,10 @@ router.post(
 				username: user.username,
 				admin: user.is_admin,
 			},
-			process.env.JWT_KEY!
+			process.env.JWT_KEY!,
+			{
+				expiresIn: '2d',
+			}
 		);
 
 		// Store it on session object

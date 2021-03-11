@@ -5,6 +5,7 @@ import { TagStatus } from '../types/tag-status';
 // An interface that describes the properties that are required to create a new Tag
 interface TagAttrs {
 	name: string;
+	username: string;
 	status: TagStatus;
 	description: string;
 }
@@ -17,6 +18,7 @@ interface TagModel extends mongoose.Model<TagDoc> {
 // An interface that describe the properties that a Tag Document has
 interface TagDoc extends mongoose.Document {
 	name: string;
+	username: string;
 	status: TagStatus;
 	version: number;
 	description: string;
@@ -34,6 +36,10 @@ const tagSchema = new mongoose.Schema(
 			enum: Object.values(TagStatus),
 		},
 		description: {
+			type: String,
+			required: true,
+		},
+		username: {
 			type: String,
 			required: true,
 		},
