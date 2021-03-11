@@ -1,9 +1,12 @@
 import axios from 'axios';
 import { useState } from 'react';
+import { useDispatch } from 'react-redux';
+import Toast from '../components/Toast';
+import { open } from '../redux/ducks/openload';
 
 const useRequest = ({ url, method, onSuccess }) => {
 	const [errors, setErrors] = useState(null);
-
+	const dispatch = useDispatch();
 	const doRequest = async (body) => {
 		try {
 			setErrors(null);
@@ -18,16 +21,16 @@ const useRequest = ({ url, method, onSuccess }) => {
 
 			return response.data;
 		} catch (err) {
-			console.log(err.response.data);
+			// console.log(err.response.data);
+			dispatch(open(true));
 			setErrors(
-				<div>
-					<h4>Ooops....</h4>
-					<ul>
+				<Toast autoHideDuration={6000} severity="error">
+					<>
 						{err.response.data.errors.map((err) => (
-							<li key={err.message}>{err.message}</li>
+							<span key={err.message}>{err.message}</span>
 						))}
-					</ul>
-				</div>
+					</>
+				</Toast>
 			);
 		}
 	};
