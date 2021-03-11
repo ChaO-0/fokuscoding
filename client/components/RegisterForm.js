@@ -18,6 +18,10 @@ import useRequest from '../hooks/use-request';
 import { useState } from 'react';
 import TextInput from './TextInput';
 
+import { useDispatch } from 'react-redux';
+import { open } from '../redux/ducks/openload';
+import Toast from './Toast';
+
 const useStyles = makeStyles((theme) => ({
 	registerButton: {
 		color: theme.palette.common.white,
@@ -90,9 +94,11 @@ const RegisterForm = () => {
 		method: 'post',
 		onSuccess: () => router.push('/home'),
 	});
+	const dispatch = useDispatch();
 
 	return (
 		<Card className={classes.cardMargin}>
+			<Toast severity="success">Register success, redirecting...</Toast>
 			<CardContent>
 				<Typography
 					component="div"
@@ -108,6 +114,7 @@ const RegisterForm = () => {
 						onSubmit={async (values, { resetForm }) => {
 							setLoading(true);
 							await doRequest(values);
+							dispatch(open(true));
 							setLoading(false);
 							// router.push('/home');
 							resetForm({});

@@ -17,6 +17,9 @@ import useRequest from '../hooks/use-request';
 import { Formik, Form } from 'formik';
 import TextInput from './TextInput';
 import * as Yup from 'yup';
+import { useDispatch } from 'react-redux';
+import { open } from '../redux/ducks/openload';
+import Toast from './Toast';
 
 const useStyles = makeStyles((theme) => ({
 	loginButton: {
@@ -75,9 +78,11 @@ const loginForm = () => {
 			'Password is required'
 		),
 	});
+	const dispatch = useDispatch();
 
 	return (
 		<Card className={classes.container}>
+			<Toast severity="success">Login success, redirecting...</Toast>
 			<CardContent>
 				<Typography variant="h4" align="center" color="secondary">
 					<Box fontWeight="bold">Login</Box>
@@ -89,6 +94,7 @@ const loginForm = () => {
 						onSubmit={async (values, { resetForm }) => {
 							setLoading(true);
 							await doRequest(values);
+							dispatch(open(true));
 							setLoading(false);
 							resetForm({});
 						}}
