@@ -6,15 +6,22 @@ import {
 	FormGroup,
 	FormControl,
 	Box,
-	Button,
 	Card,
 	CardContent,
+	CircularProgress,
 } from '@material-ui/core';
 
+import { useState } from 'react';
 import useRequest from '../../hooks/use-request';
 import MyButton from '../../components/MyButton';
+import Router from 'next/router';
+import Toast from '../../components/Toast';
+import { useDispatch } from 'react-redux';
+import { open } from '../../redux/ducks/openload';
 
 const createPost = () => {
+	const dispatch = useDispatch();
+
 	const validationSchema = yup.object({
 		tags: yup.string().required('Tags name is required'),
 		description: yup.string().required('Description is required'),
@@ -22,18 +29,30 @@ const createPost = () => {
 	const { doRequest } = useRequest({
 		url: '/api/tags',
 		method: 'post',
+		onSuccess: () =>
+			setTimeout(() => {
+				Router.push('/home');
+			}, 2000),
 	});
+	const [loading, setLoading] = useState(false);
+
 	return (
 		<Layout currentUser={{ username: 'fajar' }}>
 			<Card style={{ width: '80%', margin: 'auto' }}>
 				<CardContent>
 					<h1>Buat sebuah Tags</h1>
+
+					<Toast severity="success">Tag berhasil dibuat, redirecting...</Toast>
+
 					<Formik
 						initialValues={{ tags: '', description: '' }}
 						validationSchema={validationSchema}
 						onSubmit={async (values, { resetForm, setSubmitting }) => {
 							setSubmitting(false);
+							setLoading(true);
 							await doRequest(values);
+							dispatch(open(true));
+							setLoading(false);
 							resetForm({});
 						}}
 					>
@@ -53,8 +72,8 @@ const createPost = () => {
 									/>
 								</FormControl>
 								<Box ml="auto" mt={1}>
-									<MyButton>
-										<>Submit</>
+									<MyButton disabled={loading}>
+										{loading ? <CircularProgress size={25} /> : 'Submit'}
 									</MyButton>
 								</Box>
 							</FormGroup>
