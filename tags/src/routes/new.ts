@@ -12,12 +12,13 @@ router.post(
 	'/api/tags',
 	requireAuth,
 	[
-		body('tags').not().isEmpty().withMessage('Tag is required'),
+		body('name').not().isEmpty().withMessage('Tag name is required'),
 		body('description').not().isEmpty().withMessage('Desc is required'),
 	],
 	validateRequest,
 	async (req: Request, res: Response) => {
-		const { tags, description } = req.body;
+		const { name, description } = req.body;
+		const { username } = req.currentUser!;
 		let status = TagStatus.Awaiting;
 
 		if (req.currentUser?.admin) {
@@ -25,7 +26,8 @@ router.post(
 		}
 
 		const tag = Tag.build({
-			name: tags,
+			name,
+			username,
 			status,
 			description,
 		});
