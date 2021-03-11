@@ -18,6 +18,7 @@ const MyButton = (props) => {
 			className={classes.buttonStyle}
 			size="small"
 			type="submit"
+			{...props}
 		>
 			{props.children}
 		</Button>
