@@ -98,7 +98,9 @@ const RegisterForm = () => {
 
 	return (
 		<Card className={classes.cardMargin}>
-			<Toast severity="success">Register success, redirecting...</Toast>
+			<Toast autoHideDuration={2000} severity="success">
+				Register success, redirecting...
+			</Toast>
 			<CardContent>
 				<Typography
 					component="div"

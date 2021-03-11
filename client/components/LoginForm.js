@@ -65,7 +65,7 @@ const loginForm = () => {
 	const classes = useStyles();
 	const router = useRouter();
 	const [loading, setLoading] = useState(false);
-	const { doRequest } = useRequest({
+	const { doRequest, errors } = useRequest({
 		url: '/api/users/signin',
 		method: 'post',
 		onSuccess: () => router.push('/home'),
@@ -79,78 +79,89 @@ const loginForm = () => {
 		),
 	});
 	const dispatch = useDispatch();
-
 	return (
-		<Card className={classes.container}>
-			<Toast severity="success">Login success, redirecting...</Toast>
-			<CardContent>
-				<Typography variant="h4" align="center" color="secondary">
-					<Box fontWeight="bold">Login</Box>
-				</Typography>
-				<Container maxWidth="xs">
-					<Formik
-						initialValues={{ email: '', password: '' }}
-						validationSchema={validationSchema}
-						onSubmit={async (values, { resetForm }) => {
-							setLoading(true);
-							await doRequest(values);
-							dispatch(open(true));
-							setLoading(false);
-							resetForm({});
-						}}
-					>
-						<Form>
-							<FormGroup>
-								<FormControl className={classes.formPad}>
-									<TextInput label="Email" name="email" />
-								</FormControl>
-								<FormControl className={classes.formPad}>
-									<TextInput label="Password" name="password" type="password" />
-								</FormControl>
-								<Box m="auto" py={3} className={classes.wrapper}>
-									<Button
-										variant="contained"
-										color="secondary"
-										className={classes.loginButton}
-										disabled={loading}
-										size="small"
-										type="submit"
-									>
-										LOGIN
-									</Button>
-									{loading && (
-										<CircularProgress
-											size={30}
-											color="secondary"
-											className={classes.circular}
+		<>
+			{errors ? (
+				errors
+			) : (
+				<Toast autoHideDuration={2000} severity="success">
+					Login success, redirecting...
+				</Toast>
+			)}
+			<Card className={classes.container}>
+				<CardContent>
+					<Typography variant="h4" align="center" color="secondary">
+						<Box fontWeight="bold">Login</Box>
+					</Typography>
+					<Container maxWidth="xs">
+						<Formik
+							initialValues={{ email: '', password: '' }}
+							validationSchema={validationSchema}
+							onSubmit={async (values, { resetForm }) => {
+								setLoading(true);
+								await doRequest(values);
+								dispatch(open(true));
+								setLoading(false);
+								resetForm({});
+							}}
+						>
+							<Form>
+								<FormGroup>
+									<FormControl className={classes.formPad}>
+										<TextInput label="Email" name="email" />
+									</FormControl>
+									<FormControl className={classes.formPad}>
+										<TextInput
+											label="Password"
+											name="password"
+											type="password"
 										/>
-									)}
-									<Box className={classes.loginFooterTypography} pt={2}>
-										<Typography
-											variant="caption"
-											component="div"
-											display="inline"
+									</FormControl>
+									<Box m="auto" py={3} className={classes.wrapper}>
+										<Button
+											variant="contained"
+											color="secondary"
+											className={classes.loginButton}
+											disabled={loading}
+											size="small"
+											type="submit"
 										>
-											Or{' '}
-										</Typography>
-										<NextLink href="/register">
+											LOGIN
+										</Button>
+										{loading && (
+											<CircularProgress
+												size={30}
+												color="secondary"
+												className={classes.circular}
+											/>
+										)}
+										<Box className={classes.loginFooterTypography} pt={2}>
 											<Typography
 												variant="caption"
 												component="div"
 												display="inline"
-												className={classes.register}
 											>
-												Register
+												Or{' '}
 											</Typography>
-										</NextLink>
+											<NextLink href="/register">
+												<Typography
+													variant="caption"
+													component="div"
+													display="inline"
+													className={classes.register}
+												>
+													Register
+												</Typography>
+											</NextLink>
+										</Box>
 									</Box>
-								</Box>
-							</FormGroup>
-						</Form>
-					</Formik>
-				</Container>
-			</CardContent>
-		</Card>
+								</FormGroup>
+							</Form>
+						</Formik>
+					</Container>
+				</CardContent>
+			</Card>
+		</>
 	);
 };
 

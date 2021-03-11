@@ -42,7 +42,9 @@ const createPost = () => {
 				<CardContent>
 					<h1>Buat sebuah Tags</h1>
 
-					<Toast severity="success">Tag berhasil dibuat, redirecting...</Toast>
+					<Toast autoHideDuration={2000} severity="success">
+						Tag berhasil dibuat, redirecting...
+					</Toast>
 
 					<Formik
 						initialValues={{ tags: '', description: '' }}

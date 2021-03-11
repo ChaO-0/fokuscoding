@@ -23,8 +23,8 @@ const Toast = (props) => {
 				horizontal: 'center',
 			}}
 			open={openValue}
-			autoHideDuration={2000}
 			onClose={handleClose}
+			{...props}
 		>
 			<Alert elevation={6} variant="filled" {...props} onClose={handleClose}>
 				{props.children}
