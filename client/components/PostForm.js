@@ -8,6 +8,7 @@ import {
 	Select,
 	MenuItem,
 	Chip,
+	Box,
 } from '@material-ui/core';
 import { Editor, EditorState } from 'draft-js';
 
@@ -21,12 +22,9 @@ const PostForm = () => {
 		setTags(e.target.value);
 	};
 
-	const handleDelete = (e) => {
-		console.log(e.target.key);
-		setTags((tags) => tags.filter((tag) => tag.key !== e.key));
+	const handleDelete = (tagToDelete) => {
+		setTags((tags) => tags.filter((tag) => tag !== tagToDelete));
 	};
-
-	console.log(tags);
 
 	return (
 		<>
@@ -40,26 +38,36 @@ const PostForm = () => {
 							<InputLabel shrink htmlFor="tags">
 								Tags
 							</InputLabel>
-							<Select
-								multiple
-								value={tags}
-								onChange={handleChange}
-								renderValue={(selected) => (
-									<>
-										{selected.map((value) => (
-											<Chip
-												label={value}
-												onDelete={handleDelete}
-												onMouseDown={(e) => e.stopPropagation()}
-											/>
-										))}
-									</>
-								)}
-							>
-								<MenuItem value="test1">Test1</MenuItem>
-								<MenuItem value="test2">Test2</MenuItem>
-								<MenuItem value="test3">Test3</MenuItem>
-							</Select>
+							<Box>
+								<Select
+									multiple
+									value={tags}
+									onChange={handleChange}
+									variant="outlined"
+									style={{
+										width: '50%',
+										marginTop: 20,
+										backgroundColor: '#00000012',
+										borderRadius: 4,
+										height: 40,
+										outline: 'none',
+									}}
+								>
+									<MenuItem value="test1">Test1</MenuItem>
+									<MenuItem value="test2">Test2</MenuItem>
+									<MenuItem value="test3">Test3</MenuItem>
+								</Select>
+								{tags.map((tag) => {
+									console.log(tag);
+									return (
+										<Chip
+											key={tag}
+											label={tag}
+											onDelete={() => handleDelete(tag)}
+										/>
+									);
+								})}
+							</Box>
 						</FormControl>
 					</FormGroup>
 					{/* <Editor
