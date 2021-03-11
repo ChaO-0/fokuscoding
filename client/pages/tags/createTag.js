@@ -50,7 +50,10 @@ const createPost = () => {
 						onSubmit={async (values, { resetForm, setSubmitting }) => {
 							setSubmitting(false);
 							setLoading(true);
-							await doRequest(values);
+							await doRequest({
+								name: values.tags,
+								description: values.description,
+							});
 							dispatch(open(true));
 							setLoading(false);
 							resetForm({});
