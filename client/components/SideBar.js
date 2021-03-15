@@ -15,9 +15,12 @@ import {
 	Search as SearchIcon,
 	Chat as ChatIcon,
 	Loyalty as LoyaltyIcon,
+	ExitToApp as ExitToAppIcon,
 } from '@material-ui/icons';
 
 import NextLink from 'next/link';
+import useRequest from '../hooks/use-request';
+import Router from 'next/router';
 
 const drawerWidth = '25%';
 
@@ -37,10 +40,29 @@ const useStyles = makeStyles((theme) => ({
 		backgroundColor: theme.palette.background.default,
 		padding: theme.spacing(3),
 	},
+	bottomPush: {
+		position: 'fixed',
+		bottom: 0,
+		textAlign: 'right',
+		paddingBottom: 10,
+	},
+	rotate: {
+		transform: 'rotate(-180deg)',
+	},
 }));
 
 const SideBar = ({ currentUser }) => {
 	const classes = useStyles();
+	const { doRequest, errors } = useRequest({
+		url: '/api/users/signout',
+		method: 'post',
+		onSuccess: () => Router.push('/'),
+	});
+
+	const handleLogout = async () => {
+		await doRequest();
+		localStorage.removeItem('currentUser');
+	};
 
 	return (
 		<Drawer
@@ -134,6 +156,22 @@ const SideBar = ({ currentUser }) => {
 					<ListItemText primary="Diskusi saya" style={{ color: 'white' }} />
 				</ListItem>
 			</List>
+			<Box
+				display="flex"
+				justifyContent="flex-end"
+				alignItems="flex-end"
+				css={{ height: '100vh' }}
+				p={5}
+			>
+				<Button
+					size="large"
+					startIcon={<ExitToAppIcon className={classes.rotate} />}
+					style={{ color: 'white' }}
+					onClick={handleLogout}
+				>
+					Logout
+				</Button>
+			</Box>
 		</Drawer>
 	);
 };
