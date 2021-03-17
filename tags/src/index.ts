@@ -1,6 +1,7 @@
 import mongoose from 'mongoose';
 import { app } from './app';
 import { natsWrapper } from './nats-wrapper';
+import { dbSeeder } from './seed/seeder';
 
 const start = async () => {
 	if (!process.env.JWT_KEY) {
@@ -43,7 +44,8 @@ const start = async () => {
 			useUnifiedTopology: true,
 			useCreateIndex: true,
 		});
-		console.log('Connected to MongoDb');
+		console.log('Connected to MongoDB');
+		await dbSeeder();
 	} catch (err) {
 		console.error(err);
 	}
