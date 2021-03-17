@@ -1,3 +1,4 @@
+import { useEffect, useState } from 'react';
 import {
 	makeStyles,
 	Drawer,
@@ -16,6 +17,7 @@ import {
 	Chat as ChatIcon,
 	Loyalty as LoyaltyIcon,
 	ExitToApp as ExitToAppIcon,
+	Create as CreateIcon,
 } from '@material-ui/icons';
 
 import NextLink from 'next/link';
@@ -51,18 +53,44 @@ const useStyles = makeStyles((theme) => ({
 	},
 }));
 
-const SideBar = ({ currentUser }) => {
+const navLists = [
+	{
+		name: 'Beranda',
+		href: '/home',
+		icon: <HomeIcon style={{ color: 'white' }} />,
+	},
+	{
+		name: 'Tags',
+		href: '/tags',
+		icon: <LoyaltyIcon style={{ color: 'white' }} />,
+	},
+	{
+		name: 'Buat Tag',
+		href: '/tags/createtag',
+		icon: <CreateIcon style={{ color: 'white' }} />,
+	},
+	{
+		name: 'Diskusi Saya',
+		href: '/post',
+		icon: <ChatIcon style={{ color: 'white' }} />,
+	},
+];
+
+const SideBar = () => {
 	const classes = useStyles();
 	const { doRequest, errors } = useRequest({
 		url: '/api/users/signout',
 		method: 'post',
 		onSuccess: () => Router.push('/'),
 	});
-
+	const [currentUser, setCurrentUser] = useState({});
 	const handleLogout = async () => {
 		await doRequest();
 		localStorage.removeItem('currentUser');
 	};
+	useEffect(() => {
+		setCurrentUser(JSON.parse(localStorage.getItem('currentUser')));
+	}, []);
 
 	return (
 		<Drawer
@@ -98,7 +126,7 @@ const SideBar = ({ currentUser }) => {
 					}}
 				>
 					<ListItemText
-						primary={currentUser.username.toUpperCase()}
+						primary={currentUser.username?.toUpperCase()}
 						style={{
 							color: 'white',
 							textAlign: 'center',
@@ -130,31 +158,14 @@ const SideBar = ({ currentUser }) => {
 						</Button>
 					</Box>
 				</ListItem>
-
-				<NextLink href="/home">
-					<ListItem button>
-						<ListItemIcon>
-							<HomeIcon style={{ color: 'white' }} />
-						</ListItemIcon>
-						<ListItemText primary="Beranda" style={{ color: 'white' }} />
-					</ListItem>
-				</NextLink>
-
-				<NextLink href="/tags/createTag">
-					<ListItem button>
-						<ListItemIcon>
-							<LoyaltyIcon style={{ color: 'white' }} />
-						</ListItemIcon>
-						<ListItemText primary="Tags" style={{ color: 'white' }} />
-					</ListItem>
-				</NextLink>
-
-				<ListItem button>
-					<ListItemIcon>
-						<ChatIcon style={{ color: 'white' }} />
-					</ListItemIcon>
-					<ListItemText primary="Diskusi saya" style={{ color: 'white' }} />
-				</ListItem>
+				{navLists.map((navList) => (
+					<NextLink href={navList.href} key={navList.name}>
+						<ListItem button>
+							<ListItemIcon>{navList.icon}</ListItemIcon>
+							<ListItemText primary={navList.name} style={{ color: 'white' }} />
+						</ListItem>
+					</NextLink>
+				))}
 			</List>
 			<Box
 				display="flex"
