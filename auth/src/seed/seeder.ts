@@ -12,7 +12,12 @@ const dbSeeder = async () => {
 			is_admin: true,
 		});
 		await seed.save();
-
+		const seed2 = User.build({
+			email: 'fajar@fajar.com',
+			password: 'fajar',
+			username: 'fajar',
+		});
+		await seed2.save();
 		console.log('success add data!');
 	}
 };

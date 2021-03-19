@@ -65,3 +65,27 @@ export const dataJson = [
 			'Nginx adalah server HTTP dan Proxy dengan kode sumber terbuka yang bisa juga berfungsi sebagai proxy IMAP/POP3. Kode sumber nginx ditulis oleh seorang warga negara Rusia yang bernama Igor Sysoev pada tahun 2002 dan dirilis ke publik pada tahun 2004.',
 	},
 ];
+
+export const dataJsonAwait = [
+	{
+		name: 'html',
+		username: 'fajar',
+		status: TagStatus.Awaiting,
+		description:
+			'Hypertext Markup Language adalah bahasa markah standar untuk dokumen yang dirancang untuk ditampilkan di peramban internet. Ini dapat dibantu oleh teknologi seperti Cascading Style Sheets dan bahasa scripting seperti JavaScript dan VBScript.',
+	},
+	{
+		name: 'css',
+		username: 'fajar',
+		status: TagStatus.Awaiting,
+		description:
+			'Cascading Style Sheet merupakan aturan untuk mengatur beberapa komponen dalam sebuah web sehingga akan lebih terstruktur dan seragam. CSS bukan merupakan bahasa pemograman.',
+	},
+	{
+		name: 'python',
+		username: 'fajar',
+		status: TagStatus.Awaiting,
+		description:
+			'Python adalah bahasa pemrograman tujuan umum yang ditafsirkan, tingkat tinggi. Dibuat oleh Guido van Rossum dan pertama kali dirilis pada tahun 1991, filosofi desain Python menekankan keterbacaan kode dengan penggunaan spasi putih yang signifikan.',
+	},
+];

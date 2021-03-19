@@ -1,5 +1,5 @@
 import { Tag } from '../models/Tag';
-import { dataJson } from './data';
+import { dataJson, dataJsonAwait } from './data';
 import { TagStatus } from '../types/tag-status';
 
 import { TagCreatedPublisher } from '../events/publishers/tag-created-publisher';
@@ -26,6 +26,15 @@ const dbSeeder = async () => {
 				id: seed.id,
 				name: seed.name,
 			});
+		});
+		dataJsonAwait.map(async (data) => {
+			const seed = Tag.build({
+				name: data.name,
+				username: data.username,
+				status: data.status,
+				description: data.description,
+			});
+			await seed.save();
 		});
 
 		console.log('success add data!');
