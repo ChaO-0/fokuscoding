@@ -29,7 +29,11 @@ const createTag = () => {
 	const { doRequest } = useRequest({
 		url: '/api/tags',
 		method: 'post',
-		onSuccess: () => Router.push('/home'),
+		onSuccess: () =>
+			setTimeout(() => {
+				Router.push('/tags');
+				dispatch(open(false));
+			}, 2000),
 	});
 	const [loading, setLoading] = useState(false);
 
