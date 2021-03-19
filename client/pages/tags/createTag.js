@@ -29,10 +29,7 @@ const createPost = () => {
 	const { doRequest } = useRequest({
 		url: '/api/tags',
 		method: 'post',
-		onSuccess: () =>
-			setTimeout(() => {
-				Router.push('/home');
-			}, 2000),
+		onSuccess: () => Router.push('/home'),
 	});
 	const [loading, setLoading] = useState(false);
 
@@ -42,7 +39,7 @@ const createPost = () => {
 				<CardContent>
 					<h1>Buat sebuah Tags</h1>
 
-					<Toast autoHideDuration={2000} severity="success">
+					<Toast autoHideDuration={6000} severity="success">
 						Tag berhasil dibuat, redirecting...
 					</Toast>
 
