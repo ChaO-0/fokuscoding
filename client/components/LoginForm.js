@@ -88,9 +88,7 @@ const loginForm = () => {
 			{errors ? (
 				errors
 			) : (
-				<Toast autoHideDuration={2000} severity="success">
-					Login success, redirecting...
-				</Toast>
+				<Toast severity="success">Login success, redirecting...</Toast>
 			)}
 			<Card className={classes.container}>
 				<CardContent>

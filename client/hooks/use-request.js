@@ -24,7 +24,7 @@ const useRequest = ({ url, method, onSuccess }) => {
 			// console.log(err.response.data);
 			dispatch(open(true));
 			setErrors(
-				<Toast autoHideDuration={6000} severity="error">
+				<Toast severity="error">
 					<>
 						{err.response.data.errors.map((err) => (
 							<span key={err.message}>{err.message}</span>

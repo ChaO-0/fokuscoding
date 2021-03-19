@@ -43,9 +43,7 @@ const createTag = () => {
 				<CardContent>
 					<h1>Buat sebuah Tags</h1>
 
-					<Toast autoHideDuration={6000} severity="success">
-						Tag berhasil dibuat, redirecting...
-					</Toast>
+					<Toast severity="success">Tag berhasil dibuat, redirecting...</Toast>
 
 					<Formik
 						initialValues={{ tags: '', description: '' }}
