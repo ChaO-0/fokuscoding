@@ -18,6 +18,7 @@ import {
 	Loyalty as LoyaltyIcon,
 	ExitToApp as ExitToAppIcon,
 	Create as CreateIcon,
+	RateReview as RateReviewIcon,
 } from '@material-ui/icons';
 
 import NextLink from 'next/link';
@@ -53,7 +54,7 @@ const useStyles = makeStyles((theme) => ({
 	},
 }));
 
-const navLists = [
+const initialNavLists = [
 	{
 		name: 'Beranda',
 		href: '/home',
@@ -84,12 +85,24 @@ const SideBar = () => {
 		onSuccess: () => Router.push('/'),
 	});
 	const [currentUser, setCurrentUser] = useState({});
+	const [navLists, setNavLists] = useState(initialNavLists);
 	const handleLogout = async () => {
 		await doRequest();
 		localStorage.removeItem('currentUser');
 	};
 	useEffect(() => {
 		setCurrentUser(JSON.parse(localStorage.getItem('currentUser')));
+
+		if (JSON.parse(localStorage.getItem('currentUser')).is_admin) {
+			setNavLists([
+				...navLists,
+				{
+					name: 'ReviewTag',
+					href: '/tags/review',
+					icon: <RateReviewIcon style={{ color: 'white' }} />,
+				},
+			]);
+		}
 	}, []);
 
 	return (
