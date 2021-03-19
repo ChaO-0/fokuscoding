@@ -1,39 +1,11 @@
 import React from 'react';
 import Layout from '../../components/Layout';
-import {
-	Button,
-	Box,
-	Card,
-	CardContent,
-	CircularProgress,
-	Grid,
-	Typography,
-} from '@material-ui/core';
+import { Button, Box, Typography, Grid } from '@material-ui/core';
 
 import axios from 'axios';
-
-import ShowMoreText from 'react-show-more-text';
-
-const handleAccept = (tagId) => {
-	console.log(tagId);
-};
+import TagCard from '../../components/TagCard';
 
 const tags = ({ tags }) => {
-	let TagButton = null;
-	if (true) {
-		TagButton = ({ tagId }) => (
-			<Box display="flex" justifyContent="flex-end">
-				<Button
-					onClick={() => handleAccept(tagId)}
-					style={{ color: '#4CC9B0' }}
-				>
-					Accept
-				</Button>
-				<Button style={{ color: '#F6506C' }}>Reject</Button>
-			</Box>
-		);
-	}
-
 	return (
 		<Layout>
 			<>
@@ -42,22 +14,12 @@ const tags = ({ tags }) => {
 				</Typography>
 				<Grid container spacing={2} direction="row" justify="flex-start">
 					{tags.map((tag) => (
-						<Grid item xs={4} key={tag.name}>
-							<Card>
-								<CardContent>
-									{tag.status === 'awaiting' && <TagButton tagId={tag.id} />}
-
-									<Typography variant="h6" gutterBottom>
-										{tag.name}
-									</Typography>
-									<ShowMoreText lines={3}>
-										<Typography variant="body2" align="justify">
-											{tag.description}
-										</Typography>
-									</ShowMoreText>
-								</CardContent>
-							</Card>
-						</Grid>
+						<TagCard
+							key={tag.id}
+							tagId={tag.id}
+							tagName={tag.name}
+							tagDesc={tag.description}
+						/>
 					))}
 				</Grid>
 			</>
