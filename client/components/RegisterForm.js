@@ -88,13 +88,18 @@ const RegisterForm = () => {
 			.required('Username is required'),
 	});
 	const router = useRouter();
+	const dispatch = useDispatch();
+
 	const [loading, setLoading] = useState(false);
 	const { doRequest } = useRequest({
 		url: '/api/users/signup',
 		method: 'post',
-		onSuccess: () => router.push('/home'),
+		onSuccess: () =>
+			setTimeout(() => {
+				router.push('/home');
+				dispatch(open(false));
+			}, 2000),
 	});
-	const dispatch = useDispatch();
 
 	return (
 		<Card className={classes.cardMargin}>

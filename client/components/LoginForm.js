@@ -64,11 +64,16 @@ const useStyles = makeStyles((theme) => ({
 const loginForm = () => {
 	const classes = useStyles();
 	const router = useRouter();
+	const dispatch = useDispatch();
 	const [loading, setLoading] = useState(false);
 	const { doRequest, errors } = useRequest({
 		url: '/api/users/signin',
 		method: 'post',
-		onSuccess: () => router.push('/home'),
+		onSuccess: () =>
+			setTimeout(() => {
+				router.push('/home');
+				dispatch(open(false));
+			}, 2000),
 	});
 	const validationSchema = Yup.object({
 		email: Yup.string('Enter your email')
@@ -78,7 +83,6 @@ const loginForm = () => {
 			'Password is required'
 		),
 	});
-	const dispatch = useDispatch();
 	return (
 		<>
 			{errors ? (
