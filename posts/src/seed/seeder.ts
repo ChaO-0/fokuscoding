@@ -6,7 +6,7 @@ import { natsWrapper } from '../nats-wrapper';
 const dbSeeder = async () => {
 	const data = await Post.find().exec();
 	if (data.length === 0) {
-		for (let i = 0; i < 15; i++) {
+		for (let i = 0; i < 50; i++) {
 			const seed = Post.build({
 				title: `Lorem Ipsum Dolor Sit Amet ${i + 1}`,
 				body:
