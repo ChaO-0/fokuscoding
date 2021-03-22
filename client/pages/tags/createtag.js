@@ -30,10 +30,10 @@ const createTag = () => {
 		url: '/api/tags',
 		method: 'post',
 		onSuccess: () =>
-			setTimeout(() => {
-				Router.push('/tags');
+			setTimeout(async () => {
+				await Router.push('/tags');
 				dispatch(open(false));
-			}, 2000),
+			}, 1000),
 	});
 	const [loading, setLoading] = useState(false);
 

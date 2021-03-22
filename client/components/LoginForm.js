@@ -70,10 +70,10 @@ const loginForm = () => {
 		url: '/api/users/signin',
 		method: 'post',
 		onSuccess: () =>
-			setTimeout(() => {
-				router.push('/home');
+			setTimeout(async () => {
+				await router.push('/home');
 				dispatch(open(false));
-			}, 2000),
+			}, 1000),
 	});
 	const validationSchema = Yup.object({
 		email: Yup.string('Enter your email')

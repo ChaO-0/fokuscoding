@@ -95,10 +95,10 @@ const RegisterForm = () => {
 		url: '/api/users/signup',
 		method: 'post',
 		onSuccess: () =>
-			setTimeout(() => {
-				router.push('/home');
+			setTimeout(async () => {
+				await router.push('/home');
 				dispatch(open(false));
-			}, 2000),
+			}, 1000),
 	});
 
 	return (
