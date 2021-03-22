@@ -27,7 +27,7 @@ router.delete(
 
 		const status = tag.status;
 
-		if (status === TagStatus.Accepted) {
+		if (status === TagStatus.Accepted || status === TagStatus.Rejected) {
 			tag.remove();
 			await new TagDeletedPublisher(natsWrapper.client).publish({
 				id: tag.id,
