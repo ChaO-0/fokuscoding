@@ -97,7 +97,7 @@ const SideBar = () => {
 			setNavLists([
 				...navLists,
 				{
-					name: 'ReviewTag',
+					name: 'Review Tag',
 					href: '/tags/review',
 					icon: <RateReviewIcon style={{ color: 'white' }} />,
 				},
