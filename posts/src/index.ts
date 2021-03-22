@@ -4,6 +4,7 @@ import { natsWrapper } from './nats-wrapper';
 import { TagCreatedListener } from './events/listeners/tag-created-listener';
 import { TagDeletedListener } from './events/listeners/tag-deleted-listener';
 import { TagUpdatedListener } from './events/listeners/tag-updated-listener';
+import { dbSeeder } from './seed/seeder';
 
 const start = async () => {
 	if (!process.env.JWT_KEY) {
@@ -51,6 +52,7 @@ const start = async () => {
 			useCreateIndex: true,
 		});
 		console.log('Connected to MongoDb');
+		dbSeeder();
 	} catch (err) {
 		console.error(err);
 	}
