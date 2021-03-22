@@ -1,10 +1,60 @@
-import React from 'react';
+import { useEffect, useState } from 'react';
 import Layout from '../../components/Layout';
-import { Button, Box, Typography, Grid } from '@material-ui/core';
+import {
+	Button,
+	Box,
+	Typography,
+	Grid,
+	Select,
+	MenuItem,
+	InputLabel,
+} from '@material-ui/core';
 
 import axios from 'axios';
 import TagCard from '../../components/TagCard';
+
+import { useDispatch } from 'react-redux';
+import { open } from '../../redux/ducks/openload';
+import Toast from '../../components/Toast';
+
+const handleRequest = async (url, method) => {
+	try {
+		const request = await axios[method](url);
+	} catch (err) {
+		console.log(err);
+	}
+};
+
 const review = ({ tags }) => {
+	const [listTags, setListTags] = useState(tags);
+	const [tagStatus, setTagStatus] = useState('awaiting');
+	const dispatch = useDispatch();
+
+	const handleRemove = (tagId) => {
+		const newTagList = listTags.filter((tag) => tag.id !== tagId);
+
+		setListTags(newTagList);
+	};
+	const handleAccept = async (tagId) => {
+		await handleRequest(`/api/tags/${tagId}/accept`, 'post');
+		handleRemove(tagId);
+		dispatch(open(true));
+	};
+
+	const handleRejectDelete = async (tagId) => {
+		await handleRequest(`/api/tags/${tagId}`, 'delete');
+		handleRemove(tagId);
+		dispatch(open(true));
+	};
+
+	const handleChange = async (e) => {
+		setTagStatus(e.target.value);
+		const { data } = await axios.get(
+			`/api/tags/review?status=${e.target.value}`
+		);
+		setListTags(data);
+	};
+
 	const TagButton = ({ tagId, userName }) => (
 		<>
 			<Box display="flex" justifyContent="flex-end">
@@ -13,19 +63,53 @@ const review = ({ tags }) => {
 						Oleh: {userName}
 					</Typography>
 				</Box>
-				<Button style={{ color: '#4CC9B0' }}>Accept</Button>
-				<Button style={{ color: '#F6506C' }}>Reject</Button>
+				{tagStatus === 'awaiting' ? (
+					<>
+						<Button
+							onClick={() => handleAccept(tagId)}
+							style={{ color: '#4CC9B0' }}
+						>
+							Accept
+						</Button>
+						<Button
+							onClick={() => handleRejectDelete(tagId)}
+							style={{ color: '#F6506C' }}
+						>
+							Reject
+						</Button>
+					</>
+				) : (
+					<>
+						<Button
+							onClick={() => handleRejectDelete(tagId)}
+							style={{ color: '#F6506C' }}
+						>
+							Delete
+						</Button>
+					</>
+				)}
 			</Box>
 		</>
 	);
 	return (
 		<Layout>
 			<>
+				<Toast severity="success">Success</Toast>
+
 				<Typography variant="h4" gutterBottom>
 					Tags Review
 				</Typography>
+
+				<Box width="25%" mb={2}>
+					<InputLabel>Tag Status</InputLabel>
+					<Select onChange={handleChange} fullWidth value={tagStatus}>
+						<MenuItem value={'awaiting'}>Awaiting</MenuItem>
+						<MenuItem value={'accepted'}>Accepted</MenuItem>
+						<MenuItem value={'rejected'}>Rejected</MenuItem>
+					</Select>
+				</Box>
 				<Grid container spacing={2} direction="row" justify="flex-start">
-					{tags.map((tag) => (
+					{listTags.map((tag) => (
 						<TagCard
 							key={tag.id}
 							tagId={tag.id}
