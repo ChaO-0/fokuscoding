@@ -24,7 +24,7 @@ const Toast = (props) => {
 			}}
 			open={openValue}
 			onClose={handleClose}
-			{...props}
+			autoHideDuration={2000}
 		>
 			<Alert elevation={6} variant="filled" {...props} onClose={handleClose}>
 				{props.children}
