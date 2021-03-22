@@ -86,9 +86,12 @@ const Index = ({ posts }) => {
 };
 
 export const getServerSideProps = async ({ req }) => {
-	const { data } = await axios.get(`${process.env.INGRESS_URI}/api/posts`, {
-		headers: req.headers,
-	});
+	const { data } = await axios.get(
+		`${process.env.INGRESS_URI}/api/posts?limit=4`,
+		{
+			headers: req.headers,
+		}
+	);
 
 	return {
 		props: {
