@@ -11,6 +11,7 @@ import moment from 'moment';
 import '../assets/css/nprogress.css';
 import store from '../redux/configureStore';
 import { Provider } from 'react-redux';
+
 moment.locale('id');
 Router.events.on('routeChangeStart', () => NProgress.start());
 Router.events.on('routeChangeComplete', () => NProgress.done());
