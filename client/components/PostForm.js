@@ -10,12 +10,14 @@ import {
 	Chip,
 	Box,
 	Button,
+	FormHelperText,
 } from '@material-ui/core';
+import * as Yup from 'yup';
 import dynamic from 'next/dynamic';
 
 const SimpleMDE = dynamic(() => import('./SimpleMDE'), { ssr: false });
 
-const PostForm = () => {
+const PostForm = (props) => {
 	const [tags, setTags] = useState([]);
 	const handleChange = (e) => {
 		setTags(e.target.value);
@@ -25,9 +27,14 @@ const PostForm = () => {
 		setTags((tags) => tags.filter((tag) => tag !== tagToDelete));
 	};
 
+	const validationSchema = Yup.object({
+		title: Yup.string('Enter your Title').required('Title is required'),
+		tags: Yup.string('Enter your password').required('Tag is required'),
+	});
+
 	return (
 		<>
-			<Formik>
+			<Formik validationSchema={validationSchema}>
 				<Form>
 					<FormGroup>
 						<FormControl>
@@ -51,21 +58,24 @@ const PostForm = () => {
 										height: 40,
 										outline: 'none',
 									}}
+									name="tags"
 								>
-									<MenuItem value="test1">Test1</MenuItem>
-									<MenuItem value="test2">Test2</MenuItem>
-									<MenuItem value="test3">Test3</MenuItem>
+									{props.tags.map((tag) => (
+										<MenuItem key={tag.id} value={tag}>
+											{tag.name}
+										</MenuItem>
+									))}
 								</Select>
 								{tags.map((tag) => {
-									console.log(tag);
 									return (
 										<Chip
-											key={tag}
-											label={tag}
+											key={tag.id}
+											label={tag.name}
 											onDelete={() => handleDelete(tag)}
 										/>
 									);
 								})}
+								<FormHelperText>Error</FormHelperText>
 							</Box>
 						</FormControl>
 						<FormControl style={{ marginTop: 30 }}>
