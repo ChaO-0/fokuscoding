@@ -9,15 +9,14 @@ import {
 	MenuItem,
 	Chip,
 	Box,
+	Button,
 } from '@material-ui/core';
-import { Editor, EditorState } from 'draft-js';
+import dynamic from 'next/dynamic';
+
+const SimpleMDE = dynamic(() => import('./SimpleMDE'), { ssr: false });
 
 const PostForm = () => {
-	const [editorState, setEditorState] = useState(() =>
-		EditorState.createEmpty()
-	);
 	const [tags, setTags] = useState([]);
-
 	const handleChange = (e) => {
 		setTags(e.target.value);
 	};
@@ -69,12 +68,23 @@ const PostForm = () => {
 								})}
 							</Box>
 						</FormControl>
+						<FormControl style={{ marginTop: 30 }}>
+							<InputLabel shrink htmlFor="editor">
+								Share your problem
+							</InputLabel>
+							<Box mt={3}>
+								<SimpleMDE />
+							</Box>
+						</FormControl>
+						<Button
+							variant="contained"
+							color="secondary"
+							style={{ color: 'white' }}
+							type="submit"
+						>
+							Submit
+						</Button>
 					</FormGroup>
-					{/* <Editor
-						editorState={editorState}
-						onChange={setEditorState}
-						placeholder="test"
-					/> */}
 				</Form>
 			</Formik>
 		</>
