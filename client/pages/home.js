@@ -4,6 +4,7 @@ import axios from 'axios';
 import InfiniteScroll from 'react-infinite-scroll-component';
 import PostList from '../components/PostList';
 import Layout from '../components/Layout';
+import { Skeleton } from '@material-ui/lab';
 
 const Home = ({ currentUser, posts }) => {
 	const [nextPosts, setNextPosts] = useState(posts.docs);
@@ -30,7 +31,7 @@ const Home = ({ currentUser, posts }) => {
 					dataLength={nextPosts.length}
 					next={fetchMoreData}
 					hasMore={hasMore}
-					loader={<h4>loading</h4>}
+					loader={<Skeleton />}
 					endMessage={<h1>This is end</h1>}
 				>
 					{nextPosts.map((post) => (
