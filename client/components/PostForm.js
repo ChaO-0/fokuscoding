@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import TextInput from './TextInput';
-import { Form, Formik } from 'formik';
+import { Form, Formik, FieldArray } from 'formik';
 import {
 	FormGroup,
 	FormControl,
@@ -29,12 +29,18 @@ const PostForm = (props) => {
 
 	const validationSchema = Yup.object({
 		title: Yup.string('Enter your Title').required('Title is required'),
-		tags: Yup.string('Enter your password').required('Tag is required'),
+		// tags: Yup.string('Enter your password').required('Tag is required'),
 	});
 
 	return (
 		<>
-			<Formik validationSchema={validationSchema}>
+			<Formik
+				validationSchema={validationSchema}
+				initialValues={{ title: '', tags: [], content: '' }}
+				onSubmit={(values) => {
+					console.log(values);
+				}}
+			>
 				<Form>
 					<FormGroup>
 						<FormControl>
@@ -44,7 +50,52 @@ const PostForm = (props) => {
 							<InputLabel shrink htmlFor="tags">
 								Tags
 							</InputLabel>
-							<Box>
+							<FieldArray name="tags">
+								{({ push, remove }) => {
+									return (
+										<Box>
+											<Select
+												multiple
+												value={tags}
+												onChange={(e) => {
+													setTags(e.target.value);
+													push(e.target.value[e.target.value.length - 1]);
+												}}
+												variant="outlined"
+												style={{
+													width: '50%',
+													marginTop: 20,
+													backgroundColor: '#00000012',
+													borderRadius: 4,
+													height: 40,
+													outline: 'none',
+												}}
+												name="tags"
+											>
+												{props.tags.map((tag) => (
+													<MenuItem key={tag.id} value={tag}>
+														{tag.name}
+													</MenuItem>
+												))}
+											</Select>
+											{tags.map((tag, idx) => {
+												return (
+													<Chip
+														key={tag.id}
+														label={tag.name}
+														onDelete={() => {
+															handleDelete(tag);
+															remove(idx);
+														}}
+													/>
+												);
+											})}
+											<FormHelperText>Error</FormHelperText>
+										</Box>
+									);
+								}}
+							</FieldArray>
+							{/* <Box>
 								<Select
 									multiple
 									value={tags}
@@ -76,14 +127,14 @@ const PostForm = (props) => {
 									);
 								})}
 								<FormHelperText>Error</FormHelperText>
-							</Box>
+							</Box> */}
 						</FormControl>
 						<FormControl style={{ marginTop: 30 }}>
 							<InputLabel shrink htmlFor="editor">
 								Share your problem
 							</InputLabel>
 							<Box mt={3}>
-								<SimpleMDE />
+								<SimpleMDE name="content" />
 							</Box>
 						</FormControl>
 						<Button
