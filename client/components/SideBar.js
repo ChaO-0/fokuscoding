@@ -128,25 +128,27 @@ const SideBar = () => {
 					</ListItem>
 				</NextLink>
 
-				<ListItem
-					style={{
-						width: '40%',
-						border: '3px solid white',
-						padding: '1px 0',
-						margin: '20px auto',
-						borderRadius: 100,
-						cursor: 'pointer',
-					}}
-				>
-					<ListItemText
-						primary={currentUser.username?.toUpperCase()}
+				<NextLink href="/profile">
+					<ListItem
 						style={{
-							color: 'white',
-							textAlign: 'center',
-							fontWeight: '1000',
+							width: '40%',
+							border: '3px solid white',
+							padding: '1px 0',
+							margin: '20px auto',
+							borderRadius: 100,
+							cursor: 'pointer',
 						}}
-					/>
-				</ListItem>
+					>
+						<ListItemText
+							primary={currentUser.username?.toUpperCase()}
+							style={{
+								color: 'white',
+								textAlign: 'center',
+								fontWeight: '1000',
+							}}
+						/>
+					</ListItem>
+				</NextLink>
 				<ListItem>
 					<Box display="flex" py={1} width="100%">
 						<InputBase
