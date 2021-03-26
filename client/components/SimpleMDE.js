@@ -2,7 +2,7 @@ import { useState } from 'react';
 import SimpleMDE from 'react-simplemde-editor';
 import 'easymde/dist/easymde.min.css';
 
-const DynamicSimpleMDE = () => {
+const DynamicSimpleMDE = (props) => {
 	const [content, setContent] = useState('');
 
 	return (
