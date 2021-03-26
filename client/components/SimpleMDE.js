@@ -7,8 +7,7 @@ const DynamicSimpleMDE = (props) => {
 
 	return (
 		<SimpleMDE
-			value={content}
-			onChange={(value) => setContent(value)}
+			{...props}
 			options={{
 				hideIcons: ['guide', 'fullscreen', 'side-by-side'],
 				showIcons: ['code', 'table'],

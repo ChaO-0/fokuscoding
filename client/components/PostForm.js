@@ -11,22 +11,33 @@ import {
 	Box,
 	Button,
 	FormHelperText,
+	TextField,
 } from '@material-ui/core';
+import { withStyles } from '@material-ui/core/styles';
 import * as Yup from 'yup';
 import dynamic from 'next/dynamic';
+import { Autocomplete } from '@material-ui/lab';
 
 const SimpleMDE = dynamic(() => import('./SimpleMDE'), { ssr: false });
 
-const PostForm = (props) => {
-	const [tags, setTags] = useState([]);
-	const handleChange = (e) => {
-		setTags(e.target.value);
-	};
+const CustomAutocomplete = withStyles({
+	tag: {
+		backgroundColor: '#4CC9B040',
+		color: '#4CC9B0',
+		borderRadius: 0,
+		height: 30,
+		position: 'relative',
+		zIndex: 0,
+		'& .MuiChip-label': {
+			color: '#3e9987',
+		},
+		'& .MuiChip-deleteIcon': {
+			color: '#656565',
+		},
+	},
+})(Autocomplete);
 
-	const handleDelete = (tagToDelete) => {
-		setTags((tags) => tags.filter((tag) => tag !== tagToDelete));
-	};
-
+const PostForm = ({ tags: tagsList }) => {
 	const validationSchema = Yup.object({
 		title: Yup.string('Enter your Title').required('Title is required'),
 		// tags: Yup.string('Enter your password').required('Tag is required'),
@@ -41,112 +52,63 @@ const PostForm = (props) => {
 					console.log(values);
 				}}
 			>
-				<Form>
-					<FormGroup>
-						<FormControl>
-							<TextInput label="Title" name="title" />
-						</FormControl>
-						<FormControl style={{ marginTop: 30 }}>
-							<InputLabel shrink htmlFor="tags">
-								Tags
-							</InputLabel>
-							<FieldArray name="tags">
-								{({ push, remove }) => {
-									return (
-										<Box>
-											<Select
-												multiple
-												value={tags}
-												onChange={(e) => {
-													setTags(e.target.value);
-													push(e.target.value[e.target.value.length - 1]);
-												}}
-												variant="outlined"
-												style={{
-													width: '50%',
-													marginTop: 20,
-													backgroundColor: '#00000012',
-													borderRadius: 4,
-													height: 40,
-													outline: 'none',
-												}}
-												name="tags"
-											>
-												{props.tags.map((tag) => (
-													<MenuItem key={tag.id} value={tag}>
-														{tag.name}
-													</MenuItem>
-												))}
-											</Select>
-											{tags.map((tag, idx) => {
-												return (
-													<Chip
-														key={tag.id}
-														label={tag.name}
-														onDelete={() => {
-															handleDelete(tag);
-															remove(idx);
-														}}
-													/>
-												);
-											})}
-											<FormHelperText>Error</FormHelperText>
-										</Box>
-									);
-								}}
-							</FieldArray>
-							{/* <Box>
-								<Select
+				{({ setFieldValue }) => (
+					<Form>
+						<FormGroup>
+							<FormControl>
+								<TextInput label="Title" name="title" />
+							</FormControl>
+							<FormControl margin="normal">
+								<InputLabel shrink htmlFor="tags">
+									Tags
+								</InputLabel>
+
+								<CustomAutocomplete
 									multiple
-									value={tags}
-									onChange={handleChange}
-									variant="outlined"
-									style={{
-										width: '50%',
-										marginTop: 20,
-										backgroundColor: '#00000012',
-										borderRadius: 4,
-										height: 40,
-										outline: 'none',
-									}}
-									name="tags"
-								>
-									{props.tags.map((tag) => (
-										<MenuItem key={tag.id} value={tag}>
-											{tag.name}
-										</MenuItem>
-									))}
-								</Select>
-								{tags.map((tag) => {
-									return (
-										<Chip
-											key={tag.id}
-											label={tag.name}
-											onDelete={() => handleDelete(tag)}
+									options={tagsList}
+									getOptionLabel={(option) => option.name}
+									noOptionsText="Tidak Ditemukan"
+									onChange={(e, value) => setFieldValue('tags', value)}
+									renderInput={(params) => (
+										<TextField
+											{...params}
+											variant="outlined"
+											style={{
+												marginTop: 20,
+												backgroundColor: '#00000012',
+												borderRadius: 4,
+												height: '100%',
+												outline: 'none',
+											}}
+											name="tags"
 										/>
-									);
-								})}
+									)}
+								/>
+
 								<FormHelperText>Error</FormHelperText>
-							</Box> */}
-						</FormControl>
-						<FormControl style={{ marginTop: 30 }}>
-							<InputLabel shrink htmlFor="editor">
-								Share your problem
-							</InputLabel>
-							<Box mt={3}>
-								<SimpleMDE name="content" />
-							</Box>
-						</FormControl>
-						<Button
-							variant="contained"
-							color="secondary"
-							style={{ color: 'white' }}
-							type="submit"
-						>
-							Submit
-						</Button>
-					</FormGroup>
-				</Form>
+							</FormControl>
+							<FormControl style={{ marginTop: 30 }}>
+								<InputLabel shrink htmlFor="editor">
+									Share your problem
+								</InputLabel>
+								<Box mt={3}>
+									<SimpleMDE
+										onChange={(value) => setFieldValue('content', value)}
+										name="content"
+									/>
+								</Box>
+							</FormControl>
+							<Button
+								variant="contained"
+								color="secondary"
+								style={{ color: 'white' }}
+								type="submit"
+							>
+								Submit
+							</Button>
+						</FormGroup>
+					</Form>
+				)}
 			</Formik>
 		</>
 	);
