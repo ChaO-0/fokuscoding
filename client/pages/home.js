@@ -4,15 +4,15 @@ import axios from 'axios';
 import InfiniteScroll from 'react-infinite-scroll-component';
 import PostList from '../components/PostList';
 import Layout from '../components/Layout';
-import { Skeleton } from '@material-ui/lab';
+import { LinearProgress } from '@material-ui/core';
 
 const Home = ({ currentUser, posts }) => {
 	const [nextPosts, setNextPosts] = useState(posts.docs);
-	const [offset, setOffset] = useState(5);
+	const [offset, setOffset] = useState(10);
 	const [hasMore, setHasMore] = useState(true);
 
 	const fetchMoreData = async () => {
-		const { data } = await axios.get(`/api/posts?offset=${offset}&limit=5`);
+		const { data } = await axios.get(`/api/posts?offset=${offset}&limit=10`);
 		if (data.docs.length === 0) {
 			setHasMore(false);
 		}
@@ -20,7 +20,7 @@ const Home = ({ currentUser, posts }) => {
 		setTimeout(() => {
 			setNextPosts((prev) => [...prev, ...data.docs]);
 		}, 1500);
-		setOffset((prev) => prev + 5);
+		setOffset((prev) => prev + 10);
 		console.log(nextPosts);
 	};
 
@@ -31,7 +31,7 @@ const Home = ({ currentUser, posts }) => {
 					dataLength={nextPosts.length}
 					next={fetchMoreData}
 					hasMore={hasMore}
-					loader={<Skeleton />}
+					loader={<LinearProgress />}
 					endMessage={<h1>This is end</h1>}
 				>
 					{nextPosts.map((post) => (
@@ -62,7 +62,7 @@ export const getServerSideProps = async ({ req }) => {
 	);
 
 	const { data: posts } = await axios.get(
-		`${process.env.INGRESS_URI}/api/posts?offset=0&limit=5`,
+		`${process.env.INGRESS_URI}/api/posts?offset=0&limit=10`,
 		{
 			headers: req.headers,
 		}
