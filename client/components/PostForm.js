@@ -1,4 +1,3 @@
-import { useState } from 'react';
 import TextInput from './TextInput';
 import { Form, Formik, FieldArray } from 'formik';
 import {
@@ -17,6 +16,8 @@ import { withStyles } from '@material-ui/core/styles';
 import * as Yup from 'yup';
 import dynamic from 'next/dynamic';
 import { Autocomplete } from '@material-ui/lab';
+import useRequest from '../hooks/use-request';
+import { useRouter } from 'next/router';
 
 const SimpleMDE = dynamic(() => import('./SimpleMDE'), { ssr: false });
 
@@ -40,16 +41,24 @@ const CustomAutocomplete = withStyles({
 const PostForm = ({ tags: tagsList }) => {
 	const validationSchema = Yup.object({
 		title: Yup.string('Enter your Title').required('Title is required'),
-		// tags: Yup.string('Enter your password').required('Tag is required'),
+	});
+
+	const router = useRouter();
+
+	const { doRequest, errors } = useRequest({
+		url: '/api/posts',
+		method: 'post',
+		onSuccess: () => router.push('/home'),
 	});
 
 	return (
 		<>
 			<Formik
 				validationSchema={validationSchema}
-				initialValues={{ title: '', tags: [], content: '' }}
+				initialValues={{ title: '', tags: [], body: '' }}
 				onSubmit={(values) => {
 					console.log(values);
+					doRequest(values);
 				}}
 			>
 				{({ setFieldValue }) => (
@@ -68,7 +77,10 @@ const PostForm = ({ tags: tagsList }) => {
 									options={tagsList}
 									getOptionLabel={(option) => option.name}
 									noOptionsText="Tidak Ditemukan"
-									onChange={(e, value) => setFieldValue('tags', value)}
+									onChange={(e, value) => {
+										const ids = value.map((val) => val.id);
+										setFieldValue('tags', ids);
+									}}
 									renderInput={(params) => (
 										<TextField
 											{...params}
@@ -84,8 +96,6 @@ const PostForm = ({ tags: tagsList }) => {
 										/>
 									)}
 								/>
-
-								<FormHelperText>Error</FormHelperText>
 							</FormControl>
 							<FormControl style={{ marginTop: 30 }}>
 								<InputLabel shrink htmlFor="editor">
@@ -93,8 +103,8 @@ const PostForm = ({ tags: tagsList }) => {
 								</InputLabel>
 								<Box mt={3}>
 									<SimpleMDE
-										onChange={(value) => setFieldValue('content', value)}
-										name="content"
+										onChange={(value) => setFieldValue('body', value)}
+										name="body"
 									/>
 								</Box>
 							</FormControl>
