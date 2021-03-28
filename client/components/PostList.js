@@ -8,6 +8,7 @@ import {
 	ThemeProvider,
 	createMuiTheme,
 } from '@material-ui/core';
+import NextLink from 'next/link';
 
 const useStyles = makeStyles((theme) => ({
 	voteFont: {
@@ -49,7 +50,7 @@ const theme = createMuiTheme({
 	},
 });
 
-const PostList = ({ title, voteCount, tags = [], createdBy, time }) => {
+const PostList = ({ title, voteCount, tags = [], createdBy, time, postId }) => {
 	const classes = useStyles();
 	return (
 		<ThemeProvider theme={theme}>
@@ -93,9 +94,11 @@ const PostList = ({ title, voteCount, tags = [], createdBy, time }) => {
 								</Box>
 							</Box>
 							<Box py={1}>
-								<Typography component="div">
-									<Box fontWeight="bold">{title}</Box>
-								</Typography>
+								<NextLink href={`/post/${postId}`}>
+									<Typography component="div" style={{ cursor: 'pointer' }}>
+										<Box fontWeight="bold">{title}</Box>
+									</Typography>
+								</NextLink>
 							</Box>
 							<Box
 								display="flex"
