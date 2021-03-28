@@ -24,6 +24,8 @@ const Home = ({ currentUser, posts }) => {
 		console.log(nextPosts);
 	};
 
+	console.log(nextPosts);
+
 	return (
 		<Layout currentUser={currentUser}>
 			<>
@@ -45,6 +47,7 @@ const Home = ({ currentUser, posts }) => {
 							tags={post.tags}
 							createdBy={post.username}
 							time={moment(post.updatedAt).fromNow()}
+							postId={post.id}
 						/>
 					))}
 				</InfiniteScroll>
