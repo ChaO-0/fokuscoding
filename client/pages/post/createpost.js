@@ -3,7 +3,6 @@ import PostForm from '../../components/PostForm';
 import axios from 'axios';
 
 const CreatePost = ({ tags }) => {
-	console.log(tags);
 	return (
 		<Layout currentUser={{ username: 'pram' }}>
 			<PostForm tags={tags} />
