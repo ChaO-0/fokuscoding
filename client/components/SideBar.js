@@ -16,6 +16,7 @@ import {
 	Search as SearchIcon,
 	Chat as ChatIcon,
 	Loyalty as LoyaltyIcon,
+	LocalOffer as LocalOfferIcon,
 	ExitToApp as ExitToAppIcon,
 	Create as CreateIcon,
 	RateReview as RateReviewIcon,
@@ -63,6 +64,11 @@ const initialNavLists = [
 	{
 		name: 'Tags',
 		href: '/tags',
+		icon: <LocalOfferIcon style={{ color: 'white' }} />,
+	},
+	{
+		name: 'Tags Saya',
+		href: '/tags/mytags',
 		icon: <LoyaltyIcon style={{ color: 'white' }} />,
 	},
 	{

@@ -9,6 +9,7 @@ import { deleteTagRouter } from './routes/delete';
 import { acceptTagRouter } from './routes/accept';
 import { updateTagRouter } from './routes/update';
 import { reviewTagRouter } from './routes/review';
+import { userTagRouter } from './routes/user-tag';
 
 const app = express();
 app.set('trust proxy', true);
@@ -27,6 +28,7 @@ app.use(deleteTagRouter);
 app.use(acceptTagRouter);
 app.use(updateTagRouter);
 app.use(reviewTagRouter);
+app.use(userTagRouter);
 
 app.all('*', async (req, res) => {
 	throw new NotFoundError();
