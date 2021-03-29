@@ -1,5 +1,5 @@
 import TextInput from './TextInput';
-import { Form, Formik, FieldArray } from 'formik';
+import { Form, Formik, ErrorMessage, useField } from 'formik';
 import {
 	FormGroup,
 	FormControl,
@@ -38,9 +38,52 @@ const CustomAutocomplete = withStyles({
 	},
 })(Autocomplete);
 
+const SimpleMdeFormik = ({ onChange, onBlur, ...props }) => {
+	const [field, meta] = useField(props);
+	const margin = meta.touched && meta.error ? 0 : 2;
+	return (
+		<>
+			<Box mb={margin}>
+				<Box display="flex">
+					<InputLabel shrink htmlFor="editor">
+						Share your problem
+					</InputLabel>
+				</Box>
+				<Box display="flex" justifyContent="flex-end">
+					{meta.touched && meta.error ? (
+						<FormHelperText
+							style={{
+								color: '#FF0D39',
+								margin: 0,
+							}}
+						>
+							{meta.error}
+						</FormHelperText>
+					) : null}
+				</Box>
+			</Box>
+			<Box
+				style={
+					meta.touched && meta.error
+						? {
+								border: '1px solid #FF0D39',
+								borderRadius: '4px',
+								marginBottom: '15px',
+						  }
+						: null
+				}
+			>
+				<SimpleMDE {...props} onChange={onChange} onBlur={onBlur} />
+			</Box>
+		</>
+	);
+};
+
 const PostForm = ({ tags: tagsList }) => {
 	const validationSchema = Yup.object({
 		title: Yup.string('Enter your Title').required('Title is required'),
+		tags: Yup.array().min(1, 'Masukkan setidaknya 1 Tag!'),
+		body: Yup.string('Enter your body').required('Tulis masalah anda!'),
 	});
 
 	const router = useRouter();
@@ -58,10 +101,10 @@ const PostForm = ({ tags: tagsList }) => {
 				initialValues={{ title: '', tags: [], body: '' }}
 				onSubmit={(values) => {
 					console.log(values);
-					doRequest(values);
+					// doRequest(values);
 				}}
 			>
-				{({ setFieldValue }) => (
+				{({ setFieldValue, setFieldTouched }) => (
 					<Form>
 						<FormGroup>
 							<FormControl>
@@ -81,6 +124,10 @@ const PostForm = ({ tags: tagsList }) => {
 										const ids = value.map((val) => val.id);
 										setFieldValue('tags', ids);
 									}}
+									onBlur={(e) => {
+										setFieldTouched('tags', true, true);
+									}}
+									name="tags"
 									renderInput={(params) => (
 										<TextField
 											{...params}
@@ -96,17 +143,18 @@ const PostForm = ({ tags: tagsList }) => {
 										/>
 									)}
 								/>
+								<FormHelperText style={{ color: '#FF0D39' }}>
+									<ErrorMessage name="tags" />
+								</FormHelperText>
 							</FormControl>
-							<FormControl style={{ marginTop: 30 }}>
-								<InputLabel shrink htmlFor="editor">
-									Share your problem
-								</InputLabel>
-								<Box mt={3}>
-									<SimpleMDE
-										onChange={(value) => setFieldValue('body', value)}
-										name="body"
-									/>
-								</Box>
+							<FormControl margin="normal">
+								<SimpleMdeFormik
+									name="body"
+									onChange={(value) => setFieldValue('body', value)}
+									onBlur={(e) => {
+										setFieldTouched('body', true, true);
+									}}
+								/>
 							</FormControl>
 							<Button
 								variant="contained"
