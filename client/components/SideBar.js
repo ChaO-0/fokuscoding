@@ -21,6 +21,7 @@ import {
 	Create as CreateIcon,
 	RateReview as RateReviewIcon,
 	QuestionAnswer as QuestionAnswerIcon,
+	People as PeopleIcon,
 } from '@material-ui/icons';
 
 import NextLink from 'next/link';
@@ -107,6 +108,11 @@ const SideBar = () => {
 					name: 'Review Tag',
 					href: '/tags/review',
 					icon: <RateReviewIcon style={{ color: 'white' }} />,
+				},
+				{
+					name: 'Daftar User',
+					href: '/users',
+					icon: <PeopleIcon style={{ color: 'white' }} />,
 				},
 			]);
 		}
