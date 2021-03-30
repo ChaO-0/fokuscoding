@@ -1,8 +1,12 @@
 import axios from 'axios';
+import Layout from '../../components/Layout';
+import renderToString from 'next-mdx-remote/render-to-string';
+import hydrate from 'next-mdx-remote/hydrate';
 
-const PostShow = ({ post }) => {
+const PostShow = ({ post, mdxContent }) => {
 	console.log(post);
-	return <h1>{post.body}</h1>;
+	const content = hydrate(mdxContent);
+	return <Layout currentUser={{ username: 'admin' }}>{content}</Layout>;
 };
 
 export default PostShow;
@@ -17,9 +21,12 @@ export const getServerSideProps = async ({ req, query }) => {
 		}
 	);
 
+	const mdxContent = await renderToString(post.body);
+
 	return {
 		props: {
 			post,
+			mdxContent,
 		},
 	};
 };
