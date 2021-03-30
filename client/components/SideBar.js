@@ -20,6 +20,7 @@ import {
 	ExitToApp as ExitToAppIcon,
 	Create as CreateIcon,
 	RateReview as RateReviewIcon,
+	QuestionAnswer as QuestionAnswerIcon,
 } from '@material-ui/icons';
 
 import NextLink from 'next/link';
@@ -122,16 +123,19 @@ const SideBar = () => {
 		>
 			<List>
 				<NextLink href="/post/createpost">
-					<ListItem style={{ padding: '25px 0' }}>
-						<ListItemText
-							primary="Mulai Diskusi"
+					<Box display="flex" justifyContent="center" alignItems="center" p={5}>
+						<Button
+							size="large"
+							startIcon={<QuestionAnswerIcon />}
 							style={{
 								color: 'white',
-								textAlign: 'center',
-								cursor: 'pointer',
+								textTransform: 'capitalize',
+								fontSize: '16px',
 							}}
-						/>
-					</ListItem>
+						>
+							Mulai Diskusi
+						</Button>
+					</Box>
 				</NextLink>
 
 				<NextLink href="/profile">
