@@ -100,8 +100,7 @@ const PostForm = ({ tags: tagsList }) => {
 				validationSchema={validationSchema}
 				initialValues={{ title: '', tags: [], body: '' }}
 				onSubmit={(values) => {
-					console.log(values);
-					// doRequest(values);
+					doRequest(values);
 				}}
 			>
 				{({ setFieldValue, setFieldTouched }) => (
