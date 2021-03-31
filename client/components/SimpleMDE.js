@@ -6,8 +6,10 @@ const DynamicSimpleMDE = (props) => {
 		<SimpleMDE
 			{...props}
 			options={{
-				hideIcons: ['guide', 'fullscreen', 'side-by-side'],
+				hideIcons: ['guide', 'fullscreen', 'side-by-side', 'preview'],
 				showIcons: ['code', 'table'],
+				spellChecker: false,
+				lineWrapping: false,
 			}}
 		/>
 	);
