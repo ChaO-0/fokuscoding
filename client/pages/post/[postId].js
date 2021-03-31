@@ -2,30 +2,18 @@ import axios from 'axios';
 import Layout from '../../components/Layout';
 import renderToString from 'next-mdx-remote/render-to-string';
 import hydrate from 'next-mdx-remote/hydrate';
-import {
-	Card,
-	CardContent,
-	Box,
-	Typography,
-	Chip,
-	Button,
-} from '@material-ui/core';
-import {
-	ExpandLess as ExpandLessIcon,
-	ExpandMore as ExpandMoreIcon,
-} from '@material-ui/icons';
-import moment from 'moment';
+import { Card, CardContent, Box, Typography, Button } from '@material-ui/core';
 import dynamic from 'next/dynamic';
 import PostDetail from '../../components/PostDetail';
+import { Form, Formik } from 'formik';
 
 const SimpleMDE = dynamic(() => import('../../components/SimpleMDE'), {
 	ssr: false,
 });
 
 const PostShow = ({ post, mdxContent }) => {
-	console.log(post);
+	// console.log(post);
 	const content = hydrate(mdxContent);
-	console.log(mdxContent);
 	return (
 		<Layout currentUser={{ username: 'admin' }}>
 			<>
@@ -44,15 +32,30 @@ const PostShow = ({ post, mdxContent }) => {
 						Bantu menjawab
 					</Typography>
 					<hr />
-					<SimpleMDE />
-					<Button
-						variant="contained"
-						color="secondary"
-						type="submit"
-						style={{ color: 'white', width: '100%' }}
+					<Formik
+						initialValues={{ body: '' }}
+						onSubmit={(values) => {
+							console.log('test');
+							console.log(values);
+						}}
 					>
-						Submit
-					</Button>
+						{({ setFieldValue }) => (
+							<Form>
+								<SimpleMDE
+									name="body"
+									onChange={(value) => setFieldValue('body', value)}
+								/>
+								<Button
+									variant="contained"
+									color="secondary"
+									type="submit"
+									style={{ color: 'white', width: '100%' }}
+								>
+									Submit
+								</Button>
+							</Form>
+						)}
+					</Formik>
 				</Box>
 			</>
 		</Layout>
