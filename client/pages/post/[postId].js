@@ -29,7 +29,7 @@ const PostShow = ({ post, mdxContent, comments }) => {
 	const { doRequest } = useRequest({
 		url: `/api/posts/${postId}`,
 		method: 'post',
-		onSuccess: () => router.push(`/post/${postId}`),
+		onSuccess: () => router.reload(),
 	});
 
 	const content = hydrate(mdxContent);
