@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import Layout from '../../components/Layout';
 import {
 	Card,
@@ -21,7 +22,17 @@ import {
 
 import axios from 'axios';
 const ShowUsers = ({ users }) => {
-	console.log(users);
+	const [listUsers, setlistUsers] = useState(users);
+	const handleMakeAdmin = async (userId) => {
+		await axios.post(`/api/users/${userId}/upgrade`);
+		const { data } = await axios.get('/api/users');
+		setlistUsers(data);
+	};
+	const handleBanned = async (userId) => {
+		await axios.post(`/api/users/${userId}/ban`);
+		const { data } = await axios.get('/api/users');
+		setlistUsers(data);
+	};
 	return (
 		<Layout currentUser={{ username: 'admin' }}>
 			<Card>
@@ -46,7 +57,7 @@ const ShowUsers = ({ users }) => {
 									</TableRow>
 								</TableHead>
 								<TableBody>
-									{users.map((user, index) => (
+									{listUsers.map((user, index) => (
 										<TableRow key={user.id}>
 											<TableCell align="center">{index + 1}</TableCell>
 											<TableCell align="center">{user.username}</TableCell>
@@ -66,12 +77,18 @@ const ShowUsers = ({ users }) => {
 											</TableCell>
 											<TableCell align="center">
 												<Tooltip title="Jadikan Admin" placement="top" arrow>
-													<IconButton style={{ color: '#4C72C9' }}>
+													<IconButton
+														onClick={() => handleMakeAdmin(user.id)}
+														style={{ color: '#4C72C9' }}
+													>
 														<SuperVisorAccountIcon />
 													</IconButton>
 												</Tooltip>
 												<Tooltip title="Banned user" placement="top" arrow>
-													<IconButton style={{ color: '#F6506C' }}>
+													<IconButton
+														onClick={() => handleBanned(user.id)}
+														style={{ color: '#F6506C' }}
+													>
 														<BlockIcon />
 													</IconButton>
 												</Tooltip>
