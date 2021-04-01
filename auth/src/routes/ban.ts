@@ -1,21 +1,28 @@
 import { NotAuthorizedError, requireAuth } from '@heapoverflow/common';
 import express from 'express';
-import { User } from '../models/User';
+import { User, UserDoc } from '../models/User';
 
 const router = express.Router();
 
 router.post('/api/users/:user_id/ban', requireAuth, async (req, res) => {
-	const user = await User.findById(req.params.user_id);
+	const user: UserDoc = await User.findById(req.params.user_id);
 
 	if (!req.currentUser!.admin) {
 		throw new NotAuthorizedError();
 	}
 
-	user.set({
-		banned: true,
-	});
+	if (user.banned || user.username === 'admin') {
+		user.set({
+			banned: false,
+		});
+		await user.save();
+	} else {
+		user.set({
+			banned: true,
+		});
 
-	await user.save();
+		await user.save();
+	}
 
 	res.send(user);
 });
