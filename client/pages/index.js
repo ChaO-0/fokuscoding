@@ -53,7 +53,7 @@ const Index = ({ posts }) => {
 		<ThemeProvider theme={theme}>
 			<Container className={classes.containerPad}>
 				<Typography variant="h3" color="primary">
-					<Box fontWeight={600}>HeapOverflow</Box>
+					<img src="/brand_logo.svg" alt="Logo Brand" width="25%" />
 				</Typography>
 				<Grid
 					container
@@ -87,6 +87,21 @@ const Index = ({ posts }) => {
 
 export const getServerSideProps = async ({ req }) => {
 	const { data } = await axios.get(
+		`${process.env.INGRESS_URI}/api/users/currentuser`,
+		{
+			headers: req.headers,
+		}
+	);
+
+	if (data.currentUser) {
+		return {
+			redirect: {
+				destination: '/home',
+				permanent: false,
+			},
+		};
+	}
+	const { data: dataPost } = await axios.get(
 		`${process.env.INGRESS_URI}/api/posts?limit=4`,
 		{
 			headers: req.headers,
@@ -95,7 +110,7 @@ export const getServerSideProps = async ({ req }) => {
 
 	return {
 		props: {
-			posts: data,
+			posts: dataPost,
 		},
 	};
 };

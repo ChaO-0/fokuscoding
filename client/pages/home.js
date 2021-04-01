@@ -34,7 +34,7 @@ const Home = ({ currentUser, posts }) => {
 					next={fetchMoreData}
 					hasMore={hasMore}
 					loader={<LinearProgress />}
-					endMessage={<h1>This is end</h1>}
+					endMessage={<h4>Tidak ada yang dapat ditampilkan lagi</h4>}
 				>
 					{nextPosts.map((post) => (
 						<PostList

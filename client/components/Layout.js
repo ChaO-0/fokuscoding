@@ -38,9 +38,7 @@ const Layout = (props) => {
 			<SideBar currentUser={props.currentUser} />
 			<main className={classes.content}>
 				<Box display="flex" justifyContent="flex-end" pb={4}>
-					<Typography variant="h3" color="primary" style={{ fontWeight: 600 }}>
-						HeapOverflow
-					</Typography>
+					<img src="/brand_logo.svg" alt="Logo Brand" width="35%" />
 				</Box>
 				{props.children}
 			</main>
