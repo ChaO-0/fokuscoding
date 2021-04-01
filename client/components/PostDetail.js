@@ -11,7 +11,7 @@ const PostDetail = ({ post, content }) => {
 			<CardContent>
 				<Box display="flex" flexDirection="row" justifyContent="flex-start">
 					<Box flexDirection="column" marginRight={3}>
-						<ExpandLessIcon style={{ marginLeft: 3 }} />
+						<ExpandLessIcon style={{ marginLeft: 3, cursor: 'pointer' }} />
 						<Typography variant="h5" color="secondary" align="center">
 							<Box fontWeight={600}>{0}</Box>
 						</Typography>
@@ -25,7 +25,7 @@ const PostDetail = ({ post, content }) => {
 								VOTE
 							</Box>
 						</Typography>
-						<ExpandMoreIcon style={{ marginLeft: 3 }} />
+						<ExpandMoreIcon style={{ marginLeft: 3, cursor: 'pointer' }} />
 					</Box>
 					<Box flexDirection="row" style={{ width: '100%' }}>
 						<Box
