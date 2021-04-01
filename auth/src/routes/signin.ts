@@ -27,6 +27,10 @@ router.post(
 			throw new BadRequestError('Invalid Credentials');
 		}
 
+		if (existingUser.banned) {
+			throw new BadRequestError('Banned');
+		}
+
 		const passwordsMatch = await compare(password, existingUser.password);
 
 		if (!passwordsMatch) {
