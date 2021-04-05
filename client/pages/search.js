@@ -1,0 +1,59 @@
+import axios from 'axios';
+import { useEffect, useState } from 'react';
+import { Typography } from '@material-ui/core';
+import Layout from '../components/Layout';
+import PostList from '../components/PostList';
+import moment from 'moment';
+
+const Search = ({ query }) => {
+	const [posts, setPosts] = useState([]);
+
+	useEffect(() => {
+		const fetchSearch = async () => {
+			const { data } = await axios.post('/api/search', {
+				query,
+			});
+			setPosts(data);
+		};
+		fetchSearch();
+	}, []);
+
+	console.log(posts);
+
+	return (
+		<Layout currentUser={{ username: 'admin' }}>
+			<>
+				<Typography
+					variant="h4"
+					color="secondary"
+					style={{ fontWeight: 'bold' }}
+				>
+					Pencarian - {query}
+				</Typography>
+				{posts.map((post) => (
+					<PostList
+						key={post.id}
+						title={post.title}
+						voteCount={post.voteCount}
+						tags={post.tags}
+						createdBy={post.username}
+						time={moment(post.updatedAt).fromNow()}
+						postId={post.id}
+					/>
+				))}
+			</>
+		</Layout>
+	);
+};
+
+export const getServerSideProps = async ({ req, query }) => {
+	const { query: searchQuery } = query;
+
+	return {
+		props: {
+			query: searchQuery,
+		},
+	};
+};
+
+export default Search;
