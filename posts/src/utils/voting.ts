@@ -30,7 +30,7 @@ const voting = async (
 	// check the type of the vote if the user is already voted
 	if (alreadyVoted?.type === voteType) {
 		// find vote by id
-		const vote: VoteDoc = Vote.findById(alreadyVoted.id);
+		const vote: VoteDoc = await Vote.findById(alreadyVoted.id);
 		// remove the vote
 		vote!.remove();
 

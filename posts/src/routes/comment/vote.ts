@@ -24,7 +24,8 @@ router.post(
 		const doc = await Comment.findById(req.params.comment_id);
 
 		const { status, data } = await voting(req, voteType, doc);
-		return res.status(status).send(data);
+		const newData = await Comment.findById(req.params.comment_id);
+		return res.status(status).send(newData);
 	}
 );
 
