@@ -27,6 +27,8 @@ import {
 import NextLink from 'next/link';
 import useRequest from '../hooks/use-request';
 import Router from 'next/router';
+import { Formik, Form, Field } from 'formik';
+import { useRouter } from 'next/router';
 
 const drawerWidth = '25%';
 
@@ -85,6 +87,22 @@ const initialNavLists = [
 	},
 ];
 
+const SearchInput = ({ field, form, ...props }) => {
+	return (
+		<InputBase
+			style={{
+				width: '100%',
+				borderTopLeftRadius: 50,
+				borderBottomLeftRadius: 50,
+				backgroundColor: 'white',
+				padding: '5px 15px',
+			}}
+			{...field}
+			{...props}
+		/>
+	);
+};
+
 const SideBar = () => {
 	const classes = useStyles();
 	const { doRequest, errors } = useRequest({
@@ -117,6 +135,8 @@ const SideBar = () => {
 			]);
 		}
 	}, []);
+
+	const router = useRouter();
 
 	return (
 		<Drawer
@@ -166,28 +186,35 @@ const SideBar = () => {
 					</ListItem>
 				</NextLink>
 				<ListItem>
-					<Box display="flex" py={1} width="100%">
-						<InputBase
-							style={{
-								width: '100%',
-								borderTopLeftRadius: 50,
-								borderBottomLeftRadius: 50,
-								backgroundColor: 'white',
-								padding: '5px 15px',
-							}}
-							placeholder="Cari diskusi"
-						/>
-						<Button
-							style={{
-								borderRadius: '0px 50px 50px 0px',
-								boxShadow: 'none',
-							}}
-							variant="contained"
-							color="primary"
-						>
-							<SearchIcon />
-						</Button>
-					</Box>
+					<Formik
+						initialValues={{ query: '' }}
+						onSubmit={(values) => {
+							console.log(values);
+							router.push(`/search?query=${values.query}`);
+						}}
+					>
+						<Form>
+							<Box display="flex" py={1} width="100%">
+								<Field
+									type="text"
+									name="query"
+									component={SearchInput}
+									placeholder="Cari diskusi"
+								/>
+								<Button
+									style={{
+										borderRadius: '0px 50px 50px 0px',
+										boxShadow: 'none',
+									}}
+									variant="contained"
+									color="primary"
+									type="submit"
+								>
+									<SearchIcon />
+								</Button>
+							</Box>
+						</Form>
+					</Formik>
 				</ListItem>
 				{navLists.map((navList) => (
 					<NextLink href={navList.href} key={navList.name}>
