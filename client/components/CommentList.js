@@ -1,12 +1,23 @@
-import { Card, CardContent, Box, Typography, NoSsr } from '@material-ui/core';
+import {
+	Card,
+	CardContent,
+	Box,
+	Typography,
+	NoSsr,
+	Button,
+} from '@material-ui/core';
 import {
 	ExpandLess as ExpandLessIcon,
 	ExpandMore as ExpandMoreIcon,
 } from '@material-ui/icons';
 
 import useRequest from '../hooks/use-request';
+import Router from 'next/router';
 import axios from 'axios';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
+import Toast from '../components/Toast';
+import { useDispatch } from 'react-redux';
+import { open } from '../redux/ducks/openload';
 
 const calcVote = (commentVotes, params = 0) => {
 	// console.log('calcVotes', commentVotes);
@@ -21,12 +32,19 @@ const calcVote = (commentVotes, params = 0) => {
 	return 0;
 };
 
-const CommentList = ({ comment, children }) => {
+const CommentList = ({ postId, comment, children }) => {
+	const dispatch = useDispatch();
+
 	const [totalVote, setTotalVote] = useState(calcVote(comment.votes));
 	let username;
+	let admin;
 	if (typeof window !== 'undefined') {
 		username = JSON.parse(localStorage.getItem('currentUser')).username;
+		admin = JSON.parse(localStorage.getItem('currentUser')).is_admin;
 	}
+	const isAuthorized = comment.username === username || admin;
+
+	console.log(isAuthorized);
 	const [hasVoted, setHasVoted] = useState(
 		comment.votes.find((vote) => vote?.username === username)
 	);
@@ -36,9 +54,9 @@ const CommentList = ({ comment, children }) => {
 	const [voteClickDown, setVoteClickDown] = useState(
 		Boolean(hasVoted?.type === 'down')
 	);
-	useEffect(() => {
-		username = JSON.parse(localStorage.getItem('currentUser')).username;
-	}, []);
+	// useEffect(() => {
+	// 	username = JSON.parse(localStorage.getItem('currentUser')).username;
+	// }, []);
 
 	const { doRequest } = useRequest({
 		url: `/api/posts/comment/${comment.id}/vote`,
@@ -84,9 +102,27 @@ const CommentList = ({ comment, children }) => {
 		}
 		setTotalVote(calcVote(votes));
 	};
+	const handleDelete = async (commentId) => {
+		await axios.delete(`/api/posts/${postId}/comment/${commentId}`);
+		dispatch(open(true));
 
+		setTimeout(() => {
+			Router.reload();
+		}, 2000);
+	};
+	const DeleteButton = ({ commentId }) =>
+		isAuthorized ? (
+			<Button
+				onClick={() => handleDelete(commentId)}
+				style={{ color: '#F6506C' }}
+			>
+				Delete
+			</Button>
+		) : null;
 	return (
 		<NoSsr>
+			<Toast severity="success">Berhasil Delete Comment, Reloading...</Toast>
+
 			<Card style={{ marginBottom: 20 }}>
 				<CardContent>
 					<Box display="flex" flexDirection="row" justifyContent="flex-start">
@@ -122,25 +158,22 @@ const CommentList = ({ comment, children }) => {
 							/>
 						</Box>
 						<Box flexDirection="row" style={{ width: '100%' }}>
-							<Box
-								flexDirection="row"
-								style={{
-									borderBottom: '3px solid #707070',
-									width: '80%',
-									paddingBottom: 10,
-								}}
-							>
-								<Typography
-									variant="caption"
-									style={{
-										color: '#707070',
-										fontStyle: 'italic',
-									}}
+							<Box display="flex" justifyContent="flex-end">
+								<Box
+									fontStyle="italic"
+									display="flex"
+									flexGrow={1}
+									alignItems="center"
+									id="meee"
+									mb={1}
 								>
-									Oleh: {comment.username}
-								</Typography>
+									<Typography variant="caption">
+										Oleh: {comment.username}
+									</Typography>
+								</Box>
+								<DeleteButton commentId={comment.id} />
 							</Box>
-							<Box mt={3} style={{ width: '80%' }}>
+							<Box style={{ width: '80%', borderTop: '1px solid #707070' }}>
 								{children}
 							</Box>
 						</Box>
