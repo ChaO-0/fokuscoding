@@ -4,9 +4,6 @@ import {
 	FormGroup,
 	FormControl,
 	InputLabel,
-	Select,
-	MenuItem,
-	Chip,
 	Box,
 	Button,
 	FormHelperText,
@@ -123,7 +120,7 @@ const PostForm = ({ tags: tagsList }) => {
 										const ids = value.map((val) => val.id);
 										setFieldValue('tags', ids);
 									}}
-									onBlur={(e) => {
+									onBlur={() => {
 										setFieldTouched('tags', true, true);
 									}}
 									name="tags"
@@ -150,7 +147,7 @@ const PostForm = ({ tags: tagsList }) => {
 								<SimpleMdeFormik
 									name="body"
 									onChange={(value) => setFieldValue('body', value)}
-									onBlur={(e) => {
+									onBlur={() => {
 										setFieldTouched('body', true, true);
 									}}
 								/>
