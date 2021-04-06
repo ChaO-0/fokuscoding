@@ -1,13 +1,6 @@
 import React from 'react';
 import ShowMoreText from 'react-show-more-text';
-import {
-	Card,
-	CardContent,
-	Grid,
-	Typography,
-	Box,
-	Button,
-} from '@material-ui/core';
+import { Card, CardContent, Grid, Typography } from '@material-ui/core';
 const TagCard = (props) => {
 	const { tagName, tagDesc } = props;
 	return (
