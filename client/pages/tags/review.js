@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import Layout from '../../components/Layout';
 import {
 	Button,
@@ -19,7 +19,7 @@ import Toast from '../../components/Toast';
 
 const handleRequest = async (url, method) => {
 	try {
-		const request = await axios[method](url);
+		await axios[method](url);
 	} catch (err) {
 		console.log(err);
 	}
@@ -65,10 +65,7 @@ const review = ({ tags }) => {
 				</Box>
 				{tagStatus === 'awaiting' ? (
 					<>
-						<Button
-							onClick={() => handleAccept(tagId)}
-							style={{ color: '#4CC9B0' }}
-						>
+						<Button onClick={() => handleAccept(tagId)} color="secondary">
 							Accept
 						</Button>
 						<Button
