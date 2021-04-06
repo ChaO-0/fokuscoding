@@ -4,7 +4,7 @@ import axios from 'axios';
 
 const CreatePost = ({ tags }) => {
 	return (
-		<Layout currentUser={{ username: 'pram' }}>
+		<Layout>
 			<PostForm tags={tags} />
 		</Layout>
 	);
