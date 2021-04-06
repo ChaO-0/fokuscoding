@@ -21,10 +21,7 @@ const Home = ({ currentUser, posts }) => {
 			setNextPosts((prev) => [...prev, ...data.docs]);
 		}, 1500);
 		setOffset((prev) => prev + 10);
-		console.log(nextPosts);
 	};
-
-	console.log(nextPosts);
 
 	return (
 		<Layout currentUser={currentUser}>
