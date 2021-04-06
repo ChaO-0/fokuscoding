@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import {
 	Card,
 	CardContent,
@@ -11,8 +12,8 @@ import {
 	ExpandMore as ExpandMoreIcon,
 } from '@material-ui/icons';
 import moment from 'moment';
+
 import useRequest from '../hooks/use-request';
-import { useState } from 'react';
 
 const PostDetail = ({ post, content }) => {
 	const [voteCount, setVoteCount] = useState(
@@ -30,8 +31,10 @@ const PostDetail = ({ post, content }) => {
 		post.votes.find((vote) => vote.username === username)
 	);
 
-	const [voteClick, setVoteClick] = useState(Boolean(hasVoted?.type === 'up'));
-	const [voteClick2, setVoteClick2] = useState(
+	const [voteClickUp, setVoteClickUp] = useState(
+		Boolean(hasVoted?.type === 'up')
+	);
+	const [voteClickDown, setVoteClickDown] = useState(
 		Boolean(hasVoted?.type === 'down')
 	);
 
@@ -39,47 +42,44 @@ const PostDetail = ({ post, content }) => {
 		url: `/api/posts/${post.id}/vote`,
 		method: 'post',
 	});
-	console.log(hasVoted);
 
 	const handleUpVote = () => {
 		doRequest({ voteType: 'up' });
-		if (voteClick !== true) {
+		if (voteClickUp !== true) {
 			if (hasVoted?.type === 'down') {
-				console.log('upped');
 				setHasVoted((prev) => ({ ...prev, type: 'up' }));
 				setVoteCount((prev) => prev + 2);
-				setVoteClick(true);
-				setVoteClick2(false);
+				setVoteClickUp(true);
+				setVoteClickDown(false);
 			} else {
 				setHasVoted((prev) => ({ ...prev, type: 'up' }));
 				setVoteCount((prev) => prev + 1);
-				setVoteClick(true);
+				setVoteClickUp(true);
 			}
 		} else {
 			setHasVoted((prev) => ({ ...prev, type: '' }));
 			setVoteCount((prev) => prev - 1);
-			setVoteClick(false);
+			setVoteClickUp(false);
 		}
 	};
 
 	const handleDownVote = () => {
 		doRequest({ voteType: 'down' });
-		if (voteClick2 !== true) {
+		if (voteClickDown !== true) {
 			if (hasVoted?.type === 'up') {
-				console.log('downed');
 				setHasVoted((prev) => ({ ...prev, type: 'down' }));
 				setVoteCount((prev) => prev - 2);
-				setVoteClick2(true);
-				setVoteClick(false);
+				setVoteClickDown(true);
+				setVoteClickUp(false);
 			} else {
 				setHasVoted((prev) => ({ ...prev, type: 'down' }));
 				setVoteCount((prev) => prev - 1);
-				setVoteClick2(true);
+				setVoteClickDown(true);
 			}
 		} else {
 			setHasVoted((prev) => ({ ...prev, type: '' }));
 			setVoteCount((prev) => prev + 1);
-			setVoteClick2(false);
+			setVoteClickDown(false);
 		}
 	};
 
@@ -93,7 +93,7 @@ const PostDetail = ({ post, content }) => {
 								style={{
 									marginLeft: 3,
 									cursor: 'pointer',
-									color: voteClick && '#4CC9B0',
+									color: voteClickUp && '#4CC9B0',
 								}}
 								onClick={handleUpVote}
 							/>
@@ -114,7 +114,7 @@ const PostDetail = ({ post, content }) => {
 								style={{
 									marginLeft: 3,
 									cursor: 'pointer',
-									color: voteClick2 && '#4CC9B0',
+									color: voteClickDown && '#4CC9B0',
 								}}
 								onClick={handleDownVote}
 							/>
