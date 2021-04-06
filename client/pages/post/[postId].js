@@ -54,7 +54,7 @@ const PostShow = ({ post, mdxContent, comments }) => {
 					<hr />
 					{post.comments.map((comment, idx) => {
 						return (
-							<CommentList key={comment.id} comment={comment}>
+							<CommentList key={comment.id} comment={comment} postId={post.id}>
 								{test[idx]}
 							</CommentList>
 						);
