@@ -48,7 +48,7 @@ const Search = ({ query }) => {
 	);
 };
 
-export const getServerSideProps = async ({ req, query }) => {
+export const getServerSideProps = async ({ query }) => {
 	const { query: searchQuery } = query;
 
 	return {
