@@ -56,7 +56,6 @@ const PostShow = ({ post, mdxContent, comments }) => {
 					<Formik
 						initialValues={{ text: '' }}
 						onSubmit={(values) => {
-							console.log(values);
 							doRequest(values);
 						}}
 					>
@@ -101,8 +100,6 @@ export const getServerSideProps = async ({ req, query }) => {
 	for (const comment of post.comments) {
 		comments.push(await renderToString(comment.text));
 	}
-
-	console.log(comments);
 
 	return {
 		props: {
