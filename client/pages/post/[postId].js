@@ -1,29 +1,21 @@
 import axios from 'axios';
-import Layout from '../../components/Layout';
+import { useRouter } from 'next/router';
+import dynamic from 'next/dynamic';
 import renderToString from 'next-mdx-remote/render-to-string';
 import hydrate from 'next-mdx-remote/hydrate';
-import { Card, CardContent, Box, Typography, Button } from '@material-ui/core';
-import dynamic from 'next/dynamic';
-import PostDetail from '../../components/PostDetail';
+import { Box, Typography, Button } from '@material-ui/core';
 import { Form, Formik } from 'formik';
+
+import Layout from '../../components/Layout';
+import PostDetail from '../../components/PostDetail';
 import useRequest from '../../hooks/use-request';
-import { useRouter } from 'next/router';
-import {
-	ExpandLess as ExpandLessIcon,
-	ExpandMore as ExpandMoreIcon,
-} from '@material-ui/icons';
 import CommentList from '../../components/CommentList';
-import { useState } from 'react';
 
 const SimpleMDE = dynamic(() => import('../../components/SimpleMDE'), {
 	ssr: false,
 });
 
 const PostShow = ({ post, mdxContent, comments }) => {
-	// const [postComments, setPostComments] = useState([...comments]);
-
-	// console.log(postComments);
-
 	const router = useRouter();
 	const { postId } = router.query;
 	const { doRequest } = useRequest({
@@ -33,15 +25,11 @@ const PostShow = ({ post, mdxContent, comments }) => {
 	});
 
 	const content = hydrate(mdxContent);
-	const test = [];
+	const hydratedComment = [];
 
-	comments.map((elm) => {
-		test.push(hydrate(elm));
+	comments.forEach((elm) => {
+		hydratedComment.push(hydrate(elm));
 	});
-
-	// const test_ = post.comments.map((comment, idx) => {
-	// 	return { ...comment, mdxed: test[idx] };
-	// });
 
 	return (
 		<Layout currentUser={{ username: 'admin' }}>
@@ -55,7 +43,7 @@ const PostShow = ({ post, mdxContent, comments }) => {
 					{post.comments.map((comment, idx) => {
 						return (
 							<CommentList key={comment.id} comment={comment} postId={post.id}>
-								{test[idx]}
+								{hydratedComment[idx]}
 							</CommentList>
 						);
 					})}
