@@ -10,15 +10,17 @@ const Search = ({ query }) => {
 
 	useEffect(() => {
 		const fetchSearch = async () => {
-			const { data } = await axios.post('/api/search', {
-				query,
-			});
-			setPosts(data);
+			try {
+				const { data } = await axios.post('/api/search', {
+					query,
+				});
+				setPosts(data);
+			} catch {
+				setPosts([]);
+			}
 		};
 		fetchSearch();
-	}, []);
-
-	console.log(posts);
+	}, [query]);
 
 	return (
 		<Layout currentUser={{ username: 'admin' }}>
@@ -28,7 +30,7 @@ const Search = ({ query }) => {
 					color="secondary"
 					style={{ fontWeight: 'bold' }}
 				>
-					Pencarian - {query}
+					Pencarian - "{query}"
 				</Typography>
 				{posts.map((post) => (
 					<PostList
