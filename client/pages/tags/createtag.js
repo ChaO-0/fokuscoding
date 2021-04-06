@@ -1,7 +1,8 @@
-import Layout from '../../components/Layout';
+import { useState } from 'react';
+import Router from 'next/router';
+import { useDispatch } from 'react-redux';
 import { Formik, Form } from 'formik';
 import * as yup from 'yup';
-import TextInput from '../../components/TextInput';
 import {
 	FormGroup,
 	FormControl,
@@ -11,12 +12,11 @@ import {
 	CircularProgress,
 } from '@material-ui/core';
 
-import { useState } from 'react';
-import useRequest from '../../hooks/use-request';
+import Layout from '../../components/Layout';
+import TextInput from '../../components/TextInput';
 import MyButton from '../../components/MyButton';
-import Router from 'next/router';
 import Toast from '../../components/Toast';
-import { useDispatch } from 'react-redux';
+import useRequest from '../../hooks/use-request';
 import { open } from '../../redux/ducks/openload';
 
 const createTag = () => {
@@ -62,10 +62,10 @@ const createTag = () => {
 					>
 						<Form>
 							<FormGroup>
-								<FormControl margin={'dense'}>
+								<FormControl margin="dense">
 									<TextInput label="Tags" name="tags" type="text" />
 								</FormControl>
-								<FormControl margin={'dense'}>
+								<FormControl margin="dense">
 									<TextInput
 										label="Description"
 										name="description"
