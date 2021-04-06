@@ -1,3 +1,7 @@
+import { useState } from 'react';
+import { useDispatch } from 'react-redux';
+import axios from 'axios';
+import Router from 'next/router';
 import {
 	Card,
 	CardContent,
@@ -11,16 +15,11 @@ import {
 	ExpandMore as ExpandMoreIcon,
 } from '@material-ui/icons';
 
-import useRequest from '../hooks/use-request';
-import Router from 'next/router';
-import axios from 'axios';
-import { useState } from 'react';
 import Toast from '../components/Toast';
-import { useDispatch } from 'react-redux';
+import useRequest from '../hooks/use-request';
 import { open } from '../redux/ducks/openload';
 
 const calcVote = (commentVotes, params = 0) => {
-	// console.log('calcVotes', commentVotes);
 	if (commentVotes !== []) {
 		const upVote = commentVotes.filter((vote) => vote?.type === 'up').length;
 		const downVote = commentVotes.filter((vote) => vote?.type === 'down')
@@ -38,13 +37,13 @@ const CommentList = ({ postId, comment, children }) => {
 	const [totalVote, setTotalVote] = useState(calcVote(comment.votes));
 	let username;
 	let admin;
+
 	if (typeof window !== 'undefined') {
 		username = JSON.parse(localStorage.getItem('currentUser')).username;
 		admin = JSON.parse(localStorage.getItem('currentUser')).is_admin;
 	}
 	const isAuthorized = comment.username === username || admin;
 
-	console.log(isAuthorized);
 	const [hasVoted, setHasVoted] = useState(
 		comment.votes.find((vote) => vote?.username === username)
 	);
@@ -54,9 +53,6 @@ const CommentList = ({ postId, comment, children }) => {
 	const [voteClickDown, setVoteClickDown] = useState(
 		Boolean(hasVoted?.type === 'down')
 	);
-	// useEffect(() => {
-	// 	username = JSON.parse(localStorage.getItem('currentUser')).username;
-	// }, []);
 
 	const { doRequest } = useRequest({
 		url: `/api/posts/comment/${comment.id}/vote`,
