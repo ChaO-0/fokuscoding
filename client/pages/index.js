@@ -5,7 +5,6 @@ import {
 	makeStyles,
 	createMuiTheme,
 	ThemeProvider,
-	Box,
 } from '@material-ui/core';
 import PostList from '../components/PostList';
 import Loginform from '../components/LoginForm';
@@ -23,11 +22,6 @@ const useStyles = makeStyles((theme) => ({
 		height: '70vh',
 		overflowY: 'scroll',
 	},
-	// label: {
-	//   '&.Mui-focused': {
-	//     color: 'black',
-	//   },
-	// },
 }));
 
 const theme = createMuiTheme({
