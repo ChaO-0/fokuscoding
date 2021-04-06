@@ -117,22 +117,26 @@ const SideBar = () => {
 		localStorage.removeItem('currentUser');
 	};
 	useEffect(() => {
-		setCurrentUser(JSON.parse(localStorage.getItem('currentUser')));
+		try {
+			setCurrentUser(JSON.parse(localStorage.getItem('currentUser')));
 
-		if (JSON.parse(localStorage.getItem('currentUser')).is_admin) {
-			setNavLists([
-				...navLists,
-				{
-					name: 'Review Tag',
-					href: '/tags/review',
-					icon: <RateReviewIcon style={{ color: 'white' }} />,
-				},
-				{
-					name: 'Daftar User',
-					href: '/users',
-					icon: <PeopleIcon style={{ color: 'white' }} />,
-				},
-			]);
+			if (JSON.parse(localStorage.getItem('currentUser')).is_admin) {
+				setNavLists([
+					...navLists,
+					{
+						name: 'Review Tag',
+						href: '/tags/review',
+						icon: <RateReviewIcon style={{ color: 'white' }} />,
+					},
+					{
+						name: 'Daftar User',
+						href: '/users',
+						icon: <PeopleIcon style={{ color: 'white' }} />,
+					},
+				]);
+			}
+		} catch {
+			router.push('/');
 		}
 	}, []);
 
