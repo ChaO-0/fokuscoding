@@ -2,6 +2,7 @@ import {
 	Typography,
 	makeStyles,
 	Box,
+	Button,
 	Card,
 	CardContent,
 	Chip,
@@ -102,10 +103,16 @@ const PostList = ({ title, voteCount, tags = [], createdBy, time, postId }) => {
 							</Box>
 							<Box
 								display="flex"
-								justifyContent="flex-end"
+								justifyContent="space-between"
 								className={classes.createdBy}
 							>
-								Oleh: {createdBy}
+								<Box>
+									<NextLink href={`/post/update/${postId}`}>
+										<Button style={{ color: '#4C72C9' }}>Edit</Button>
+									</NextLink>
+									<Button style={{ color: '#F6506C' }}>Delete</Button>
+								</Box>
+								<Box>Oleh: {createdBy}</Box>
 							</Box>
 						</Box>
 					</Box>
