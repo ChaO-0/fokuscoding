@@ -76,7 +76,7 @@ const SimpleMdeFormik = ({ onChange, onBlur, ...props }) => {
 	);
 };
 
-const PostForm = ({ tags: tagsList }) => {
+const PostForm = ({ tags: tagsList, postValue, editForm }) => {
 	const validationSchema = Yup.object({
 		title: Yup.string('Enter your Title').required('Title is required'),
 		tags: Yup.array().min(1, 'Masukkan setidaknya 1 Tag!'),
@@ -86,8 +86,8 @@ const PostForm = ({ tags: tagsList }) => {
 	const router = useRouter();
 
 	const { doRequest, errors } = useRequest({
-		url: '/api/posts',
-		method: 'post',
+		url: editForm ? `/api/posts/${postValue.id}` : '/api/posts',
+		method: editForm ? 'put' : 'post',
 		onSuccess: () => router.push('/home'),
 	});
 
@@ -95,12 +95,19 @@ const PostForm = ({ tags: tagsList }) => {
 		<>
 			<Formik
 				validationSchema={validationSchema}
-				initialValues={{ title: '', tags: [], body: '' }}
+				initialValues={{
+					title: postValue ? postValue.title : '',
+					tags: postValue ? postValue.tags : [],
+					body: postValue ? postValue.body : '',
+				}}
 				onSubmit={(values) => {
+					const tagIds = values.tags.map((tag) => tag.id);
+					values = { ...values, tags: tagIds };
+					console.log(values);
 					doRequest(values);
 				}}
 			>
-				{({ setFieldValue, setFieldTouched }) => (
+				{({ setFieldValue, setFieldTouched, values }) => (
 					<Form>
 						<FormGroup>
 							<FormControl>
@@ -113,12 +120,13 @@ const PostForm = ({ tags: tagsList }) => {
 
 								<CustomAutocomplete
 									multiple
+									value={values.tags}
+									getOptionSelected={(option, value) => option.id === value.id}
 									options={tagsList}
 									getOptionLabel={(option) => option.name}
 									noOptionsText="Tidak Ditemukan"
 									onChange={(e, value) => {
-										const ids = value.map((val) => val.id);
-										setFieldValue('tags', ids);
+										setFieldValue('tags', value);
 									}}
 									onBlur={() => {
 										setFieldTouched('tags', true, true);
@@ -145,6 +153,7 @@ const PostForm = ({ tags: tagsList }) => {
 							</FormControl>
 							<FormControl margin="normal">
 								<SimpleMdeFormik
+									value={values.body}
 									name="body"
 									onChange={(value) => setFieldValue('body', value)}
 									onBlur={() => {
