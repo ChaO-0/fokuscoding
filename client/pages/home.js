@@ -23,6 +23,12 @@ const Home = ({ posts }) => {
 		setOffset((prev) => prev + 10);
 	};
 
+	let isAdmin;
+
+	if (typeof window !== undefined) {
+		isAdmin = JSON.parse(localStorage.getItem('currentUser')).is_admin;
+	}
+
 	return (
 		<Layout>
 			<>
@@ -45,6 +51,7 @@ const Home = ({ posts }) => {
 							createdBy={post.username}
 							time={moment(post.updatedAt).fromNow()}
 							postId={post.id}
+							deleteButton={isAdmin ? true : false}
 						/>
 					))}
 				</InfiniteScroll>
