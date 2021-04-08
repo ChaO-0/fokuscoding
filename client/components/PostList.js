@@ -10,6 +10,8 @@ import {
 	createMuiTheme,
 } from '@material-ui/core';
 import NextLink from 'next/link';
+import { useRouter } from 'next/router';
+import useRequest from '../hooks/use-request';
 
 const useStyles = makeStyles((theme) => ({
 	voteFont: {
@@ -51,8 +53,30 @@ const theme = createMuiTheme({
 	},
 });
 
-const PostList = ({ title, voteCount, tags = [], createdBy, time, postId }) => {
+const PostList = ({
+	title,
+	voteCount,
+	tags = [],
+	createdBy,
+	time,
+	postId,
+	editButton,
+	deleteButton,
+}) => {
 	const classes = useStyles();
+
+	const router = useRouter();
+
+	const { doRequest, errors } = useRequest({
+		url: `/api/posts/${postId}`,
+		method: 'delete',
+		onSuccess: () => router.push('/post'),
+	});
+
+	const handleDelete = () => {
+		doRequest();
+	};
+
 	return (
 		<ThemeProvider theme={theme}>
 			<Card style={{ marginBottom: theme.spacing(2) }}>
@@ -107,10 +131,16 @@ const PostList = ({ title, voteCount, tags = [], createdBy, time, postId }) => {
 								className={classes.createdBy}
 							>
 								<Box>
-									<NextLink href={`/post/update/${postId}`}>
-										<Button style={{ color: '#4C72C9' }}>Edit</Button>
-									</NextLink>
-									<Button style={{ color: '#F6506C' }}>Delete</Button>
+									{editButton && (
+										<NextLink href={`/post/update/${postId}`}>
+											<Button style={{ color: '#4C72C9' }}>Edit</Button>
+										</NextLink>
+									)}
+									{deleteButton && (
+										<Button style={{ color: '#F6506C' }} onClick={handleDelete}>
+											Delete
+										</Button>
+									)}
 								</Box>
 								<Box>Oleh: {createdBy}</Box>
 							</Box>
