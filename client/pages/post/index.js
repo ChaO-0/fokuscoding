@@ -62,6 +62,8 @@ const MyPost = () => {
 							createdBy={post.username}
 							time={moment(post.updatedAt).fromNow()}
 							postId={post.id}
+							editButton
+							deleteButton
 						/>
 					))}
 				</InfiniteScroll>
