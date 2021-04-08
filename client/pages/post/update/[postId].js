@@ -7,7 +7,7 @@ const UpdatePost = ({ tags, post }) => {
 		<Layout>
 			<>
 				<h1>Test</h1>
-				<PostForm tags={tags} postValue={post} />
+				<PostForm tags={tags} postValue={post} editForm />
 			</>
 		</Layout>
 	);
