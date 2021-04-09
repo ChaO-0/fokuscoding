@@ -107,7 +107,9 @@ const PostList = ({
 								justifyContent="space-between"
 								flexDirection="row"
 							>
-								<Typography variant="caption">{time}</Typography>
+								<Typography variant="caption">
+									Terakhir diperbarui: {time}
+								</Typography>
 								<Box>
 									{tags.map((tag) => (
 										<Chip
