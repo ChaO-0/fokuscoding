@@ -27,7 +27,7 @@ import {
 import NextLink from 'next/link';
 import useRequest from '../hooks/use-request';
 import Router from 'next/router';
-import { Formik, Form, Field } from 'formik';
+import { Formik, Form, useField } from 'formik';
 import { useRouter } from 'next/router';
 
 const drawerWidth = '25%';
@@ -87,7 +87,9 @@ const initialNavLists = [
 	},
 ];
 
-const SearchInput = ({ field, form, ...props }) => {
+const SearchInput = ({ ...props }) => {
+	const [field, meta] = useField(props);
+
 	return (
 		<InputBase
 			style={{
@@ -197,27 +199,28 @@ const SideBar = () => {
 							router.push(`/search?query=${values.query}`);
 						}}
 					>
-						<Form>
-							<Box display="flex" py={1} width="100%">
-								<Field
-									type="text"
-									name="query"
-									component={SearchInput}
-									placeholder="Cari diskusi"
-								/>
-								<Button
-									style={{
-										borderRadius: '0px 50px 50px 0px',
-										boxShadow: 'none',
-									}}
-									variant="contained"
-									color="primary"
-									type="submit"
-								>
-									<SearchIcon />
-								</Button>
-							</Box>
-						</Form>
+						<Box width="100%">
+							<Form>
+								<Box display="flex" py={1} width="100%">
+									<SearchInput
+										type="text"
+										name="query"
+										placeholder="Cari diskusi"
+									/>
+									<Button
+										style={{
+											borderRadius: '0px 50px 50px 0px',
+											boxShadow: 'none',
+										}}
+										variant="contained"
+										color="primary"
+										type="submit"
+									>
+										<SearchIcon />
+									</Button>
+								</Box>
+							</Form>
+						</Box>
 					</Formik>
 				</ListItem>
 				{navLists.map((navList) => (
