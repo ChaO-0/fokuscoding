@@ -47,7 +47,7 @@ const Index = ({ posts }) => {
 		<ThemeProvider theme={theme}>
 			<Container className={classes.containerPad}>
 				<Typography variant="h3" color="primary">
-					<img src="/brand_logo.svg" alt="Logo Brand" width="25%" />
+					<img src="/logo_fokus.png" alt="logo fokus" width="25%" />
 				</Typography>
 				<Grid
 					container

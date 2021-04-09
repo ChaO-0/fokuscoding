@@ -40,7 +40,7 @@ const Layout = (props) => {
 			<SideBar currentUser={currentUser} />
 			<main className={classes.content}>
 				<Box display="flex" justifyContent="flex-end" pb={4}>
-					<img src="/brand_logo.svg" alt="Logo Brand" width="35%" />
+					<img src="/logo_fokus.png" alt="logo_fokus" width="35%" />
 				</Box>
 				{props.children}
 			</main>

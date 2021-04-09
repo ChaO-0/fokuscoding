@@ -27,7 +27,7 @@ const Register = () => {
 	return (
 		<Container className={classes.padTop}>
 			<Typography className={classes.brand} color="primary" component="div">
-				<img src="/brand_logo.svg" alt="Logo Brand" width="25%" />
+				<img src="/logo_fokus.png" alt="logo fokus" width="25%" />
 			</Typography>
 			<Container maxWidth="md">
 				<RegisterForm />
