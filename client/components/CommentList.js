@@ -2,29 +2,26 @@ import { useState } from 'react';
 import { useDispatch } from 'react-redux';
 import axios from 'axios';
 import Router from 'next/router';
-import {
-	Card,
-	CardContent,
-	Box,
-	Typography,
-	NoSsr,
-	Button,
-} from '@material-ui/core';
+import dynamic from 'next/dynamic';
+
+import { Card, CardContent, Box, Typography, NoSsr } from '@material-ui/core';
 import {
 	ExpandLess as ExpandLessIcon,
 	ExpandMore as ExpandMoreIcon,
 } from '@material-ui/icons';
 
+import MyDialogBox from './MyDialogBox';
+
 import Toast from '../components/Toast';
 import useRequest from '../hooks/use-request';
 import { open } from '../redux/ducks/openload';
 
-const calcVote = (commentVotes, params = 0) => {
+const calcVote = (commentVotes) => {
 	if (commentVotes !== []) {
 		const upVote = commentVotes.filter((vote) => vote?.type === 'up').length;
 		const downVote = commentVotes.filter((vote) => vote?.type === 'down')
 			.length;
-		const totalVote = upVote - downVote - params;
+		const totalVote = upVote - downVote;
 
 		return totalVote;
 	}
@@ -42,7 +39,8 @@ const CommentList = ({ postId, comment, children }) => {
 		username = JSON.parse(localStorage.getItem('currentUser')).username;
 		admin = JSON.parse(localStorage.getItem('currentUser')).is_admin;
 	}
-	const isAuthorized = comment.username === username || admin;
+	const showDelete = comment.username === username || admin;
+	const showUpdate = comment.username === username;
 
 	const [hasVoted, setHasVoted] = useState(
 		comment.votes.find((vote) => vote?.username === username)
@@ -98,6 +96,7 @@ const CommentList = ({ postId, comment, children }) => {
 		}
 		setTotalVote(calcVote(votes));
 	};
+
 	const handleDelete = async (commentId) => {
 		await axios.delete(`/api/posts/${postId}/comment/${commentId}`);
 		dispatch(open(true));
@@ -106,15 +105,7 @@ const CommentList = ({ postId, comment, children }) => {
 			Router.reload();
 		}, 2000);
 	};
-	const DeleteButton = ({ commentId }) =>
-		isAuthorized ? (
-			<Button
-				onClick={() => handleDelete(commentId)}
-				style={{ color: '#F6506C' }}
-			>
-				Delete
-			</Button>
-		) : null;
+
 	return (
 		<NoSsr>
 			<Toast severity="success">Berhasil Delete Comment, Reloading...</Toast>
@@ -160,16 +151,36 @@ const CommentList = ({ postId, comment, children }) => {
 									display="flex"
 									flexGrow={1}
 									alignItems="center"
-									id="meee"
 									mb={1}
 								>
 									<Typography variant="caption">
 										Oleh: {comment.username}
 									</Typography>
 								</Box>
-								<DeleteButton commentId={comment.id} />
+
+								{showUpdate && (
+									<MyDialogBox
+										buttonText="Edit"
+										buttonColor="#4C72C9"
+										dialogTitle="Edit Komentar"
+										dialogText="Silahkan edit komentar anda dibawah"
+										acceptText="Edit"
+										showForm={comment.text}
+									/>
+								)}
+
+								{showDelete && (
+									<MyDialogBox
+										buttonText="Delete"
+										buttonColor="#F6506C"
+										dialogTitle="Hapus Komentar"
+										dialogText="Kamu yakin ingin menghapus komentar?"
+										acceptText="Delete"
+										request={() => handleDelete(comment.id)}
+									/>
+								)}
 							</Box>
-							<Box style={{ width: '80%', borderTop: '1px solid #707070' }}>
+							<Box style={{ width: '80%', borderTop: '1px solid #70707040' }}>
 								{children}
 							</Box>
 						</Box>
