@@ -6,6 +6,7 @@ import {
 	Typography,
 	Chip,
 	NoSsr,
+	Button,
 } from '@material-ui/core';
 import {
 	ExpandLess as ExpandLessIcon,
@@ -14,6 +15,12 @@ import {
 import moment from 'moment';
 
 import useRequest from '../hooks/use-request';
+import MyDialogBox from './MyDialogBox';
+
+import NextLink from 'next/link';
+import Router from 'next/router';
+
+import axios from 'axios';
 
 const PostDetail = ({ post, content }) => {
 	const [voteCount, setVoteCount] = useState(
@@ -83,6 +90,14 @@ const PostDetail = ({ post, content }) => {
 		}
 	};
 
+	const handleDelete = async (postId) => {
+		await axios.delete(`/api/posts/${postId}`);
+
+		setTimeout(() => {
+			Router.push('/home');
+		}, 2000);
+	};
+
 	return (
 		<NoSsr>
 			<Card>
@@ -120,14 +135,7 @@ const PostDetail = ({ post, content }) => {
 							/>
 						</Box>
 						<Box flexDirection="row" style={{ width: '100%' }}>
-							<Box
-								flexDirection="row"
-								style={{
-									borderBottom: '3px solid #707070',
-									width: '80%',
-									paddingBottom: 10,
-								}}
-							>
+							<Box flexDirection="row">
 								<Box>
 									{post.tags.map((tag) => (
 										<Chip
@@ -142,7 +150,23 @@ const PostDetail = ({ post, content }) => {
 										/>
 									))}
 								</Box>
-								<Typography variant="h4">{post.title}</Typography>
+								<Box display="flex" justifyContent="flex-end">
+									<Box display="flex" flexGrow={1} alignItems="center" mb={1}>
+										<Typography variant="h4">{post.title}</Typography>
+									</Box>
+									<NextLink href={`/post/update/${post.id}`}>
+										<Button style={{ color: '#4C72C9' }}>Edit</Button>
+									</NextLink>
+									<MyDialogBox
+										buttonText="Delete"
+										buttonColor="#F6506C"
+										dialogTitle="Hapus Postingan"
+										dialogText="Kamu yakin ingin menghapus postingan?"
+										acceptText="Delete"
+										request={() => handleDelete(post.id)}
+									/>
+								</Box>
+
 								<Box flexDirection="column">
 									<Typography
 										variant="caption"
@@ -172,7 +196,7 @@ const PostDetail = ({ post, content }) => {
 									Oleh: {post.username}
 								</Typography>
 							</Box>
-							<Box mt={3} style={{ width: '80%' }}>
+							<Box style={{ width: '80%', borderTop: '1px solid #70707040' }}>
 								{content}
 							</Box>
 						</Box>
