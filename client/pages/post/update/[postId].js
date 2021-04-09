@@ -6,7 +6,7 @@ const UpdatePost = ({ tags, post }) => {
 	return (
 		<Layout>
 			<>
-				<h1>Test</h1>
+				<h1>Update Post</h1>
 				<PostForm tags={tags} postValue={post} editForm />
 			</>
 		</Layout>
