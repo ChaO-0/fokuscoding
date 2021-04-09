@@ -99,12 +99,12 @@ const loginForm = () => {
 						<Formik
 							initialValues={{ email: '', password: '' }}
 							validationSchema={validationSchema}
-							onSubmit={async (values, { resetForm }) => {
+							onSubmit={async (values, { resetForm, setSubmitting }) => {
 								setLoading(true);
 								await doRequest(values);
 								dispatch(open(true));
 								setLoading(false);
-								resetForm({});
+								setSubmitting(false);
 							}}
 						>
 							<Form>

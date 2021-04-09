@@ -121,8 +121,6 @@ const RegisterForm = () => {
 							await doRequest(values);
 							dispatch(open(true));
 							setLoading(false);
-							// router.push('/home');
-							resetForm({});
 						}}
 					>
 						<Form>
