@@ -1,5 +1,5 @@
-import Layout from '../../../components/Layout';
-import PostForm from '../../../components/PostForm';
+import Layout from '../../components/Layout';
+import PostForm from '../../components/PostForm';
 import axios from 'axios';
 
 const UpdatePost = ({ tags, post }) => {
