@@ -29,9 +29,11 @@ const PostDetail = ({ post, content }) => {
 	);
 
 	let username;
+	let isAdmin;
 
 	if (typeof window !== 'undefined') {
 		username = JSON.parse(localStorage.getItem('currentUser')).username;
+		isAdmin = JSON.parse(localStorage.getItem('currentUser')).is_admin;
 	}
 
 	const [hasVoted, setHasVoted] = useState(
@@ -159,14 +161,16 @@ const PostDetail = ({ post, content }) => {
 											<Button style={{ color: '#4C72C9' }}>Edit</Button>
 										</NextLink>
 									)}
-									<MyDialogBox
-										buttonText="Delete"
-										buttonColor="#F6506C"
-										dialogTitle="Hapus Postingan"
-										dialogText="Kamu yakin ingin menghapus postingan?"
-										acceptText="Delete"
-										request={() => handleDelete(post.id)}
-									/>
+									{username === post.username || isAdmin ? (
+										<MyDialogBox
+											buttonText="Delete"
+											buttonColor="#F6506C"
+											dialogTitle="Hapus Postingan"
+											dialogText="Kamu yakin ingin menghapus postingan?"
+											acceptText="Delete"
+											request={() => handleDelete(post.id)}
+										/>
+									) : null}
 								</Box>
 
 								<Box flexDirection="column">
