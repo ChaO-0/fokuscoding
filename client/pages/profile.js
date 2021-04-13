@@ -1,5 +1,14 @@
-import { Typography, Card, CardContent } from '@material-ui/core';
+import {
+	Typography,
+	Card,
+	CardContent,
+	FormGroup,
+	FormControl,
+} from '@material-ui/core';
+import { Formik, Form } from 'formik';
+
 import Layout from '../components/Layout';
+import TextInput from '../components/TextInput';
 
 const Profile = () => {
 	return (
@@ -9,9 +18,23 @@ const Profile = () => {
 			</Typography>
 			<Card>
 				<CardContent>
-					<Typography variant="h6" gutterBottom>
-						test
-					</Typography>
+					<Formik
+						initialValues={{ email: '', password: '' }}
+						onSubmit={async (values, { resetForm, setSubmitting }) => {
+							console.log('test');
+						}}
+					>
+						<Form>
+							<FormGroup>
+								<FormControl>
+									<TextInput label="Email" name="email" />
+								</FormControl>
+								<FormControl>
+									<TextInput label="Password" name="password" type="password" />
+								</FormControl>
+							</FormGroup>
+						</Form>
+					</Formik>
 				</CardContent>
 			</Card>
 		</Layout>
