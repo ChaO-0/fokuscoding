@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import axios from 'axios';
 import { useRouter } from 'next/router';
 import dynamic from 'next/dynamic';
@@ -17,6 +18,7 @@ const SimpleMDE = dynamic(() => import('../../components/SimpleMDE'), {
 
 const PostShow = ({ post, mdxContent, comments }) => {
 	const router = useRouter();
+	const [hasSolution, setHasSolution] = useState(post.has_solution);
 	const { postId } = router.query;
 	const { doRequest } = useRequest({
 		url: `/api/posts/${postId}`,
@@ -41,8 +43,17 @@ const PostShow = ({ post, mdxContent, comments }) => {
 					</Typography>
 					<hr />
 					{post.comments.map((comment, idx) => {
+						console.log(post.has_solution);
 						return (
-							<CommentList key={comment.id} comment={comment} postId={post.id}>
+							<CommentList
+								key={comment.id}
+								comment={comment}
+								postId={post.id}
+								postUsername={post.username}
+								solution={post.solution?.id === comment.id}
+								hasSolution={hasSolution}
+								setHasSolution={setHasSolution}
+							>
 								{hydratedComment[idx]}
 							</CommentList>
 						);
@@ -100,6 +111,8 @@ export const getServerSideProps = async ({ req, query }) => {
 	for (const comment of post.comments) {
 		comments.push(await renderToString(comment.text));
 	}
+
+	console.log(post);
 
 	return {
 		props: {
