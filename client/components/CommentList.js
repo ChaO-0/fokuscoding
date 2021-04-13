@@ -2,9 +2,15 @@ import { useState } from 'react';
 import { useDispatch } from 'react-redux';
 import axios from 'axios';
 import Router from 'next/router';
-import dynamic from 'next/dynamic';
 
-import { Card, CardContent, Box, Typography, NoSsr } from '@material-ui/core';
+import {
+	Card,
+	CardContent,
+	Box,
+	Typography,
+	NoSsr,
+	Button,
+} from '@material-ui/core';
 import {
 	ExpandLess as ExpandLessIcon,
 	ExpandMore as ExpandMoreIcon,
@@ -28,12 +34,21 @@ const calcVote = (commentVotes) => {
 	return 0;
 };
 
-const CommentList = ({ postId, comment, children }) => {
+const CommentList = ({
+	postId,
+	comment,
+	postUsername,
+	solution,
+	hasSolution,
+	setHasSolution,
+	children,
+}) => {
 	const dispatch = useDispatch();
 
 	const [totalVote, setTotalVote] = useState(calcVote(comment.votes));
 	const [text, setText] = useState(comment.text);
 	const [typeHandler, setTypeHandler] = useState('');
+	const [postSolution, setPostSolution] = useState(solution);
 
 	let username;
 	let admin;
@@ -122,11 +137,24 @@ const CommentList = ({ postId, comment, children }) => {
 		}, 2000);
 	};
 
+	const handleSolution = async (commentId) => {
+		await axios.post(`/api/posts/${postId}/solution`, {
+			commentId,
+		});
+		setPostSolution((prev) => !prev);
+		setHasSolution((prev) => !prev);
+	};
+
 	return (
 		<NoSsr>
 			<Toast severity="success">{`Berhasil ${typeHandler} Comment, Reloading...`}</Toast>
 
-			<Card style={{ marginBottom: 20 }}>
+			<Card
+				style={{
+					marginBottom: 20,
+					backgroundColor: postSolution ? '#00FFA042' : 'white',
+				}}
+			>
 				<CardContent>
 					<Box display="flex" flexDirection="row" justifyContent="flex-start">
 						<Box flexDirection="column" marginRight={3}>
@@ -161,6 +189,23 @@ const CommentList = ({ postId, comment, children }) => {
 							/>
 						</Box>
 						<Box flexDirection="row" style={{ width: '100%' }}>
+							{username === postUsername && !hasSolution ? (
+								<Button
+									color="secondary"
+									onClick={() => handleSolution(comment.id)}
+								>
+									Tandai Sebagai Solusi
+								</Button>
+							) : (
+								postSolution && (
+									<Button
+										color="secondary"
+										onClick={() => handleSolution(comment.id)}
+									>
+										Batalkan solusi
+									</Button>
+								)
+							)}
 							<Box display="flex" justifyContent="flex-end">
 								<Box
 									fontStyle="italic"
@@ -173,7 +218,6 @@ const CommentList = ({ postId, comment, children }) => {
 										Oleh: {comment.username}
 									</Typography>
 								</Box>
-
 								{showUpdate && (
 									<MyDialogBox
 										buttonText="Edit"
@@ -186,7 +230,6 @@ const CommentList = ({ postId, comment, children }) => {
 										request={() => handleUpdate(comment.id)}
 									/>
 								)}
-
 								{showDelete && (
 									<MyDialogBox
 										buttonText="Delete"
