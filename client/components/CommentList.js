@@ -197,6 +197,7 @@ const CommentList = ({
 									Tandai Sebagai Solusi
 								</Button>
 							) : (
+								username === postUsername &&
 								postSolution && (
 									<Button
 										color="secondary"
