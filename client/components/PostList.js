@@ -134,7 +134,7 @@ const PostList = ({
 							>
 								<Box>
 									{editButton && (
-										<NextLink href={`/post/update/${postId}`}>
+										<NextLink href={`/update/${postId}`}>
 											<Button style={{ color: '#4C72C9' }}>Edit</Button>
 										</NextLink>
 									)}
