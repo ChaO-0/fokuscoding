@@ -4,6 +4,7 @@ import {
 	CardContent,
 	FormGroup,
 	FormControl,
+	Button,
 } from '@material-ui/core';
 import { Formik, Form } from 'formik';
 
@@ -25,13 +26,40 @@ const Profile = () => {
 						}}
 					>
 						<Form>
-							<FormGroup>
+							<FormGroup style={{ width: '40%' }}>
 								<FormControl>
-									<TextInput label="Email" name="email" />
+									<TextInput label="Email" name="email" type="email" />
 								</FormControl>
-								<FormControl>
-									<TextInput label="Password" name="password" type="password" />
+								<FormControl style={{ marginTop: '10px' }}>
+									<TextInput label="Username" name="username" />
 								</FormControl>
+								<FormControl style={{ marginTop: '10px' }}>
+									<TextInput
+										label="Old Password"
+										name="oldpass"
+										type="password"
+									/>
+								</FormControl>
+								<FormControl style={{ marginTop: '10px' }}>
+									<TextInput
+										label="New Password"
+										name="newpass"
+										type="password"
+									/>
+								</FormControl>
+								<Button
+									variant="contained"
+									color="secondary"
+									type="submit"
+									style={{
+										color: 'white',
+										marginTop: '10px',
+										fontWeight: 'bold',
+										width: '30%',
+									}}
+								>
+									Update
+								</Button>
 							</FormGroup>
 						</Form>
 					</Formik>
