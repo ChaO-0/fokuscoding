@@ -47,7 +47,7 @@ const MyDialogBox = ({
 			<Dialog
 				open={open}
 				onClose={handleClose}
-				fullWidth={showForm}
+				// fullWidth={showForm}
 				maxWidth={showForm && 'md'}
 				aria-labelledby="alert-dialog-title"
 				aria-describedby="alert-dialog-description"
