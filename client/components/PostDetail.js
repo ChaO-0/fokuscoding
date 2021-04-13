@@ -154,9 +154,11 @@ const PostDetail = ({ post, content }) => {
 									<Box display="flex" flexGrow={1} alignItems="center" mb={1}>
 										<Typography variant="h4">{post.title}</Typography>
 									</Box>
-									<NextLink href={`/update/${post.id}`}>
-										<Button style={{ color: '#4C72C9' }}>Edit</Button>
-									</NextLink>
+									{username === post.username && (
+										<NextLink href={`/update/${post.id}`}>
+											<Button style={{ color: '#4C72C9' }}>Edit</Button>
+										</NextLink>
+									)}
 									<MyDialogBox
 										buttonText="Delete"
 										buttonColor="#F6506C"
