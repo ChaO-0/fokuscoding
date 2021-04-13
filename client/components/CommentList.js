@@ -32,6 +32,9 @@ const CommentList = ({ postId, comment, children }) => {
 	const dispatch = useDispatch();
 
 	const [totalVote, setTotalVote] = useState(calcVote(comment.votes));
+	const [text, setText] = useState(comment.text);
+	const [typeHandler, setTypeHandler] = useState('');
+
 	let username;
 	let admin;
 
@@ -100,6 +103,19 @@ const CommentList = ({ postId, comment, children }) => {
 	const handleDelete = async (commentId) => {
 		await axios.delete(`/api/posts/${postId}/comment/${commentId}`);
 		dispatch(open(true));
+		setTypeHandler('Delete');
+
+		setTimeout(() => {
+			Router.reload();
+		}, 2000);
+	};
+
+	const handleUpdate = async (commentId) => {
+		await axios.put(`/api/posts/comment/${commentId}`, {
+			text,
+		});
+		dispatch(open(true));
+		setTypeHandler('Update');
 
 		setTimeout(() => {
 			Router.reload();
@@ -108,7 +124,7 @@ const CommentList = ({ postId, comment, children }) => {
 
 	return (
 		<NoSsr>
-			<Toast severity="success">Berhasil Delete Comment, Reloading...</Toast>
+			<Toast severity="success">{`Berhasil ${typeHandler} Comment, Reloading...`}</Toast>
 
 			<Card style={{ marginBottom: 20 }}>
 				<CardContent>
@@ -166,6 +182,8 @@ const CommentList = ({ postId, comment, children }) => {
 										dialogText="Silahkan edit komentar anda dibawah"
 										acceptText="Edit"
 										showForm={comment.text}
+										setText={setText}
+										request={() => handleUpdate(comment.id)}
 									/>
 								)}
 
