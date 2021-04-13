@@ -22,6 +22,7 @@ const MyDialogBox = ({
 	acceptText,
 	request,
 	showForm,
+	setText,
 }) => {
 	const [open, setOpen] = useState(false);
 
@@ -34,8 +35,10 @@ const MyDialogBox = ({
 	};
 	const handleRequest = async () => {
 		await request();
+		// console.log(text);
 		setOpen(false);
 	};
+
 	return (
 		<>
 			<Button onClick={handleClickOpen} style={{ color: buttonColor }}>
@@ -54,7 +57,9 @@ const MyDialogBox = ({
 					<DialogContentText id="alert-dialog-description">
 						{dialogText}
 					</DialogContentText>
-					{showForm && <SimpleMDE value={showForm} />}
+					{showForm && (
+						<SimpleMDE value={showForm} onChange={(val) => setText(val)} />
+					)}
 				</DialogContent>
 				<DialogActions>
 					<Button onClick={handleClose} color="primary">
