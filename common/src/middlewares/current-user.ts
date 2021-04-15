@@ -3,6 +3,7 @@ import jwt from 'jsonwebtoken';
 
 interface UserPayload {
 	username: string;
+	email: string;
 	admin: boolean;
 }
 
