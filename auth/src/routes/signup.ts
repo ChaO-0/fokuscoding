@@ -43,6 +43,7 @@ router.post(
 			{
 				username: user.username,
 				admin: user.is_admin,
+				email: user.email,
 			},
 			process.env.JWT_KEY!,
 			{
