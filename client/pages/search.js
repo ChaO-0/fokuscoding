@@ -31,7 +31,7 @@ const Search = ({ query }) => {
 					style={{ fontWeight: 'bold' }}
 					gutterBottom
 				>
-					Pencarian - "{query}"
+					Pencarian - "{query}" {posts.length === 0 && ' tidak ditemukan'}
 				</Typography>
 				<Typography variant="subtitle2" color="textSecondary" gutterBottom>
 					Menemukan {posts.length} hasil
