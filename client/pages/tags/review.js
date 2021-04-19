@@ -63,28 +63,31 @@ const review = ({ tags }) => {
 						Oleh: {userName}
 					</Typography>
 				</Box>
-				{tagStatus === 'awaiting' ? (
-					<>
-						<Button onClick={() => handleAccept(tagId)} color="secondary">
-							Accept
-						</Button>
-						<Button
-							onClick={() => handleRejectDelete(tagId)}
-							style={{ color: '#F6506C' }}
-						>
-							Reject
-						</Button>
-					</>
-				) : (
-					<>
-						<Button
-							onClick={() => handleRejectDelete(tagId)}
-							style={{ color: '#F6506C' }}
-						>
-							Delete
-						</Button>
-					</>
-				)}
+				{
+					tagStatus === 'awaiting' ? (
+						<>
+							<Button onClick={() => handleAccept(tagId)} color="secondary">
+								Accept
+							</Button>
+							<Button
+								onClick={() => handleRejectDelete(tagId)}
+								style={{ color: '#F6506C' }}
+							>
+								Reject
+							</Button>
+						</>
+					) : null
+					// (
+					// 	<>
+					// 		<Button
+					// 			onClick={() => handleRejectDelete(tagId)}
+					// 			style={{ color: '#F6506C' }}
+					// 		>
+					// 			Delete
+					// 		</Button>
+					// 	</>
+					// )
+				}
 			</Box>
 		</>
 	);
