@@ -22,10 +22,7 @@ const Profile = ({ userData }) => {
 	const { doRequest, errors } = useRequest({
 		url: `/api/users/${userData.username}`,
 		method: 'put',
-		onSuccess: () =>
-			setTimeout(() => {
-				dispatch(open(false));
-			}, 1000),
+		onSuccess: () => dispatch(open(false)),
 	});
 
 	return (
