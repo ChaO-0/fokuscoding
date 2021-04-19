@@ -26,10 +26,10 @@ router.post(
 		}
 
 		const tag = Tag.build({
-			name,
+			name: name.toLowerCase(),
+			description: description.toLowerCase(),
 			username,
 			status,
-			description,
 		});
 
 		await tag.save();
