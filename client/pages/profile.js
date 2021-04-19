@@ -9,7 +9,6 @@ import {
 import { Formik, Form } from 'formik';
 import axios from 'axios';
 import useRequest from '../hooks/use-request';
-import { useRouter } from 'next/router';
 import { useDispatch } from 'react-redux';
 
 import Layout from '../components/Layout';
@@ -18,8 +17,6 @@ import Toast from '../components/Toast';
 import { open } from '../redux/ducks/openload';
 
 const Profile = ({ userData }) => {
-	console.log(userData);
-	const router = useRouter();
 	const dispatch = useDispatch();
 
 	const { doRequest, errors } = useRequest({
@@ -27,7 +24,6 @@ const Profile = ({ userData }) => {
 		method: 'put',
 		onSuccess: () =>
 			setTimeout(() => {
-				// await router.push('/home');
 				dispatch(open(false));
 			}, 1000),
 	});
@@ -50,7 +46,7 @@ const Profile = ({ userData }) => {
 								oldpass: '',
 								newpass: '',
 							}}
-							onSubmit={async (values, { resetForm, setSubmitting }) => {
+							onSubmit={async (values, { resetForm }) => {
 								await doRequest(values);
 								dispatch(open(true));
 								resetForm();
