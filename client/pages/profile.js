@@ -10,18 +10,26 @@ import { Formik, Form } from 'formik';
 import axios from 'axios';
 import useRequest from '../hooks/use-request';
 import { useRouter } from 'next/router';
+import { useDispatch } from 'react-redux';
 
 import Layout from '../components/Layout';
 import TextInput from '../components/TextInput';
+import Toast from '../components/Toast';
+import { open } from '../redux/ducks/openload';
 
 const Profile = ({ userData }) => {
 	console.log(userData);
 	const router = useRouter();
+	const dispatch = useDispatch();
 
-	const { doRequest } = useRequest({
+	const { doRequest, errors } = useRequest({
 		url: `/api/users/${userData.username}`,
 		method: 'put',
-		onSuccess: () => router.reload(),
+		onSuccess: () =>
+			setTimeout(() => {
+				// await router.push('/home');
+				dispatch(open(false));
+			}, 1000),
 	});
 
 	return (
@@ -30,32 +38,37 @@ const Profile = ({ userData }) => {
 				<Typography variant="h4" gutterBottom>
 					Profile
 				</Typography>
+				{errors ? (
+					errors
+				) : (
+					<Toast severity="success">Update profile success</Toast>
+				)}
 				<Card>
 					<CardContent>
 						<Formik
 							initialValues={{
-								email: userData.email,
-								username: userData.username,
-								password: '',
+								oldpass: '',
+								newpass: '',
 							}}
 							onSubmit={async (values, { resetForm, setSubmitting }) => {
-								console.log(values);
-								values.password === '' && delete values.password;
-								doRequest(values);
+								await doRequest(values);
+								dispatch(open(true));
+								resetForm();
 							}}
 						>
 							<Form>
 								<FormGroup style={{ width: '40%' }}>
-									<FormControl>
-										<TextInput label="Email" name="email" type="email" />
-									</FormControl>
 									<FormControl style={{ marginTop: '10px' }}>
-										<TextInput label="Username" name="username" />
+										<TextInput
+											label="Old Password"
+											name="oldpass"
+											type="password"
+										/>
 									</FormControl>
 									<FormControl style={{ marginTop: '10px' }}>
 										<TextInput
 											label="New Password"
-											name="password"
+											name="newpass"
 											type="password"
 										/>
 									</FormControl>
