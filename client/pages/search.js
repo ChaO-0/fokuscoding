@@ -29,8 +29,12 @@ const Search = ({ query }) => {
 					variant="h4"
 					color="secondary"
 					style={{ fontWeight: 'bold' }}
+					gutterBottom
 				>
 					Pencarian - "{query}"
+				</Typography>
+				<Typography variant="subtitle2" color="textSecondary" gutterBottom>
+					Menemukan {posts.length} hasil
 				</Typography>
 				{posts.map((post) => (
 					<PostList
