@@ -20,6 +20,25 @@ const theme = createMuiTheme({
 	typography: {
 		fontFamily: 'Roboto',
 	},
+	overrides: {
+		MuiCssBaseline: {
+			'@global': {
+				blockquote: {
+					borderLeft: '3px solid gray',
+					paddingLeft: '10px',
+					background: '#80808026',
+					fontStyle: 'italic',
+					padding: '3px 3px 3px 10px',
+					marginLeft: '0',
+				},
+				pre: {
+					background: '#8080803d',
+					borderRadius: '3px',
+					padding: '10px',
+				},
+			},
+		},
+	},
 });
 
 export default theme;
