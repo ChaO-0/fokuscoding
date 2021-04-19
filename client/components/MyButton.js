@@ -4,7 +4,6 @@ const useStyles = makeStyles((theme) => ({
 	buttonStyle: {
 		color: theme.palette.common.white,
 		width: theme.spacing(14),
-		borderRadius: 10,
 		fontSize: 14,
 	},
 }));
