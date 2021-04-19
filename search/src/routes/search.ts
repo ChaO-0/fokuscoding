@@ -20,7 +20,9 @@ router.post(
 				$regex: `.*${query}.*`,
 				$options: 'i',
 			},
-		}).populate('tags');
+		})
+			.sort({ updatedAt: -1 })
+			.populate('tags');
 
 		return res.send(search);
 	}
