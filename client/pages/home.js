@@ -43,7 +43,7 @@ const Home = ({ posts }) => {
 							}
 							tags={post.tags}
 							createdBy={post.username}
-							time={moment(post.updatedAt).fromNow()}
+							time={moment(post.createdAt).fromNow()}
 							postId={post.id}
 						/>
 					))}
