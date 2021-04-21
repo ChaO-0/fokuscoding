@@ -38,6 +38,7 @@ import useRequest from '../hooks/use-request';
 import Router from 'next/router';
 import { Formik, Form, useField } from 'formik';
 import { useRouter } from 'next/router';
+import axios from 'axios';
 
 const drawerWidth = '25%';
 
@@ -140,11 +141,12 @@ const SideBar = () => {
 	});
 	const [currentUser, setCurrentUser] = useState({});
 	const [navLists, setNavLists] = useState(initialNavLists);
+	const [tagList, setTagList] = useState([]);
 	const handleLogout = async () => {
 		await doRequest();
 		localStorage.removeItem('currentUser');
 	};
-	useEffect(() => {
+	useEffect(async () => {
 		try {
 			setCurrentUser(JSON.parse(localStorage.getItem('currentUser')));
 
@@ -163,11 +165,15 @@ const SideBar = () => {
 					},
 				]);
 			}
+
+			const getTags = async () => await axios.get('/api/tags');
+			const { data } = await getTags();
+			setTagList(data);
+			console.log(data);
 		} catch {
 			router.push('/');
 		}
 	}, []);
-
 	const [open, setOpen] = useState(false);
 
 	const handleClickOpen = () => {
@@ -273,67 +279,65 @@ const SideBar = () => {
 										Cari Diskusi
 									</DialogTitle>
 									<DialogContent>
-										<DialogContentText id="alert-dialog-description">
+										<DialogContentText
+											id="alert-dialog-description"
+											component={'div'}
+										>
 											<Formik
-												initialValues={{ query: '' }}
+												initialValues={{ query: '', tags: [] }}
 												onSubmit={(values) => {
+													const tagIds = values.tags.map((tag) => tag.id);
+													values = { ...values, tags: tagIds };
 													console.log(values);
 													// router.push(`/search?query=${values.query}`);
 												}}
 											>
-												<Form>
-													<Box display="flex" py={1} width="100%">
-														<SearchInput
-															type="text"
-															name="query"
-															placeholder="Cari diskusi"
-														/>
-														<Button
-															style={{
-																borderRadius: '0px 50px 50px 0px',
-																boxShadow: 'none',
-															}}
-															variant="contained"
-															color="primary"
-															type="submit"
-														>
-															<SearchIcon />
-														</Button>
-													</Box>
-													<CustomAutocomplete
-														multiple
-														// value={values.tags}
-														// getOptionSelected={(option, value) => option.id === value.id}
-														options={[
-															{ name: 'test1' },
-															{ name: 'test2' },
-															{ name: 'test3' },
-														]}
-														getOptionLabel={(option) => option.name}
-														noOptionsText="Tidak Ditemukan"
-														// onChange={(e, value) => {
-														// 	setFieldValue('tags', value);
-														// }}
-														// onBlur={() => {
-														// 	setFieldTouched('tags', true, true);
-														// }}
-														name="tags"
-														renderInput={(params) => (
-															<TextField
-																{...params}
-																variant="outlined"
-																style={{
-																	marginTop: 20,
-																	backgroundColor: '#00000012',
-																	borderRadius: 4,
-																	height: '100%',
-																	outline: 'none',
-																}}
-																name="tags"
+												{({ setFieldValue, setFieldTouched, values }) => (
+													<Form>
+														<Box display="flex" py={1} width="100%">
+															<SearchInput
+																type="text"
+																name="query"
+																placeholder="Cari diskusi"
 															/>
-														)}
-													/>
-												</Form>
+															<Button
+																style={{
+																	borderRadius: '0px 50px 50px 0px',
+																	boxShadow: 'none',
+																}}
+																variant="contained"
+																color="primary"
+																type="submit"
+															>
+																<SearchIcon />
+															</Button>
+														</Box>
+														<CustomAutocomplete
+															multiple
+															options={tagList}
+															getOptionLabel={(option) => option.name}
+															noOptionsText="Tidak Ditemukan"
+															onChange={(e, value) => {
+																setFieldValue('tags', value);
+															}}
+															name="tags"
+															renderInput={(params) => (
+																<TextField
+																	{...params}
+																	variant="outlined"
+																	style={{
+																		marginTop: 20,
+																		backgroundColor: '#00000012',
+																		borderRadius: 4,
+																		height: '100%',
+																		outline: 'none',
+																	}}
+																	name="tags"
+																/>
+															)}
+														/>
+													</Form>
+												)}
 											</Formik>
 										</DialogContentText>
 									</DialogContent>
