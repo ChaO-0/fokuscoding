@@ -9,7 +9,16 @@ import {
 	ListItemText,
 	InputBase,
 	Button,
+	Dialog,
+	DialogActions,
+	DialogContent,
+	DialogContentText,
+	DialogTitle,
+	withStyles,
+	TextField,
 } from '@material-ui/core';
+
+import { Autocomplete } from '@material-ui/lab';
 
 import {
 	Home as HomeIcon,
@@ -42,7 +51,7 @@ const useStyles = makeStyles((theme) => ({
 		width: drawerWidth,
 		backgroundColor: '#4C72C9',
 	},
-	// necessary for content to be below app bar
+
 	content: {
 		flexGrow: 1,
 		backgroundColor: theme.palette.background.default,
@@ -105,6 +114,23 @@ const SearchInput = ({ ...props }) => {
 	);
 };
 
+const CustomAutocomplete = withStyles({
+	tag: {
+		backgroundColor: '#4CC9B040',
+		color: '#4CC9B0',
+		borderRadius: 0,
+		height: 30,
+		position: 'relative',
+		zIndex: 0,
+		'& .MuiChip-label': {
+			color: '#3e9987',
+		},
+		'& .MuiChip-deleteIcon': {
+			color: '#656565',
+		},
+	},
+})(Autocomplete);
+
 const SideBar = () => {
 	const classes = useStyles();
 	const { doRequest, errors } = useRequest({
@@ -141,6 +167,16 @@ const SideBar = () => {
 			router.push('/');
 		}
 	}, []);
+
+	const [open, setOpen] = useState(false);
+
+	const handleClickOpen = () => {
+		setOpen(true);
+	};
+
+	const handleClose = () => {
+		setOpen(false);
+	};
 
 	const router = useRouter();
 
@@ -219,6 +255,94 @@ const SideBar = () => {
 										<SearchIcon />
 									</Button>
 								</Box>
+								<Box
+									display="flex"
+									justifyContent="flex-end"
+									style={{ color: 'white', cursor: 'pointer' }}
+									onClick={handleClickOpen}
+								>
+									Advanced Search
+								</Box>
+								<Dialog
+									open={open}
+									onClose={handleClose}
+									aria-labelledby="alert-dialog-title"
+									aria-describedby="alert-dialog-description"
+								>
+									<DialogTitle id="alert-dialog-title">
+										Cari Diskusi
+									</DialogTitle>
+									<DialogContent>
+										<DialogContentText id="alert-dialog-description">
+											<Formik
+												initialValues={{ query: '' }}
+												onSubmit={(values) => {
+													console.log(values);
+													// router.push(`/search?query=${values.query}`);
+												}}
+											>
+												<Form>
+													<Box display="flex" py={1} width="100%">
+														<SearchInput
+															type="text"
+															name="query"
+															placeholder="Cari diskusi"
+														/>
+														<Button
+															style={{
+																borderRadius: '0px 50px 50px 0px',
+																boxShadow: 'none',
+															}}
+															variant="contained"
+															color="primary"
+															type="submit"
+														>
+															<SearchIcon />
+														</Button>
+													</Box>
+													<CustomAutocomplete
+														multiple
+														// value={values.tags}
+														// getOptionSelected={(option, value) => option.id === value.id}
+														options={[
+															{ name: 'test1' },
+															{ name: 'test2' },
+															{ name: 'test3' },
+														]}
+														getOptionLabel={(option) => option.name}
+														noOptionsText="Tidak Ditemukan"
+														// onChange={(e, value) => {
+														// 	setFieldValue('tags', value);
+														// }}
+														// onBlur={() => {
+														// 	setFieldTouched('tags', true, true);
+														// }}
+														name="tags"
+														renderInput={(params) => (
+															<TextField
+																{...params}
+																variant="outlined"
+																style={{
+																	marginTop: 20,
+																	backgroundColor: '#00000012',
+																	borderRadius: 4,
+																	height: '100%',
+																	outline: 'none',
+																}}
+																name="tags"
+															/>
+														)}
+													/>
+												</Form>
+											</Formik>
+										</DialogContentText>
+									</DialogContent>
+									<DialogActions>
+										<Button onClick={handleClose} color="primary">
+											Cancel
+										</Button>
+									</DialogActions>
+								</Dialog>
 							</Form>
 						</Box>
 					</Formik>
