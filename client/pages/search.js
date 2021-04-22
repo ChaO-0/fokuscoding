@@ -5,7 +5,7 @@ import Layout from '../components/Layout';
 import PostList from '../components/PostList';
 import moment from 'moment';
 
-const Search = ({ query }) => {
+const Search = ({ query, tags }) => {
 	const [posts, setPosts] = useState([]);
 
 	useEffect(() => {
@@ -53,11 +53,12 @@ const Search = ({ query }) => {
 };
 
 export const getServerSideProps = async ({ query }) => {
-	const { query: searchQuery } = query;
+	const { query: searchQuery, tags } = query;
 
 	return {
 		props: {
 			query: searchQuery,
+			tags,
 		},
 	};
 };
