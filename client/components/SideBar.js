@@ -286,10 +286,12 @@ const SideBar = () => {
 											<Formik
 												initialValues={{ query: '', tags: [] }}
 												onSubmit={(values) => {
-													const tagIds = values.tags.map((tag) => tag.id);
-													values = { ...values, tags: tagIds };
+													const tagNames = values.tags.map((tag) => tag.name);
+													values = { ...values, tags: tagNames };
 													console.log(values);
-													// router.push(`/search?query=${values.query}`);
+													router.push(
+														`/search?query=${values.query}&tags=${tagNames}`
+													);
 												}}
 											>
 												{({ setFieldValue, setFieldTouched, values }) => (
