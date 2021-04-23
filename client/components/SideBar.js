@@ -288,7 +288,7 @@ const SideBar = () => {
 												onSubmit={(values) => {
 													const tagNames = values.tags.map((tag) => tag.name);
 													values = { ...values, tags: tagNames };
-													console.log(values);
+													handleClose();
 													router.push(
 														`/search?query=${values.query}&tags=${tagNames}`
 													);
