@@ -13,6 +13,7 @@ const Search = ({ query, tags }) => {
 			try {
 				const { data } = await axios.post('/api/search', {
 					query,
+					tags: tags ? tags.split(',') : null,
 				});
 				setPosts(data);
 			} catch {
@@ -53,7 +54,11 @@ const Search = ({ query, tags }) => {
 };
 
 export const getServerSideProps = async ({ query }) => {
-	const { query: searchQuery, tags } = query;
+	const { query: searchQuery } = query;
+
+	let { tags } = query;
+
+	if (tags === undefined) tags = null;
 
 	return {
 		props: {
