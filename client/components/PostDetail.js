@@ -153,7 +153,7 @@ const PostDetail = ({ post, content }) => {
 									))}
 								</Box>
 								<Box display="flex" justifyContent="flex-end">
-									<Box display="flex" flexGrow={1} alignItems="center" mb={1}>
+									<Box display="flex" flexGrow={1} alignItems="center" my={1}>
 										<Typography variant="h4">{post.title}</Typography>
 									</Box>
 									{username === post.username && (
@@ -181,15 +181,10 @@ const PostDetail = ({ post, content }) => {
 											color: '#707070',
 											fontStyle: 'italic',
 										}}
+										gutterBottom
 									>
 										Dibuat tanggal:{' '}
 										{moment(new Date(post.createdAt)).format('DD-MM-YYYY')}
-									</Typography>
-									<Typography
-										variant="caption"
-										style={{ color: '#707070', fontStyle: 'italic' }}
-									>
-										Terakhir diperbarui: {moment(post.updatedAt).fromNow()}
 									</Typography>
 								</Box>
 								<Typography
