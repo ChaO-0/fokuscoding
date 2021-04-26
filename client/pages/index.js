@@ -5,11 +5,14 @@ import {
 	makeStyles,
 	createMuiTheme,
 	ThemeProvider,
+	Box,
+	Button,
 } from '@material-ui/core';
 import PostList from '../components/PostList';
-import Loginform from '../components/LoginForm';
 import moment from 'moment';
 import axios from 'axios';
+import MyDialogBox from '../components/MyDialogBox';
+import Router from 'next/router';
 
 const useStyles = makeStyles((theme) => ({
 	containerPad: {
@@ -19,8 +22,8 @@ const useStyles = makeStyles((theme) => ({
 		paddingTop: theme.spacing(10),
 	},
 	postList: {
-		height: '70vh',
-		overflowY: 'scroll',
+		// height: '70vh',
+		// overflowY: 'scroll',
 	},
 }));
 
@@ -46,16 +49,34 @@ const Index = ({ posts }) => {
 	return (
 		<ThemeProvider theme={theme}>
 			<Container className={classes.containerPad}>
-				<Typography variant="h3" color="primary">
-					<img src="/logo_fokus.png" alt="logo fokus" width="25%" />
-				</Typography>
+				<Box display="flex" justifyContent="flex-end">
+					<Box display="flex" flexGrow={1} alignItems="center">
+						<Typography variant="h3" color="primary">
+							<img src="/logo_fokus.png" alt="logo fokus" width="25%" />
+						</Typography>
+					</Box>
+					<Box display="flex" alignItems="center">
+						<MyDialogBox buttonText="Login" buttonColor="#4CC9B0" showLogin />
+						<Button
+							style={{
+								backgroundColor: '#4C72C9',
+								color: 'white',
+								marginLeft: '10px',
+							}}
+							variant="contained"
+							onClick={() => Router.push('/register')}
+						>
+							Register
+						</Button>
+					</Box>
+				</Box>
 				<Grid
 					container
 					className={classes.gridPad}
 					spacing={10}
 					justify="center"
 				>
-					<Grid item sm={12} md={6} className={classes.postList}>
+					<Grid item sm={12} md={12} className={classes.postList}>
 						{posts.docs.map((post) => (
 							<PostList
 								key={post.id}
@@ -69,9 +90,6 @@ const Index = ({ posts }) => {
 								time={moment(post.createdAt).fromNow()}
 							/>
 						))}
-					</Grid>
-					<Grid item sm={12} md={6}>
-						<Loginform />
 					</Grid>
 				</Grid>
 			</Container>
