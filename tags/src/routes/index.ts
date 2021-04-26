@@ -6,7 +6,7 @@ import { TagStatus } from '../types/tag-status';
 const router = express.Router();
 
 router.get('/api/tags', requireAuth, async (req: Request, res: Response) => {
-	const tags = await Tag.find({ status: TagStatus.Accepted });
+	const tags = await Tag.find({ status: TagStatus.Accepted, is_active: true });
 
 	return res.send(tags);
 });
