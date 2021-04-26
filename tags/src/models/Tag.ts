@@ -16,12 +16,13 @@ interface TagModel extends mongoose.Model<TagDoc> {
 }
 
 // An interface that describe the properties that a Tag Document has
-interface TagDoc extends mongoose.Document {
+export interface TagDoc extends mongoose.Document {
 	name: string;
 	username: string;
 	status: TagStatus;
-	version: number;
 	description: string;
+	is_active: boolean;
+	version: number;
 }
 
 const tagSchema = new mongoose.Schema(
@@ -42,6 +43,10 @@ const tagSchema = new mongoose.Schema(
 		username: {
 			type: String,
 			required: true,
+		},
+		is_active: {
+			type: Boolean,
+			default: false,
 		},
 	},
 	{
