@@ -31,6 +31,7 @@ const useStyles = makeStyles((theme) => ({
 		color: '#4CC9B0',
 		borderRadius: 0,
 		margin: theme.spacing(0, 0.3),
+		marginTop: '3px',
 	},
 }));
 
@@ -62,6 +63,7 @@ const PostList = ({
 	postId,
 	editButton,
 	deleteButton,
+	children,
 }) => {
 	const classes = useStyles();
 
@@ -106,10 +108,11 @@ const PostList = ({
 								display="flex"
 								justifyContent="space-between"
 								flexDirection="row"
+								alignItems="center"
 							>
-								<Typography variant="caption">
-									Terakhir diperbarui: {time}
-								</Typography>
+								<Box display="flex" alignItems="center">
+									<Typography variant="caption">{time}</Typography>
+								</Box>
 								<Box>
 									{tags.map((tag) => (
 										<Chip
@@ -121,11 +124,18 @@ const PostList = ({
 								</Box>
 							</Box>
 							<Box py={1}>
-								<NextLink href={`/post/${postId}`}>
-									<Typography component="div" style={{ cursor: 'pointer' }}>
+								{postId ? (
+									<NextLink href={`/post/${postId}`}>
+										<Typography component="div" style={{ cursor: 'pointer' }}>
+											<Box fontWeight="bold">{title}</Box>
+										</Typography>
+									</NextLink>
+								) : (
+									<Typography gutterBottom component="div">
 										<Box fontWeight="bold">{title}</Box>
 									</Typography>
-								</NextLink>
+								)}
+								{children}
 							</Box>
 							<Box
 								display="flex"
