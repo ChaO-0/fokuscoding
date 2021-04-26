@@ -124,7 +124,7 @@ const PostForm = ({ tags: tagsList, postValue, editForm }) => {
 									getOptionSelected={(option, value) => option.id === value.id}
 									options={tagsList}
 									getOptionLabel={(option) => option.name}
-									noOptionsText="Tidak Ditemukan"
+									noOptionsText={`Tidak Ditemukan? Buat tag baru dengan klik menu "Buat Tag" `}
 									onChange={(e, value) => {
 										setFieldValue('tags', value);
 									}}
