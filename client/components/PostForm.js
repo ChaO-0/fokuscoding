@@ -88,7 +88,7 @@ const PostForm = ({ tags: tagsList, postValue, editForm }) => {
 	const { doRequest, errors } = useRequest({
 		url: editForm ? `/api/posts/${postValue.id}` : '/api/posts',
 		method: editForm ? 'put' : 'post',
-		onSuccess: () => router.push('/home'),
+		onSuccess: () => router.push('/post/mypost'),
 	});
 
 	return (
