@@ -16,6 +16,7 @@ import TagCard from '../../components/TagCard';
 import { useDispatch } from 'react-redux';
 import { open } from '../../redux/ducks/openload';
 import Toast from '../../components/Toast';
+import MyDialogBox from '../../components/MyDialogBox';
 
 const handleRequest = async (url, method) => {
 	try {
@@ -66,15 +67,22 @@ const review = ({ tags }) => {
 				{
 					tagStatus === 'awaiting' ? (
 						<>
-							<Button onClick={() => handleAccept(tagId)} color="secondary">
-								Accept
-							</Button>
-							<Button
-								onClick={() => handleRejectDelete(tagId)}
-								style={{ color: '#F6506C' }}
-							>
-								Reject
-							</Button>
+							<MyDialogBox
+								buttonText="Accept"
+								buttonColor="#4CC9B0"
+								dialogTitle="Accept Tags"
+								dialogText="Kamu yakin ingin accept tag ini?"
+								acceptText="Accept"
+								request={() => handleAccept(tagId)}
+							/>
+							<MyDialogBox
+								buttonText="Reject"
+								buttonColor="#F6506C"
+								dialogTitle="Reject Tags"
+								dialogText="Kamu yakin ingin reject tag ini?"
+								acceptText="Reject"
+								request={() => handleRejectDelete(tagId)}
+							/>
 						</>
 					) : null
 					// (
