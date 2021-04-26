@@ -7,12 +7,15 @@ import {
 	ThemeProvider,
 	Box,
 	Button,
+	LinearProgress,
 } from '@material-ui/core';
 import PostList from '../components/PostList';
 import moment from 'moment';
 import axios from 'axios';
 import MyDialogBox from '../components/MyDialogBox';
 import Router from 'next/router';
+import InfiniteScroll from 'react-infinite-scroll-component';
+import { useState } from 'react';
 
 const useStyles = makeStyles((theme) => ({
 	containerPad: {
@@ -45,6 +48,21 @@ const theme = createMuiTheme({
 
 const Index = ({ posts }) => {
 	const classes = useStyles();
+	const [nextPosts, setNextPosts] = useState(posts.docs);
+	const [offset, setOffset] = useState(4);
+	const [hasMore, setHasMore] = useState(true);
+
+	const fetchMoreData = async () => {
+		const { data } = await axios.get(`/api/posts?offset=${offset}&limit=4`);
+		if (data.docs.length === 0) {
+			setHasMore(false);
+		}
+
+		setTimeout(() => {
+			setNextPosts((prev) => [...prev, ...data.docs]);
+		}, 1500);
+		setOffset((prev) => prev + 4);
+	};
 
 	return (
 		<ThemeProvider theme={theme}>
@@ -77,19 +95,27 @@ const Index = ({ posts }) => {
 					justify="center"
 				>
 					<Grid item sm={12} md={12} className={classes.postList}>
-						{posts.docs.map((post) => (
-							<PostList
-								key={post.id}
-								title={post.title}
-								voteCount={
-									post.votes.filter((vote) => vote.type === 'up').length -
-									post.votes.filter((vote) => vote.type === 'down').length
-								}
-								tags={post.tags}
-								createdBy={post.username}
-								time={moment(post.createdAt).fromNow()}
-							/>
-						))}
+						<InfiniteScroll
+							dataLength={nextPosts.length}
+							next={fetchMoreData}
+							hasMore={hasMore}
+							loader={<LinearProgress />}
+							endMessage={<h4>Tidak ada yang dapat ditampilkan lagi</h4>}
+						>
+							{nextPosts.map((post) => (
+								<PostList
+									key={post.id}
+									title={post.title}
+									voteCount={
+										post.votes.filter((vote) => vote.type === 'up').length -
+										post.votes.filter((vote) => vote.type === 'down').length
+									}
+									tags={post.tags}
+									createdBy={post.username}
+									time={moment(post.createdAt).fromNow()}
+								/>
+							))}
+						</InfiniteScroll>
 					</Grid>
 				</Grid>
 			</Container>
@@ -114,11 +140,13 @@ export const getServerSideProps = async ({ req }) => {
 		};
 	}
 	const { data: dataPost } = await axios.get(
-		`${process.env.INGRESS_URI}/api/posts?limit=4`,
+		`${process.env.INGRESS_URI}/api/posts?offset=0&limit=4`,
 		{
 			headers: req.headers,
 		}
 	);
+
+	console.log(dataPost);
 
 	return {
 		props: {
