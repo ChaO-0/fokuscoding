@@ -97,7 +97,7 @@ const initialNavLists = [
 	},
 ];
 
-const SearchInput = ({ ...props }) => {
+const SearchInput = ({ dialogForm, ...props }) => {
 	const [field, meta] = useField(props);
 
 	return (
@@ -106,7 +106,7 @@ const SearchInput = ({ ...props }) => {
 				width: '100%',
 				borderTopLeftRadius: 50,
 				borderBottomLeftRadius: 50,
-				backgroundColor: 'white',
+				backgroundColor: dialogForm ? '#ededed' : 'white',
 				padding: '5px 15px',
 			}}
 			{...field}
@@ -150,7 +150,10 @@ const SideBar = () => {
 		try {
 			setCurrentUser(JSON.parse(localStorage.getItem('currentUser')));
 
-			if (JSON.parse(localStorage.getItem('currentUser')).is_admin) {
+			if (
+				JSON.parse(localStorage.getItem('currentUser')).is_admin &&
+				navLists.length === initialNavLists.length
+			) {
 				setNavLists([
 					...navLists,
 					{
@@ -272,6 +275,8 @@ const SideBar = () => {
 								<Dialog
 									open={open}
 									onClose={handleClose}
+									fullWidth={true}
+									maxWidth="sm"
 									aria-labelledby="alert-dialog-title"
 									aria-describedby="alert-dialog-description"
 								>
@@ -301,6 +306,7 @@ const SideBar = () => {
 																type="text"
 																name="query"
 																placeholder="Cari diskusi"
+																dialogForm
 															/>
 															<Button
 																style={{
