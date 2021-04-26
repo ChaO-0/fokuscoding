@@ -81,10 +81,12 @@ const RegisterForm = () => {
 		password: yup
 			.string('Enter your password')
 			.min(4, 'Password should be of minimum 4 characters')
+			.max(20, 'Password should be of maximum 20 characters')
 			.required('Password is required'),
 		username: yup
 			.string('Enter your username')
 			.min(4, 'Username should be of minimum 4 characters')
+			.max(20, 'Username should be of maximum 20 characters')
 			.required('Username is required'),
 	});
 	const router = useRouter();
