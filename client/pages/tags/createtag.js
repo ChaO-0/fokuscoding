@@ -31,7 +31,7 @@ const createTag = () => {
 		method: 'post',
 		onSuccess: () =>
 			setTimeout(async () => {
-				await Router.push('/tags');
+				await Router.push('/tags/mytags');
 				dispatch(open(false));
 			}, 1000),
 	});
