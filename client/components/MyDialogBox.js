@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import dynamic from 'next/dynamic';
-
+import LoginForm from './LoginForm';
 import {
 	Button,
 	Dialog,
@@ -22,6 +22,7 @@ const MyDialogBox = ({
 	acceptText,
 	request,
 	showForm,
+	showLogin,
 	setText,
 }) => {
 	const [open, setOpen] = useState(false);
@@ -41,14 +42,21 @@ const MyDialogBox = ({
 
 	return (
 		<>
-			<Button onClick={handleClickOpen} style={{ color: buttonColor }}>
+			<Button
+				onClick={handleClickOpen}
+				variant={showLogin && 'contained'}
+				style={{
+					backgroundColor: showLogin && buttonColor,
+					color: showLogin ? 'white' : buttonColor,
+				}}
+			>
 				{buttonText}
 			</Button>
 			<Dialog
 				open={open}
 				onClose={handleClose}
-				// fullWidth={showForm}
-				maxWidth={showForm && 'md'}
+				fullWidth={showForm || showLogin}
+				maxWidth={(showForm && 'md') || (showLogin && 'md')}
 				aria-labelledby="alert-dialog-title"
 				aria-describedby="alert-dialog-description"
 			>
@@ -60,19 +68,22 @@ const MyDialogBox = ({
 					{showForm && (
 						<SimpleMDE value={showForm} onChange={(val) => setText(val)} />
 					)}
+					{showLogin && <LoginForm />}
 				</DialogContent>
-				<DialogActions>
-					<Button onClick={handleClose} color="primary">
-						Cancel
-					</Button>
-					<Button
-						onClick={handleRequest}
-						style={{ color: buttonColor }}
-						autoFocus
-					>
-						{acceptText}
-					</Button>
-				</DialogActions>
+				{showLogin ? null : (
+					<DialogActions>
+						<Button onClick={handleClose} color="primary">
+							Cancel
+						</Button>
+						<Button
+							onClick={handleRequest}
+							style={{ color: buttonColor }}
+							autoFocus
+						>
+							{acceptText}
+						</Button>
+					</DialogActions>
+				)}
 			</Dialog>
 		</>
 	);
