@@ -12,6 +12,7 @@ import {
 import NextLink from 'next/link';
 import { useRouter } from 'next/router';
 import useRequest from '../hooks/use-request';
+import MyDialogBox from './MyDialogBox';
 
 const useStyles = makeStyles((theme) => ({
 	voteFont: {
@@ -72,11 +73,11 @@ const PostList = ({
 	const { doRequest, errors } = useRequest({
 		url: `/api/posts/${postId}`,
 		method: 'delete',
-		onSuccess: () => router.push('/post'),
+		onSuccess: () => router.reload(),
 	});
 
-	const handleDelete = () => {
-		doRequest();
+	const handleDelete = async () => {
+		await doRequest();
 	};
 
 	return (
@@ -149,9 +150,14 @@ const PostList = ({
 										</NextLink>
 									)}
 									{deleteButton && (
-										<Button style={{ color: '#F6506C' }} onClick={handleDelete}>
-											Delete
-										</Button>
+										<MyDialogBox
+											buttonText="Delete"
+											buttonColor="#F6506C"
+											dialogTitle="Delete Post"
+											dialogText="Kamu yakin ingin menghapus postingan ini?"
+											acceptText="Delete"
+											request={() => handleDelete(handleDelete)}
+										/>
 									)}
 								</Box>
 								<Box>Oleh: {createdBy}</Box>
