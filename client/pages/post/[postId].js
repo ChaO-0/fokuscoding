@@ -112,7 +112,7 @@ export const getServerSideProps = async ({ req, query }) => {
 		comments.push(await renderToString(comment.text));
 	}
 
-	console.log(post);
+	// console.log(post);
 
 	return {
 		props: {
