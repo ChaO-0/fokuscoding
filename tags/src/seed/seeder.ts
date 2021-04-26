@@ -19,6 +19,7 @@ const dbSeeder = async () => {
 
 			seed.set({
 				status: TagStatus.Accepted,
+				is_active: true,
 			});
 			await seed.save();
 
