@@ -14,9 +14,9 @@ interface PostAttrs {
 
 interface PostDoc extends mongoose.Document {
 	title: string;
+	username: string;
 	voteCount: number;
 	commentCount: number;
-	username: string;
 	tags: string[];
 	has_solution: boolean;
 	createdAt: Date;
