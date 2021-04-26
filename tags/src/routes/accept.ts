@@ -33,6 +33,7 @@ router.post(
 
 		tag.set({
 			status: TagStatus.Accepted,
+			is_active: true,
 		});
 
 		await tag.save();
