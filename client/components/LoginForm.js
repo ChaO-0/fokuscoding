@@ -39,7 +39,8 @@ const useStyles = makeStyles((theme) => ({
 	},
 	container: {
 		maxWidth: '80%',
-		margin: 'auto',
+
+		margin: '50px auto 50px auto',
 	},
 	input: {
 		marginTop: theme.spacing(3),
