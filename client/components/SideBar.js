@@ -92,7 +92,7 @@ const initialNavLists = [
 	},
 	{
 		name: 'Diskusi Saya',
-		href: '/post',
+		href: '/post/mypost',
 		icon: <ChatIcon style={{ color: 'white' }} />,
 	},
 ];
