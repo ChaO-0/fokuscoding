@@ -1,6 +1,5 @@
-import React from 'react';
 import Layout from '../../components/Layout';
-import { Typography, Grid } from '@material-ui/core';
+import { Box, Typography, Grid } from '@material-ui/core';
 
 import axios from 'axios';
 import TagCard from '../../components/TagCard';
@@ -19,7 +18,21 @@ const tags = ({ tags }) => {
 							tagId={tag.id}
 							tagName={tag.name}
 							tagDesc={tag.description}
-						/>
+						>
+							<Box display="flex" justifyContent="flex-end">
+								<Box
+									fontStyle="italic"
+									display="flex"
+									flexGrow={1}
+									alignItems="center"
+								>
+									<Typography variant="caption" color="textSecondary">
+										Oleh: {tag.username}
+									</Typography>
+								</Box>
+								<Typography>0</Typography>
+							</Box>
+						</TagCard>
 					))}
 				</Grid>
 			</>
