@@ -60,6 +60,7 @@ export const getServerSideProps = async ({ req }) => {
 			headers: req.headers,
 		}
 	);
+
 	return {
 		props: {
 			posts,
