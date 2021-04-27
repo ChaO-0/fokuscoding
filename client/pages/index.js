@@ -49,20 +49,29 @@ const theme = createMuiTheme({
 const Index = ({ posts }) => {
 	const classes = useStyles();
 	const [nextPosts, setNextPosts] = useState(posts.docs);
-	const [offset, setOffset] = useState(4);
+	const [offset, setOffset] = useState(5);
 	const [hasMore, setHasMore] = useState(true);
 
 	const fetchMoreData = async () => {
-		const { data } = await axios.get(`/api/posts?offset=${offset}&limit=4`);
+		const { data } = await axios.get(`/api/posts?offset=${offset}&limit=5`);
 		if (data.docs.length === 0) {
 			setHasMore(false);
 		}
 
 		setTimeout(() => {
-			setNextPosts((prev) => [...prev, ...data.docs]);
+			if (nextPosts.length === 20) {
+				setHasMore(false);
+			} else {
+				setNextPosts((prev) => [...prev, ...data.docs]);
+			}
 		}, 1500);
-		setOffset((prev) => prev + 4);
+
+		setOffset((prev) => prev + 5);
 	};
+
+	const LoginDialog = ({ id }) => (
+		<MyDialogBox id={id} buttonText="Login" buttonColor="#4CC9B0" showLogin />
+	);
 
 	return (
 		<ThemeProvider theme={theme}>
@@ -74,7 +83,7 @@ const Index = ({ posts }) => {
 						</Typography>
 					</Box>
 					<Box display="flex" alignItems="center">
-						<MyDialogBox buttonText="Login" buttonColor="#4CC9B0" showLogin />
+						<LoginDialog id="loginButton" />
 						<Button
 							style={{
 								backgroundColor: '#4C72C9',
@@ -100,20 +109,34 @@ const Index = ({ posts }) => {
 							next={fetchMoreData}
 							hasMore={hasMore}
 							loader={<LinearProgress />}
-							endMessage={<h4>Tidak ada yang dapat ditampilkan lagi</h4>}
+							endMessage={
+								<>
+									<h4>
+										Tidak ada yang dapat ditampilkan lagi silahkan login untuk
+										melanjutkan
+									</h4>
+									<LoginDialog />
+								</>
+							}
 						>
 							{nextPosts.map((post) => (
-								<PostList
+								<Box
+									onClick={() => document.querySelector('#loginButton').click()}
 									key={post.id}
-									title={post.title}
-									voteCount={
-										post.votes.filter((vote) => vote.type === 'up').length -
-										post.votes.filter((vote) => vote.type === 'down').length
-									}
-									tags={post.tags}
-									createdBy={post.username}
-									time={moment(post.createdAt).fromNow()}
-								/>
+									style={{ cursor: 'pointer' }}
+								>
+									<PostList
+										key={post.id}
+										title={post.title}
+										voteCount={
+											post.votes.filter((vote) => vote.type === 'up').length -
+											post.votes.filter((vote) => vote.type === 'down').length
+										}
+										tags={post.tags}
+										createdBy={post.username}
+										time={moment(post.createdAt).fromNow()}
+									/>
+								</Box>
 							))}
 						</InfiniteScroll>
 					</Grid>
@@ -140,7 +163,7 @@ export const getServerSideProps = async ({ req }) => {
 		};
 	}
 	const { data: dataPost } = await axios.get(
-		`${process.env.INGRESS_URI}/api/posts?offset=0&limit=4`,
+		`${process.env.INGRESS_URI}/api/posts?offset=0&limit=5`,
 		{
 			headers: req.headers,
 		}

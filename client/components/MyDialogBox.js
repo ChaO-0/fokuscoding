@@ -24,6 +24,7 @@ const MyDialogBox = ({
 	showForm,
 	showLogin,
 	setText,
+	id,
 }) => {
 	const [open, setOpen] = useState(false);
 
@@ -49,6 +50,7 @@ const MyDialogBox = ({
 					backgroundColor: showLogin && buttonColor,
 					color: showLogin ? 'white' : buttonColor,
 				}}
+				id={id}
 			>
 				{buttonText}
 			</Button>
