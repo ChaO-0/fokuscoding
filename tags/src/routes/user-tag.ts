@@ -1,7 +1,6 @@
 import { requireAuth } from '@heapoverflow/common';
 import express, { Request, Response } from 'express';
 import { Tag } from '../models/Tag';
-import { TagStatus } from '../types/tag-status';
 
 const router = express.Router();
 

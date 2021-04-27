@@ -18,7 +18,9 @@ router.get(
 
 		if (statusQuery === TagStatus.Accepted) {
 			status = TagStatus.Accepted;
-		} else if (statusQuery === TagStatus.Rejected) {
+		}
+
+		if (statusQuery === TagStatus.Rejected) {
 			status = TagStatus.Rejected;
 		}
 

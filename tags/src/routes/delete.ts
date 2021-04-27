@@ -16,7 +16,7 @@ router.delete(
 	'/api/tags/:tag_id',
 	requireAuth,
 	async (req: Request, res: Response) => {
-		const tag: TagDoc = await Tag.findById(req.params.tag_id);
+		const tag = await Tag.findById(req.params.tag_id);
 
 		if (!req.currentUser!.admin) {
 			throw new NotAuthorizedError();
@@ -26,21 +26,17 @@ router.delete(
 			throw new NotFoundError();
 		}
 
-		const status = tag.status;
-		const is_active = tag.is_active;
+		const { status, is_active } = tag;
 
 		if (status === TagStatus.Awaiting) {
 			tag.set({
 				status: TagStatus.Rejected,
 			});
 			await tag.save();
-
-			res.status(204).send(tag);
 		}
+
 		if (status === TagStatus.Rejected) {
 			tag.remove();
-
-			return res.status(204).send(tag);
 		}
 
 		if (status === TagStatus.Accepted && is_active === true) {
@@ -48,14 +44,16 @@ router.delete(
 				is_active: false,
 			});
 			await tag.save();
-			res.status(204).send(tag);
-		} else if (status === TagStatus.Accepted && is_active === false) {
+		}
+
+		if (status === TagStatus.Accepted && is_active === false) {
 			tag.set({
 				is_active: true,
 			});
 			await tag.save();
-			res.status(204).send(tag);
 		}
+
+		return res.status(204).send(tag);
 	}
 );
 
