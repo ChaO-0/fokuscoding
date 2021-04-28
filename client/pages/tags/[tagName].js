@@ -39,7 +39,12 @@ const TagShow = ({ posts, tag }) => {
 			>
 				<Card style={{ marginBottom: 30 }}>
 					<CardContent>
-						<Typography variant="h4">{tag}</Typography>
+						<Typography variant="h4" gutterBottom>
+							{tag.name}
+						</Typography>
+						<Typography variant="body1" component="div">
+							{tag.description}
+						</Typography>
 					</CardContent>
 				</Card>
 				{nextPosts.map((post) => (
@@ -70,12 +75,19 @@ export const getServerSideProps = async ({ req, query }) => {
 		}
 	);
 
-	// TODO: Add tag description
+	const { data: tagData } = await axios.get(
+		`${process.env.INGRESS_URI}/api/tags/${tagName}`,
+		{
+			headers: req.headers,
+		}
+	);
+
+	console.log(tagData);
 
 	return {
 		props: {
 			posts: data,
-			tag: tagName,
+			tag: tagData,
 		},
 	};
 };
