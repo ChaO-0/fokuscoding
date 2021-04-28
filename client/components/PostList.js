@@ -65,6 +65,7 @@ const PostList = ({
 	editButton,
 	deleteButton,
 	children,
+	hasSolution,
 }) => {
 	const classes = useStyles();
 
@@ -82,7 +83,12 @@ const PostList = ({
 
 	return (
 		<ThemeProvider theme={theme}>
-			<Card style={{ marginBottom: theme.spacing(2) }}>
+			<Card
+				style={{
+					marginBottom: theme.spacing(2),
+					backgroundColor: hasSolution ? '#00FFA042' : '#FFF',
+				}}
+			>
 				<CardContent>
 					<Box display="flex" flexDirection="row" justifyContent="flex-start">
 						<Box flexDirection="column" marginRight={3}>
