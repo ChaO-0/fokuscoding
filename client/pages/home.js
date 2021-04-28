@@ -35,6 +35,7 @@ const Home = ({ posts }) => {
 				>
 					{nextPosts.map((post) => (
 						<PostList
+							hasSolution={post.has_solution}
 							key={post.id}
 							title={post.title}
 							voteCount={
