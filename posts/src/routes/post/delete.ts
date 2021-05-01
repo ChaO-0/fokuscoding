@@ -34,8 +34,14 @@ router.delete(
 		// remove the post
 		post.remove();
 
+		let tagList: string[] | undefined = post.tags?.map((tag) => tag.id);
+		if (!tagList) {
+			tagList = [];
+		}
+
 		await new PostDeletedPublisher(natsWrapper.client).publish({
 			id: post.id,
+			tags: tagList,
 		});
 
 		res.status(204).send(post);
