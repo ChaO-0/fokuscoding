@@ -1,5 +1,8 @@
 import mongoose from 'mongoose';
 import { app } from './app';
+import { PostCreatedListener } from './events/listeners/post-created-listener';
+import { PostDeletedListener } from './events/listeners/post-deleted-listener';
+import { PostUpdatedListener } from './events/listeners/post-updated-listener';
 import { natsWrapper } from './nats-wrapper';
 import { dbSeeder } from './seed/seeder';
 
@@ -45,6 +48,11 @@ const start = async () => {
 			useCreateIndex: true,
 		});
 		console.log('Connected to MongoDB');
+
+		new PostCreatedListener(natsWrapper.client).listen();
+		new PostUpdatedListener(natsWrapper.client).listen();
+		new PostDeletedListener(natsWrapper.client).listen();
+
 		await dbSeeder();
 	} catch (err) {
 		console.error(err);
