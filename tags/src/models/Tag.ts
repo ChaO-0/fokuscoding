@@ -8,6 +8,7 @@ interface TagAttrs {
 	username: string;
 	status: TagStatus;
 	description: string;
+	posts?: string[];
 }
 
 // An interface that describe the properties that a Tag Model has
@@ -23,6 +24,7 @@ export interface TagDoc extends mongoose.Document {
 	description: string;
 	is_active: boolean;
 	version: number;
+	posts: string[];
 }
 
 const tagSchema = new mongoose.Schema(
@@ -48,6 +50,12 @@ const tagSchema = new mongoose.Schema(
 			type: Boolean,
 			default: false,
 		},
+		posts: [
+			{
+				type: mongoose.Schema.Types.ObjectId,
+				default: [],
+			},
+		],
 	},
 	{
 		toJSON: {
