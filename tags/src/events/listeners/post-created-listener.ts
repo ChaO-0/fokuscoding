@@ -1,7 +1,7 @@
 import { Listener, PostCreatedEvent, Subjects } from '@heapoverflow/common';
 import { Message } from 'node-nats-streaming';
 import { queueGroupName } from './queue-group-name';
-import { Post } from '../../models/Post';
+// import { Post } from '../../models/Post';
 import { Tag } from '../../models/Tag';
 
 export class PostCreatedListener extends Listener<PostCreatedEvent> {
@@ -20,14 +20,14 @@ export class PostCreatedListener extends Listener<PostCreatedEvent> {
 			updatedAt,
 		} = data;
 
-		console.log(tags, id);
+		// console.log(tags, id);
 
-		const post = Post.build({ id, tags });
+		// const post = Post.build({ id, tags });
 
-		await post.save();
+		// await post.save();
 
 		const tagPosts = await Tag.find({ _id: { $in: tags } });
-		console.log(tagPosts);
+		// console.log(tagPosts);
 
 		await Tag.updateMany(
 			{ _id: { $in: tags } },
