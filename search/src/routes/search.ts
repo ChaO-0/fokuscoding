@@ -20,13 +20,17 @@ router.post('/api/search', async (req: Request, res: Response) => {
 		});
 
 		search = await Post.find({
-			title: {
-				$regex: `.*${query}.*`,
-				$options: 'i',
-			},
-			tags: {
-				$in: alikeTags,
-			},
+			$and: [
+				{
+					title: {
+						$regex: `.*${query}.*`,
+						$options: 'i',
+					},
+					tags: {
+						$in: alikeTags,
+					},
+				},
+			],
 		})
 			.sort({ updatedAt: -1 })
 			.populate('tags');
