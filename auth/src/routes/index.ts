@@ -5,7 +5,7 @@ import { User } from '../models/User';
 const router = express.Router();
 
 router.get('/api/users', requireAuth, async (req, res) => {
-	const user = await User.find();
+	const user = await User.find({ username: { $not: { $eq: 'admin' } } });
 
 	if (!req.currentUser!.admin) {
 		throw new NotAuthorizedError();
