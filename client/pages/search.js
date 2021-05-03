@@ -21,7 +21,7 @@ const Search = ({ query, tags }) => {
 			}
 		};
 		fetchSearch();
-	}, [query]);
+	}, [query, tags]);
 
 	return (
 		<Layout currentUser={{ username: 'admin' }}>
@@ -34,6 +34,7 @@ const Search = ({ query, tags }) => {
 				>
 					Pencarian - "{query}" {posts.length === 0 && ' tidak ditemukan'}
 				</Typography>
+				{tags && <Typography gutterBottom>Must include: {tags}</Typography>}
 				<Typography variant="subtitle2" color="textSecondary" gutterBottom>
 					Menemukan {posts.length} hasil
 				</Typography>
