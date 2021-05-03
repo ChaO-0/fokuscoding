@@ -16,6 +16,8 @@ import {
 	DialogTitle,
 	withStyles,
 	TextField,
+	FormControl,
+	InputLabel,
 } from '@material-ui/core';
 
 import { Autocomplete } from '@material-ui/lab';
@@ -301,7 +303,12 @@ const SideBar = () => {
 											>
 												{({ setFieldValue, setFieldTouched, values }) => (
 													<Form>
-														<Box display="flex" py={1} width="100%">
+														<Box
+															display="flex"
+															py={1}
+															width="100%"
+															marginBottom={1}
+														>
 															<SearchInput
 																type="text"
 																name="query"
@@ -320,6 +327,10 @@ const SideBar = () => {
 																<SearchIcon />
 															</Button>
 														</Box>
+
+														<InputLabel shrink htmlFor="tags">
+															Must included tags:
+														</InputLabel>
 														<CustomAutocomplete
 															multiple
 															options={tagList}
@@ -334,7 +345,6 @@ const SideBar = () => {
 																	{...params}
 																	variant="outlined"
 																	style={{
-																		marginTop: 20,
 																		backgroundColor: '#00000012',
 																		borderRadius: 4,
 																		height: '100%',
