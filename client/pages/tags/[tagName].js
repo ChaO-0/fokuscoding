@@ -8,6 +8,7 @@ import {
 	Card,
 	CardContent,
 	Typography,
+	Box,
 } from '@material-ui/core';
 import moment from 'moment';
 
@@ -39,10 +40,15 @@ const TagShow = ({ posts, tag }) => {
 			>
 				<Card style={{ marginBottom: 30 }}>
 					<CardContent>
-						<Typography variant="h4" gutterBottom>
-							{tag.name}
-						</Typography>
-						<Typography variant="body1" component="div">
+						<Box display="flex" justifyContent="flex-end" alignItems="center">
+							<Box display="flex" flexGrow={1} alignItems="center">
+								<Typography variant="h4" gutterBottom>
+									{tag.name}
+								</Typography>
+							</Box>
+							<Typography>{tag.posts.length} Diskusi</Typography>
+						</Box>
+						<Typography variant="body1" component="div" align="justify">
 							{tag.description}
 						</Typography>
 					</CardContent>
