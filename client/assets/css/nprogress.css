@@ -7,7 +7,7 @@
 	background: #56e6ca;
 
 	position: fixed;
-	z-index: 1031;
+	z-index: 1301;
 	top: 0;
 	left: 0;
 
@@ -34,7 +34,7 @@
 #nprogress .spinner {
 	display: block;
 	position: fixed;
-	z-index: 1031;
+	z-index: 1301;
 	top: 15px;
 	right: 15px;
 }
