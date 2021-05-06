@@ -56,7 +56,16 @@ const review = ({ tags }) => {
 		setListTags(data);
 	};
 
-	const TagButton = ({ tagId, userName }) => (
+	const handleActivation = async (tagId) => {
+		await handleRequest(`/api/tags/${tagId}`, 'put');
+		const tagIndex = listTags.findIndex((elm) => elm.id === tagId);
+		setListTags((prev) => {
+			prev[tagIndex].is_active = !prev[tagIndex].is_active;
+			return [...prev];
+		});
+	};
+
+	const TagButton = ({ tagId, userName, active }) => (
 		<>
 			<Box display="flex" justifyContent="flex-end">
 				<Box fontStyle="italic" display="flex" flexGrow={1} alignItems="center">
@@ -96,6 +105,28 @@ const review = ({ tags }) => {
 					// 	</>
 					// )
 				}
+				{tagStatus === 'accepted' && active ? (
+					<MyDialogBox
+						buttonText="Deactivate"
+						buttonColor="#F6506C"
+						dialogTitle="Deactivate Tags"
+						dialogText="Kamu yakin ingin non-aktifkan tag ini?"
+						acceptText="Deactivate"
+						request={() => handleActivation(tagId)}
+					/>
+				) : (
+					tagStatus === 'accepted' &&
+					!active && (
+						<MyDialogBox
+							buttonText="Activate"
+							buttonColor="#4CC9B0"
+							dialogTitle="Activate Tags"
+							dialogText="Kamu yakin ingin aktifkan tag ini?"
+							acceptText="Activate"
+							request={() => handleActivation(tagId)}
+						/>
+					)
+				)}
 			</Box>
 		</>
 	);
@@ -124,7 +155,11 @@ const review = ({ tags }) => {
 							tagName={tag.name}
 							tagDesc={tag.description}
 						>
-							<TagButton tagId={tag.id} userName={tag.username} />
+							<TagButton
+								tagId={tag.id}
+								userName={tag.username}
+								active={tag.is_active}
+							/>
 						</TagCard>
 					))}
 				</Grid>
@@ -140,6 +175,8 @@ export const getServerSideProps = async ({ req }) => {
 			headers: req.headers,
 		}
 	);
+
+	console.log(data);
 
 	return {
 		props: {
