@@ -13,14 +13,14 @@ import { natsWrapper } from '../../nats-wrapper';
 const router = express.Router();
 
 router.post(
-	'/api/posts/:postId/solution',
+	'/api/posts/:post_id/solution',
 	requireAuth,
 	[body('commentId').not().isEmpty().withMessage('commentId is Required')],
 	validateRequest,
 	async (req: Request, res: Response) => {
 		const { commentId } = req.body;
 
-		const post: PostDoc = await Post.findById(req.params.postId);
+		const post: PostDoc = await Post.findById(req.params.post_id);
 
 		if (!post) {
 			throw new NotFoundError();
