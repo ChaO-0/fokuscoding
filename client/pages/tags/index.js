@@ -30,7 +30,7 @@ const tags = ({ tags }) => {
 										Oleh: {tag.username}
 									</Typography>
 								</Box>
-								<Typography>{tag.posts.length}</Typography>
+								<Typography>{tag.posts.length} Diskusi</Typography>
 							</Box>
 						</TagCard>
 					))}
