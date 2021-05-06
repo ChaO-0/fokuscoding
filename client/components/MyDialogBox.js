@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import dynamic from 'next/dynamic';
 import LoginForm from './LoginForm';
 import {
@@ -40,6 +40,10 @@ const MyDialogBox = ({
 		// console.log(text);
 		setOpen(false);
 	};
+
+	useEffect(() => {
+		return () => setOpen(false);
+	}, []);
 
 	return (
 		<>
