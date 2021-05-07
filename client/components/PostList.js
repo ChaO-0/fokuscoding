@@ -33,6 +33,9 @@ const useStyles = makeStyles((theme) => ({
 		borderRadius: 0,
 		margin: theme.spacing(0, 0.3),
 		marginTop: '3px',
+		'&:hover': {
+			background: '#4CC9B040',
+		},
 	},
 }));
 
@@ -122,11 +125,13 @@ const PostList = ({
 								</Box>
 								<Box>
 									{tags.map((tag) => (
-										<Chip
-											label={tag.name}
-											key={tag.id}
-											className={classes.chip}
-										/>
+										<NextLink href={`/tags/${tag.name}`}>
+											<Chip
+												label={tag.name}
+												key={tag.id}
+												className={classes.chip}
+											/>
+										</NextLink>
 									))}
 								</Box>
 							</Box>
