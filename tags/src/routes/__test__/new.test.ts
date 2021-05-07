@@ -10,6 +10,7 @@ it('has accepted status if the user is an admin', async () => {
 		.set('Cookie', global.signin('pram', true))
 		.send({
 			name: 'php',
+			description: 'ini description php',
 		})
 		.expect(201);
 
@@ -23,6 +24,7 @@ it('has awaiting status if the user is not an admin', async () => {
 		.set('Cookie', global.signin('pram'))
 		.send({
 			name: 'php',
+			description: 'ini description php',
 		})
 		.expect(201);
 
@@ -35,6 +37,7 @@ it('returns 401 if the user is not signed in', async () => {
 		.post('/api/tags')
 		.send({
 			name: 'php',
+			description: 'ini description php',
 		})
 		.expect(401);
 });
@@ -45,6 +48,7 @@ it('emits a tag created event if tag status is accepted', async () => {
 		.set('Cookie', global.signin('pram', true))
 		.send({
 			name: 'php',
+			description: 'ini description php',
 		})
 		.expect(201);
 
@@ -59,6 +63,7 @@ it('does not emits a tag created event if tag status is awaiting', async () => {
 		.set('Cookie', global.signin('pram'))
 		.send({
 			name: 'php',
+			description: 'ini description php',
 		})
 		.expect(201);
 

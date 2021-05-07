@@ -10,6 +10,7 @@ it('updates the tag status to accepted if the user is an admin', async () => {
 		.set('Cookie', global.signin('pram'))
 		.send({
 			name: 'php',
+			description: 'ini tag php',
 		})
 		.expect(201);
 
@@ -42,6 +43,7 @@ it('returns 401 if the user is not an admin', async () => {
 		.set('Cookie', global.signin('pram'))
 		.send({
 			name: 'php',
+			description: 'ini tag php',
 		})
 		.expect(201);
 
