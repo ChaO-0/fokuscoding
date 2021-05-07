@@ -22,18 +22,6 @@ import Toast from '../components/Toast';
 import useRequest from '../hooks/use-request';
 import { open } from '../redux/ducks/openload';
 
-const calcVote = (commentVotes) => {
-	if (commentVotes !== []) {
-		const upVote = commentVotes.filter((vote) => vote?.type === 'up').length;
-		const downVote = commentVotes.filter((vote) => vote?.type === 'down')
-			.length;
-		const totalVote = upVote - downVote;
-
-		return totalVote;
-	}
-	return 0;
-};
-
 const CommentList = ({
 	postId,
 	comment,
@@ -45,7 +33,10 @@ const CommentList = ({
 }) => {
 	const dispatch = useDispatch();
 
-	const [totalVote, setTotalVote] = useState(calcVote(comment.votes));
+	const [voteCount, setVoteCount] = useState(
+		comment.votes.filter((vote) => vote.type === 'up').length -
+			comment.votes.filter((vote) => vote.type === 'down').length
+	);
 	const [text, setText] = useState(comment.text);
 	const [typeHandler, setTypeHandler] = useState('');
 	const [postSolution, setPostSolution] = useState(solution);
@@ -75,44 +66,44 @@ const CommentList = ({
 		method: 'post',
 	});
 
-	const handleVoteUp = async () => {
-		const { votes } = await doRequest({
-			voteType: 'up',
-		});
+	const handleUpVote = () => {
+		doRequest({ voteType: 'up' });
 		if (voteClickUp !== true) {
 			if (hasVoted?.type === 'down') {
-				setHasVoted(votes.find((vote) => vote.username === username));
+				setHasVoted((prev) => ({ ...prev, type: 'up' }));
+				setVoteCount((prev) => prev + 2);
 				setVoteClickUp(true);
 				setVoteClickDown(false);
 			} else {
-				setHasVoted(votes.find((vote) => vote.username === username));
+				setHasVoted((prev) => ({ ...prev, type: 'up' }));
+				setVoteCount((prev) => prev + 1);
 				setVoteClickUp(true);
 			}
 		} else {
-			setHasVoted(votes.find((vote) => vote.username === username));
+			setHasVoted((prev) => ({ ...prev, type: '' }));
+			setVoteCount((prev) => prev - 1);
 			setVoteClickUp(false);
 		}
-		setTotalVote(calcVote(votes));
 	};
 
-	const handleVoteDown = async () => {
-		const { votes } = await doRequest({
-			voteType: 'down',
-		});
+	const handleDownVote = () => {
+		doRequest({ voteType: 'down' });
 		if (voteClickDown !== true) {
 			if (hasVoted?.type === 'up') {
-				setHasVoted(votes.find((vote) => vote.username === username));
+				setHasVoted((prev) => ({ ...prev, type: 'down' }));
+				setVoteCount((prev) => prev - 2);
 				setVoteClickDown(true);
 				setVoteClickUp(false);
 			} else {
-				setHasVoted(votes.find((vote) => vote.username === username));
+				setHasVoted((prev) => ({ ...prev, type: 'down' }));
+				setVoteCount((prev) => prev - 1);
 				setVoteClickDown(true);
 			}
 		} else {
-			setHasVoted(votes.find((vote) => vote.username === username));
+			setHasVoted((prev) => ({ ...prev, type: '' }));
+			setVoteCount((prev) => prev + 1);
 			setVoteClickDown(false);
 		}
-		setTotalVote(calcVote(votes));
 	};
 
 	const handleDelete = async (commentId) => {
@@ -159,7 +150,7 @@ const CommentList = ({
 					<Box display="flex" flexDirection="row" justifyContent="flex-start">
 						<Box flexDirection="column" marginRight={3}>
 							<ExpandLessIcon
-								onClick={handleVoteUp}
+								onClick={handleUpVote}
 								style={{
 									marginLeft: 3,
 									cursor: 'pointer',
@@ -167,7 +158,7 @@ const CommentList = ({
 								}}
 							/>
 							<Typography variant="h5" color="secondary" align="center">
-								<Box fontWeight={600}>{totalVote}</Box>
+								<Box fontWeight={600}>{voteCount}</Box>
 							</Typography>
 							<Typography
 								color="secondary"
@@ -180,7 +171,7 @@ const CommentList = ({
 								</Box>
 							</Typography>
 							<ExpandMoreIcon
-								onClick={handleVoteDown}
+								onClick={handleDownVote}
 								style={{
 									marginLeft: 3,
 									cursor: 'pointer',
