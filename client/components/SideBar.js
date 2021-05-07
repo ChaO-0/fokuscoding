@@ -382,7 +382,8 @@ const SideBar = () => {
 				display="flex"
 				justifyContent="flex-end"
 				alignItems="flex-end"
-				css={{ height: '100vh', position: 'relative' }}
+				flexDirection="column"
+				css={{ height: '100vh' }}
 				p={5}
 			>
 				<Button
@@ -393,8 +394,8 @@ const SideBar = () => {
 				>
 					Logout
 				</Button>
-				<Box style={{ position: 'absolute', top: 120, color: '#FFF' }}>
-					&copy; Christopher, Fajar
+				<Box pt={3} style={{ color: '#FFF' }}>
+					&copy;2021 Christopher, Fajar
 				</Box>
 			</Box>
 		</Drawer>
