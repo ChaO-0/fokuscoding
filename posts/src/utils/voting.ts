@@ -43,7 +43,7 @@ const voting = async (
 		// ? ref: https://stackoverflow.com/questions/18553946/remove-sub-document-from-mongo-with-mongoose
 		await doc.save();
 
-		return { status: 201, data: doc };
+		return { status: 204, data: doc };
 	} else if (alreadyVoted?.type === voteOpp) {
 		// find vote by id
 		const vote: VoteDoc = await Vote.findById(alreadyVoted.id);
@@ -55,7 +55,7 @@ const voting = async (
 		await vote!.save();
 
 		await doc.save();
-		return { status: 201, data: doc };
+		return { status: 204, data: doc };
 	}
 
 	// build down the vote if the user has not voted
