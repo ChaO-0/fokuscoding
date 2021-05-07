@@ -18,15 +18,19 @@ it('creates upvote if the user has not voted the post', async () => {
 		.expect(201);
 
 	await request(app)
-		.post(`/api/posts/${post1.id}/up`)
+		.post(`/api/posts/${post1.id}/vote`)
 		.set('Cookie', global.signin(user2))
-		.send()
+		.send({
+			voteType: 'up',
+		})
 		.expect(201);
 
 	await request(app)
-		.post(`/api/posts/${post1.id}/up`)
+		.post(`/api/posts/${post1.id}/vote`)
 		.set('Cookie', global.signin(user1))
-		.send()
+		.send({
+			voteType: 'up',
+		})
 		.expect(201);
 
 	const { body: post2 } = await request(app)
@@ -39,15 +43,19 @@ it('creates upvote if the user has not voted the post', async () => {
 		.expect(201);
 
 	await request(app)
-		.post(`/api/posts/${post2.id}/up`)
+		.post(`/api/posts/${post2.id}/vote`)
 		.set('Cookie', global.signin(user1))
-		.send()
+		.send({
+			voteType: 'up',
+		})
 		.expect(201);
 
 	await request(app)
-		.post(`/api/posts/${post2.id}/up`)
+		.post(`/api/posts/${post2.id}/vote`)
 		.set('Cookie', global.signin(user2))
-		.send()
+		.send({
+			voteType: 'up',
+		})
 		.expect(201);
 
 	const firstPost = await Post.findById(post1.id);
@@ -69,15 +77,19 @@ it('deletes the upvote if the user voted up second time', async () => {
 		.expect(201);
 
 	await request(app)
-		.post(`/api/posts/${post.id}/up`)
+		.post(`/api/posts/${post.id}/vote`)
 		.set('Cookie', global.signin(username))
-		.send()
+		.send({
+			voteType: 'up',
+		})
 		.expect(201);
 
 	await request(app)
-		.post(`/api/posts/${post.id}/up`)
+		.post(`/api/posts/${post.id}/vote`)
 		.set('Cookie', global.signin(username))
-		.send()
+		.send({
+			voteType: 'up',
+		})
 		.expect(204);
 
 	const savedPost = await Post.findById(post.id);
@@ -95,7 +107,10 @@ it('returns 401 if the user is not signed in', async () => {
 		})
 		.expect(201);
 
-	await request(app).post(`/api/posts/${post.id}/up`).send().expect(401);
+	await request(app)
+		.post(`/api/posts/${post.id}/vote`)
+		.send({ voteType: 'up' })
+		.expect(401);
 });
 
 it('updates the vote to up if the user has voted down', async () => {
@@ -111,15 +126,19 @@ it('updates the vote to up if the user has voted down', async () => {
 		.expect(201);
 
 	await request(app)
-		.post(`/api/posts/${post.id}/down`)
+		.post(`/api/posts/${post.id}/vote`)
 		.set('Cookie', global.signin(username))
-		.send()
+		.send({
+			voteType: 'down',
+		})
 		.expect(201);
 
 	await request(app)
-		.post(`/api/posts/${post.id}/up`)
+		.post(`/api/posts/${post.id}/vote`)
 		.set('Cookie', global.signin(username))
-		.send()
+		.send({
+			voteType: 'up',
+		})
 		.expect(204);
 
 	const savedPost = await Post.findById(post.id).populate('votes');
@@ -130,7 +149,10 @@ it('updates the vote to up if the user has voted down', async () => {
 it('returns 404 if the post does not exist', async () => {
 	const id = mongoose.Schema.Types.ObjectId;
 
-	await request(app).post(`/api/posts/${id}/up`).expect(404);
+	await request(app)
+		.post(`/api/posts/${id}/vote`)
+		.send({ voteType: 'up' })
+		.expect(404);
 });
 
 it('emits a vote updated event if the user voted', async () => {
@@ -147,15 +169,19 @@ it('emits a vote updated event if the user voted', async () => {
 		.expect(201);
 
 	await request(app)
-		.post(`/api/posts/${post1.id}/up`)
+		.post(`/api/posts/${post1.id}/vote`)
 		.set('Cookie', global.signin(user2))
-		.send()
+		.send({
+			voteType: 'up',
+		})
 		.expect(201);
 
 	await request(app)
-		.post(`/api/posts/${post1.id}/up`)
+		.post(`/api/posts/${post1.id}/vote`)
 		.set('Cookie', global.signin(user1))
-		.send()
+		.send({
+			voteType: 'up',
+		})
 		.expect(201);
 
 	const { body: post2 } = await request(app)
@@ -168,15 +194,19 @@ it('emits a vote updated event if the user voted', async () => {
 		.expect(201);
 
 	await request(app)
-		.post(`/api/posts/${post2.id}/up`)
+		.post(`/api/posts/${post2.id}/vote`)
 		.set('Cookie', global.signin(user1))
-		.send()
+		.send({
+			voteType: 'up',
+		})
 		.expect(201);
 
 	await request(app)
-		.post(`/api/posts/${post2.id}/up`)
+		.post(`/api/posts/${post2.id}/vote`)
 		.set('Cookie', global.signin(user2))
-		.send()
+		.send({
+			voteType: 'up',
+		})
 		.expect(201);
 
 	const firstPost = await Post.findById(post1.id);

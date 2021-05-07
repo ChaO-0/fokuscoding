@@ -22,9 +22,11 @@ it('creates downvote if the user has not voted the comment', async () => {
 		.expect(201);
 
 	await request(app)
-		.post(`/api/posts/comment/${comment.id}/down`)
+		.post(`/api/posts/comment/${comment.id}/vote`)
 		.set('Cookie', global.signin('duar'))
-		.send()
+		.send({
+			voteType: 'down',
+		})
 		.expect(201);
 
 	const upvotedComment = await Comment.findById(comment.id);
@@ -51,15 +53,19 @@ it('deletes the downvote if the user voted down second time', async () => {
 		.expect(201);
 
 	await request(app)
-		.post(`/api/posts/comment/${comment.id}/down`)
+		.post(`/api/posts/comment/${comment.id}/vote`)
 		.set('Cookie', global.signin(username))
-		.send()
+		.send({
+			voteType: 'down',
+		})
 		.expect(201);
 
 	await request(app)
-		.post(`/api/posts/comment/${comment.id}/down`)
+		.post(`/api/posts/comment/${comment.id}/vote`)
 		.set('Cookie', global.signin(username))
-		.send()
+		.send({
+			voteType: 'down',
+		})
 		.expect(204);
 
 	const savedComment = await Comment.findById(comment.id);
@@ -86,8 +92,10 @@ it('returns 401 if the user is not signed in', async () => {
 		.expect(201);
 
 	await request(app)
-		.post(`/api/posts/comment/${comment.id}/down`)
-		.send()
+		.post(`/api/posts/comment/${comment.id}/vote`)
+		.send({
+			voteType: 'down',
+		})
 		.expect(401);
 });
 
@@ -112,15 +120,19 @@ it('updates the vote to down if the user has voted up', async () => {
 		.expect(201);
 
 	await request(app)
-		.post(`/api/posts/comment/${comment.id}/up`)
+		.post(`/api/posts/comment/${comment.id}/vote`)
 		.set('Cookie', global.signin(username))
-		.send()
+		.send({
+			voteType: 'up',
+		})
 		.expect(201);
 
 	await request(app)
-		.post(`/api/posts/comment/${comment.id}/down`)
+		.post(`/api/posts/comment/${comment.id}/vote`)
 		.set('Cookie', global.signin(username))
-		.send()
+		.send({
+			voteType: 'down',
+		})
 		.expect(204);
 
 	const savedComment = await Comment.findById(comment.id).populate('votes');
