@@ -26,29 +26,11 @@ router.delete(
 			throw new NotFoundError();
 		}
 
-		const { status, is_active } = tag;
+		const { status } = tag;
 
 		if (status === TagStatus.Awaiting) {
 			tag.set({
 				status: TagStatus.Rejected,
-			});
-			await tag.save();
-		}
-
-		if (status === TagStatus.Rejected) {
-			tag.remove();
-		}
-
-		if (status === TagStatus.Accepted && is_active === true) {
-			tag.set({
-				is_active: false,
-			});
-			await tag.save();
-		}
-
-		if (status === TagStatus.Accepted && is_active === false) {
-			tag.set({
-				is_active: true,
 			});
 			await tag.save();
 		}
