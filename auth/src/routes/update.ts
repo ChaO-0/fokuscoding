@@ -48,7 +48,7 @@ router.put(
 
 		await user.save();
 
-		res.send(user);
+		res.status(204).send(user);
 	}
 );
 

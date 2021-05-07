@@ -30,7 +30,7 @@ router.post('/api/users/:user_id/upgrade', requireAuth, async (req, res) => {
 		await user.save();
 	}
 
-	res.send(user);
+	res.status(204).send(user);
 });
 
 export { router as upgradeRouter };
