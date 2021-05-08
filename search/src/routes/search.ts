@@ -9,7 +9,7 @@ const router = express.Router();
 router.post('/api/search', async (req: Request, res: Response) => {
 	const { query, tags } = req.body;
 
-	let search;
+	let search: [] = [];
 
 	// if tags and query post parameter is not empty
 	if (tags && query) {
