@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import TextInput from './TextInput';
 import { Form, Formik, ErrorMessage, useField } from 'formik';
 import {
@@ -5,9 +6,9 @@ import {
 	FormControl,
 	InputLabel,
 	Box,
-	Button,
 	FormHelperText,
 	TextField,
+	CircularProgress,
 } from '@material-ui/core';
 import { withStyles } from '@material-ui/core/styles';
 import * as Yup from 'yup';
@@ -15,7 +16,10 @@ import dynamic from 'next/dynamic';
 import { Autocomplete } from '@material-ui/lab';
 import useRequest from '../hooks/use-request';
 import { useRouter } from 'next/router';
-
+import Toast from './Toast';
+import { open } from '../redux/ducks/openload';
+import { useDispatch } from 'react-redux';
+import MyButton from './MyButton';
 const SimpleMDE = dynamic(() => import('./SimpleMDE'), { ssr: false });
 
 const CustomAutocomplete = withStyles({
@@ -77,6 +81,9 @@ const SimpleMdeFormik = ({ onChange, onBlur, ...props }) => {
 };
 
 const PostForm = ({ tags: tagsList, postValue, editForm }) => {
+	const dispatch = useDispatch();
+	const [loading, setLoading] = useState(false);
+
 	const validationSchema = Yup.object({
 		title: Yup.string('Enter your Title').required('Title is required'),
 		tags: Yup.array().min(1, 'Masukkan setidaknya 1 Tag!'),
@@ -88,11 +95,23 @@ const PostForm = ({ tags: tagsList, postValue, editForm }) => {
 	const { doRequest, errors } = useRequest({
 		url: editForm ? `/api/posts/${postValue.id}` : '/api/posts',
 		method: editForm ? 'put' : 'post',
-		onSuccess: () => router.push('/post/mypost'),
+		onSuccess: () =>
+			setTimeout(async () => {
+				await router.push('/post/mypost');
+				dispatch(open(false));
+				setLoading(false);
+			}, 1000),
 	});
 
 	return (
 		<>
+			{errors ? (
+				errors
+			) : (
+				<Toast severity="success">
+					Diskusi berhasil {editForm ? 'ter-update' : 'dibuat'}, redirecting...
+				</Toast>
+			)}
 			<Formik
 				validationSchema={validationSchema}
 				initialValues={{
@@ -105,6 +124,8 @@ const PostForm = ({ tags: tagsList, postValue, editForm }) => {
 					values = { ...values, tags: tagIds };
 					console.log(values);
 					doRequest(values);
+					setLoading(true);
+					dispatch(open(true));
 				}}
 			>
 				{({ setFieldValue, setFieldTouched, values }) => (
@@ -161,14 +182,18 @@ const PostForm = ({ tags: tagsList, postValue, editForm }) => {
 									}}
 								/>
 							</FormControl>
-							<Button
+							{/* <Button
 								variant="contained"
 								color="secondary"
 								style={{ color: 'white' }}
 								type="submit"
 							>
 								Submit
-							</Button>
+							
+							</Button> */}
+							<MyButton>
+								{loading ? <CircularProgress size={25} /> : 'Submit'}
+							</MyButton>
 						</FormGroup>
 					</Form>
 				)}
