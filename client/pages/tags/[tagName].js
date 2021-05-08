@@ -48,7 +48,7 @@ const TagShow = ({ posts, tag }) => {
 							</Box>
 							<Typography>{tag.posts.length} Diskusi</Typography>
 						</Box>
-						<Typography variant="body1" component="div" align="justify">
+						<Typography variant="body2" component="div" align="justify">
 							{tag.description}
 						</Typography>
 					</CardContent>
