@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import axios from 'axios';
 import moment from 'moment';
 import InfiniteScroll from 'react-infinite-scroll-component';
-import { LinearProgress } from '@material-ui/core';
+import { LinearProgress, Typography } from '@material-ui/core';
 
 import Layout from '../../components/Layout';
 import PostList from '../../components/PostList';
@@ -44,29 +44,41 @@ const MyPost = () => {
 	return (
 		<Layout>
 			<>
-				<InfiniteScroll
-					dataLength={nextPosts.length}
-					next={fetchMoreData}
-					hasMore={hasMore}
-					loader={<LinearProgress />}
-				>
-					{nextPosts.map((post) => (
-						<PostList
-							key={post.id}
-							title={post.title}
-							voteCount={
-								post.votes.filter((vote) => vote.type === 'up').length -
-								post.votes.filter((vote) => vote.type === 'down').length
-							}
-							tags={post.tags}
-							createdBy={post.username}
-							time={moment(post.updatedAt).fromNow()}
-							postId={post.id}
-							editButton
-							deleteButton
-						/>
-					))}
-				</InfiniteScroll>
+				{nextPosts.length !== 0 ? (
+					<InfiniteScroll
+						dataLength={nextPosts.length}
+						next={fetchMoreData}
+						hasMore={hasMore}
+						loader={<LinearProgress />}
+					>
+						{nextPosts.map((post) => (
+							<PostList
+								key={post.id}
+								title={post.title}
+								voteCount={
+									post.votes.filter((vote) => vote.type === 'up').length -
+									post.votes.filter((vote) => vote.type === 'down').length
+								}
+								tags={post.tags}
+								createdBy={post.username}
+								time={moment(post.updatedAt).fromNow()}
+								postId={post.id}
+								commentCount={post.comments.length}
+								editButton
+								deleteButton
+							/>
+						))}
+					</InfiniteScroll>
+				) : (
+					<Typography
+						variant="h4"
+						color="secondary"
+						style={{ fontWeight: 'bold' }}
+						gutterBottom
+					>
+						Anda belum membuat diskusi
+					</Typography>
+				)}
 			</>
 		</Layout>
 	);
