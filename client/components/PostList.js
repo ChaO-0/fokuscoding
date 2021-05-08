@@ -69,6 +69,7 @@ const PostList = ({
 	deleteButton,
 	children,
 	hasSolution,
+	commentCount,
 }) => {
 	const classes = useStyles();
 
@@ -122,6 +123,15 @@ const PostList = ({
 							>
 								<Box display="flex" alignItems="center">
 									<Typography variant="caption">{time}</Typography>
+									<Typography
+										variant="caption"
+										style={{ marginLeft: '5px', marginRight: '5px' }}
+									>
+										•
+									</Typography>
+									<Typography variant="caption">
+										{commentCount} Komentar
+									</Typography>
 								</Box>
 								<Box>
 									{tags.map((tag) => (

@@ -46,6 +46,7 @@ const Home = ({ posts }) => {
 							createdBy={post.username}
 							time={moment(post.createdAt).fromNow()}
 							postId={post.id}
+							commentCount={post.comments.length}
 						/>
 					))}
 				</InfiniteScroll>

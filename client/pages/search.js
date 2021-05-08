@@ -47,6 +47,7 @@ const Search = ({ query, tags }) => {
 						createdBy={post.username}
 						time={moment(post.updatedAt).fromNow()}
 						postId={post.id}
+						commentCount={post.commentCount}
 					/>
 				))}
 			</>

@@ -135,6 +135,7 @@ const Index = ({ posts }) => {
 										tags={post.tags}
 										createdBy={post.username}
 										time={moment(post.createdAt).fromNow()}
+										commentCount={post.comments.length}
 									/>
 								</Box>
 							))}
@@ -169,7 +170,7 @@ export const getServerSideProps = async ({ req }) => {
 		}
 	);
 
-	console.log(dataPost);
+	// console.log(dataPost);
 
 	return {
 		props: {
