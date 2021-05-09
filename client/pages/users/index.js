@@ -106,9 +106,21 @@ const ShowUsers = ({ users }) => {
 };
 
 export const getServerSideProps = async ({ req }) => {
-	const { data } = await axios.get(`${process.env.INGRESS_URI}/api/users`, {
-		headers: req.headers,
-	});
+	const getUsers = async () => {
+		try {
+			const { data } = await axios.get(`${process.env.INGRESS_URI}/api/users`, {
+				headers: req.headers,
+			});
+			return data;
+		} catch {
+			return [];
+		}
+	};
+	// const { data } = await axios.get(`${process.env.INGRESS_URI}/api/users`, {
+	// 	headers: req.headers,
+	// });
+
+	const data = await getUsers();
 
 	return {
 		props: {

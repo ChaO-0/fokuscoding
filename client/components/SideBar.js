@@ -171,10 +171,19 @@ const SideBar = () => {
 				]);
 			}
 
-			const getTags = async () => await axios.get('/api/tags');
-			const { data } = await getTags();
-			setTagList(data);
-			console.log(data);
+			const getTags = async () => {
+				try {
+					const { data } = await axios.get('/api/tags');
+					return data;
+				} catch {
+					return [];
+				}
+			};
+
+			// const getTags = async () => await axios.get('/api/tags');
+			// const { data } = await getTags();
+			setTagList(await getTags());
+			// console.log(data);
 		} catch {
 			router.push('/');
 		}

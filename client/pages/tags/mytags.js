@@ -45,12 +45,27 @@ const myTags = ({ tags }) => {
 	);
 };
 export const getServerSideProps = async ({ req }) => {
-	const { data } = await axios.get(
-		`${process.env.INGRESS_URI}/api/tags/userTag`,
-		{
-			headers: req.headers,
+	const getTags = async () => {
+		try {
+			const { data } = await axios.get(
+				`${process.env.INGRESS_URI}/api/tags/userTag`,
+				{
+					headers: req.headers,
+				}
+			);
+			return data;
+		} catch {
+			return [];
 		}
-	);
+	};
+	// const { data } = await axios.get(
+	// 	`${process.env.INGRESS_URI}/api/tags/userTag`,
+	// 	{
+	// 		headers: req.headers,
+	// 	}
+	// );
+
+	const data = await getTags();
 
 	return {
 		props: {

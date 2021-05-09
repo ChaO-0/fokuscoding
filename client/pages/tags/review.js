@@ -169,12 +169,21 @@ const review = ({ tags }) => {
 };
 
 export const getServerSideProps = async ({ req }) => {
-	const { data } = await axios.get(
-		`${process.env.INGRESS_URI}/api/tags/review`,
-		{
-			headers: req.headers,
+	const getTags = async () => {
+		try {
+			const { data } = await axios.get(
+				`${process.env.INGRESS_URI}/api/tags/review`,
+				{
+					headers: req.headers,
+				}
+			);
+			return data;
+		} catch {
+			return [];
 		}
-	);
+	};
+
+	const data = await getTags();
 
 	console.log(data);
 
