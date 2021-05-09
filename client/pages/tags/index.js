@@ -33,16 +33,29 @@ const tags = ({ tags }) => {
 								<Typography>{tag.posts.length} Diskusi</Typography>
 							</Box>
 						</TagCard>
-					))}
+					)) || []}
 				</Grid>
 			</>
 		</Layout>
 	);
 };
 export const getServerSideProps = async ({ req }) => {
-	const { data } = await axios.get(`${process.env.INGRESS_URI}/api/tags`, {
-		headers: req.headers,
-	});
+	// const { data } = await axios.get(`${process.env.INGRESS_URI}/api/tags`, {
+	// 	headers: req.headers,
+	// });
+
+	const getTags = async () => {
+		try {
+			const { data } = await axios.get(`${process.env.INGRESS_URI}/api/tags`, {
+				headers: req.headers,
+			});
+			return data;
+		} catch {
+			return [];
+		}
+	};
+
+	const data = await getTags();
 
 	return {
 		props: {

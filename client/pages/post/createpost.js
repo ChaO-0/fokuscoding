@@ -11,9 +11,23 @@ const CreatePost = ({ tags }) => {
 };
 
 export const getServerSideProps = async ({ req }) => {
-	const { data } = await axios.get(`${process.env.INGRESS_URI}/api/tags`, {
-		headers: req.headers,
-	});
+	const getPosts = async () => {
+		try {
+			const { data } = await axios.get(`${process.env.INGRESS_URI}/api/tags`, {
+				headers: req.headers,
+			});
+
+			return data;
+		} catch {
+			return [];
+		}
+	};
+
+	// const { data } = await axios.get(`${process.env.INGRESS_URI}/api/tags`, {
+	// 	headers: req.headers,
+	// });
+
+	const data = await getPosts();
 
 	data.forEach((elm) => {
 		delete elm.description;
