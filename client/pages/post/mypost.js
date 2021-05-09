@@ -29,15 +29,28 @@ const MyPost = () => {
 
 	useEffect(async () => {
 		const username = JSON.parse(localStorage.getItem('currentUser')).username;
-		const { data } = await axios.get(
-			`/api/posts?offset=${offset}&limit=10&username=${username}`
-		);
+		const getPosts = async () => {
+			try {
+				const { data } = await axios.get(
+					`/api/posts?offset=${offset}&limit=10&username=${username}`
+				);
+				return data;
+			} catch {
+				return [];
+			}
+		};
 
-		if (data.docs.length === 0) {
+		const data = await getPosts();
+
+		// const { data } = await axios.get(
+		// 	`/api/posts?offset=${offset}&limit=10&username=${username}`
+		// );
+
+		if (data.docs?.length === 0) {
 			setHasMore(false);
 		}
 
-		setNextPosts(data.docs);
+		setNextPosts(data.docs || []);
 		setOffset((prev) => prev + 10);
 	}, []);
 

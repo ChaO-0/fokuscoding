@@ -7,7 +7,7 @@ import Layout from '../components/Layout';
 import { LinearProgress } from '@material-ui/core';
 
 const Home = ({ posts }) => {
-	const [nextPosts, setNextPosts] = useState(posts.docs);
+	const [nextPosts, setNextPosts] = useState(posts?.docs || []);
 	const [offset, setOffset] = useState(10);
 	const [hasMore, setHasMore] = useState(true);
 
@@ -56,12 +56,21 @@ const Home = ({ posts }) => {
 };
 
 export const getServerSideProps = async ({ req }) => {
-	const { data: posts } = await axios.get(
-		`${process.env.INGRESS_URI}/api/posts?offset=0&limit=10`,
-		{
-			headers: req.headers,
+	const getPosts = async () => {
+		try {
+			const { data } = await axios.get(
+				`${process.env.INGRESS_URI}/api/posts?offset=0&limit=10`,
+				{
+					headers: req.headers,
+				}
+			);
+			return data;
+		} catch {
+			return [];
 		}
-	);
+	};
+
+	const posts = await getPosts();
 
 	return {
 		props: {

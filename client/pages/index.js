@@ -48,7 +48,7 @@ const theme = createMuiTheme({
 
 const Index = ({ posts }) => {
 	const classes = useStyles();
-	const [nextPosts, setNextPosts] = useState(posts.docs);
+	const [nextPosts, setNextPosts] = useState(posts.docs || []);
 	const [offset, setOffset] = useState(5);
 	const [hasMore, setHasMore] = useState(true);
 
@@ -163,18 +163,34 @@ export const getServerSideProps = async ({ req }) => {
 			},
 		};
 	}
-	const { data: dataPost } = await axios.get(
-		`${process.env.INGRESS_URI}/api/posts?offset=0&limit=5`,
-		{
-			headers: req.headers,
+
+	const getPosts = async () => {
+		try {
+			const { data } = await axios.get(
+				`${process.env.INGRESS_URI}/api/posts?offset=0&limit=10`,
+				{
+					headers: req.headers,
+				}
+			);
+			return data;
+		} catch {
+			return [];
 		}
-	);
+	};
+	// const { data: dataPost } = await axios.get(
+	// 	`${process.env.INGRESS_URI}/api/posts?offset=0&limit=5`,
+	// 	{
+	// 		headers: req.headers,
+	// 	}
+	// );
+
+	const posts = await getPosts();
 
 	// console.log(dataPost);
 
 	return {
 		props: {
-			posts: dataPost,
+			posts,
 		},
 	};
 };
