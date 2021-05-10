@@ -17,8 +17,11 @@ const TagShow = ({ posts, tag }) => {
 	const [offset, setOffset] = useState(10);
 	const [hasMore, setHasMore] = useState(true);
 
+	// console.log(tag);
 	const fetchMoreData = async () => {
-		const { data } = await axios.get(`/api/posts?offset=${offset}&limit=10`);
+		const { data } = await axios.get(
+			`/api/posts?offset=${offset}&limit=10&tags=${tag.name}`
+		);
 		if (data.docs.length === 0) {
 			setHasMore(false);
 		}

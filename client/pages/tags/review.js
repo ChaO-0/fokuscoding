@@ -154,6 +154,7 @@ const review = ({ tags }) => {
 							tagId={tag.id}
 							tagName={tag.name}
 							tagDesc={tag.description}
+							hasLink={tag.status === 'accepted'}
 						>
 							<TagButton
 								tagId={tag.id}
