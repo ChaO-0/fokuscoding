@@ -138,7 +138,11 @@ const CommentList = ({
 
 	return (
 		<NoSsr>
-			<Toast severity="success">{`Berhasil ${typeHandler} Comment, Reloading...`}</Toast>
+			{typeHandler && (
+				<Toast severity="success">
+					{`Berhasil ${typeHandler} Comment, Reloading...`}
+				</Toast>
+			)}
 
 			<Card
 				style={{
