@@ -173,7 +173,7 @@ const SideBar = () => {
 
 			const getTags = async () => {
 				try {
-					const { data } = await axios.get('/api/tags');
+					const { data } = await axios.get('/api/tags?search=true');
 					return data;
 				} catch {
 					return [];
