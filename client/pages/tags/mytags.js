@@ -31,6 +31,8 @@ const myTags = ({ tags }) => {
 									style={
 										tag.status === 'rejected'
 											? { color: '#F6506C' }
+											: tag.status === 'awaiting'
+											? { color: '#4C72C9' }
 											: { color: '#4CC9B0' }
 									}
 								>
