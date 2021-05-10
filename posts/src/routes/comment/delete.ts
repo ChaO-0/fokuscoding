@@ -43,6 +43,16 @@ router.delete(
 			throw new NotFoundError();
 		}
 
+		if (
+			post.has_solution &&
+			req.params.comment_id === post.solution.toString()
+		) {
+			post.set({
+				solution: null,
+				has_solution: false,
+			});
+		}
+
 		// remove the comment if we pass through the checks
 		comment.remove();
 
