@@ -8,6 +8,7 @@ import {
 	Chip,
 	ThemeProvider,
 	createMuiTheme,
+	NoSsr,
 } from '@material-ui/core';
 import NextLink from 'next/link';
 import { useRouter } from 'next/router';
@@ -122,7 +123,9 @@ const PostList = ({
 								alignItems="center"
 							>
 								<Box display="flex" alignItems="center">
-									<Typography variant="caption">{time}</Typography>
+									<NoSsr>
+										<Typography variant="caption">{time}</Typography>
+									</NoSsr>
 									<Typography
 										variant="caption"
 										style={{ marginLeft: '5px', marginRight: '5px' }}
@@ -135,12 +138,8 @@ const PostList = ({
 								</Box>
 								<Box>
 									{tags.map((tag) => (
-										<NextLink href={`/tags/${tag.name}`}>
-											<Chip
-												label={tag.name}
-												key={tag.id}
-												className={classes.chip}
-											/>
+										<NextLink href={`/tags/${tag.name}`} key={tag.id}>
+											<Chip label={tag.name} className={classes.chip} />
 										</NextLink>
 									))}
 								</Box>
