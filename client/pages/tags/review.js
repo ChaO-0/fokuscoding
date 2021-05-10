@@ -186,8 +186,6 @@ export const getServerSideProps = async ({ req }) => {
 
 	const data = await getTags();
 
-	console.log(data);
-
 	return {
 		props: {
 			tags: data,
