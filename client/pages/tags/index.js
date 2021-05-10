@@ -18,6 +18,7 @@ const tags = ({ tags }) => {
 							tagId={tag.id}
 							tagName={tag.name}
 							tagDesc={tag.description}
+							hasLink={tag.status === 'accepted'}
 						>
 							<Box display="flex" justifyContent="flex-end">
 								<Box
