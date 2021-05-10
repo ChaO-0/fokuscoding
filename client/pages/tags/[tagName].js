@@ -15,13 +15,13 @@ import moment from 'moment';
 const TagShow = ({ posts, tag }) => {
 	const [nextPosts, setNextPosts] = useState(posts.docs);
 	const [offset, setOffset] = useState(10);
-	const [hasMore, setHasMore] = useState(true);
+	const [hasMore, setHasMore] = useState(posts.docs.length >= 10);
 
-	// console.log(tag);
 	const fetchMoreData = async () => {
 		const { data } = await axios.get(
 			`/api/posts?offset=${offset}&limit=10&tags=${tag.name}`
 		);
+
 		if (data.docs.length === 0) {
 			setHasMore(false);
 		}
@@ -90,8 +90,6 @@ export const getServerSideProps = async ({ req, query }) => {
 			headers: req.headers,
 		}
 	);
-
-	console.log(tagData);
 
 	return {
 		props: {
