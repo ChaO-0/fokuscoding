@@ -136,6 +136,7 @@ const Index = ({ posts }) => {
 										createdBy={post.username}
 										time={moment(post.createdAt).fromNow()}
 										commentCount={post.comments.length}
+										hasSolution={post.has_solution}
 									/>
 								</Box>
 							))}

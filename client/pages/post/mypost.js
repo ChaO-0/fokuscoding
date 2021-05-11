@@ -77,6 +77,7 @@ const MyPost = () => {
 								time={moment(post.updatedAt).fromNow()}
 								postId={post.id}
 								commentCount={post.comments.length}
+								hasSolution={post.has_solution}
 								editButton
 								deleteButton
 							/>
