@@ -1,5 +1,11 @@
 name: tests-search
-on: [push, pull_request]
+on:
+  push:
+    paths:
+      - 'search/**'
+  pull_request:
+    paths:
+      - 'search/**'
 
 jobs:
   build:

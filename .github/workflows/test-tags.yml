@@ -1,5 +1,11 @@
 name: tests-tags
-on: [push, pull_request]
+on:
+  push:
+    paths:
+      - 'tags/**'
+  pull_request:
+    paths:
+      - 'tags/**'
 
 jobs:
   build:
