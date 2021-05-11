@@ -7,17 +7,21 @@ import moment from 'moment';
 
 const Search = ({ query, tags }) => {
 	const [posts, setPosts] = useState([]);
+	const [loading, setLoading] = useState(false);
 
 	useEffect(() => {
 		const fetchSearch = async () => {
 			try {
+				setLoading(true);
 				const { data } = await axios.post('/api/search', {
 					query,
 					tags: tags ? tags.split(',') : null,
 				});
 				setPosts(data);
+				setLoading(false);
 			} catch {
 				setPosts([]);
+				setLoading(false);
 			}
 		};
 		fetchSearch();
@@ -32,24 +36,27 @@ const Search = ({ query, tags }) => {
 					style={{ fontWeight: 'bold' }}
 					gutterBottom
 				>
-					Pencarian - "{query}" {posts.length === 0 && ' tidak ditemukan'}
+					Pencarian - "{query}"{' '}
+					{!loading && posts.length === 0 && ' tidak ditemukan'}
 				</Typography>
 				{tags && <Typography gutterBottom>Must include: {tags}</Typography>}
 				<Typography variant="subtitle2" color="textSecondary" gutterBottom>
 					Menemukan {posts.length} hasil
 				</Typography>
-				{posts.map((post) => (
-					<PostList
-						key={post.id}
-						title={post.title}
-						voteCount={post.voteCount}
-						tags={post.tags}
-						createdBy={post.username}
-						time={moment(post.updatedAt).fromNow()}
-						postId={post.id}
-						commentCount={post.commentCount}
-					/>
-				))}
+				{loading
+					? 'loading'
+					: posts.map((post) => (
+							<PostList
+								key={post.id}
+								title={post.title}
+								voteCount={post.voteCount}
+								tags={post.tags}
+								createdBy={post.username}
+								time={moment(post.updatedAt).fromNow()}
+								postId={post.id}
+								commentCount={post.commentCount}
+							/>
+					  ))}
 			</>
 		</Layout>
 	);
