@@ -140,16 +140,17 @@ const PostDetail = ({ post, content }) => {
 							<Box flexDirection="row">
 								<Box>
 									{post.tags.map((tag) => (
-										<Chip
-											label={tag.name}
-											key={tag.id}
-											style={{
-												backgroundColor: '#4CC9B040',
-												color: '#4CC9B0',
-												borderRadius: 0,
-												margin: '0 3px',
-											}}
-										/>
+										<NextLink href={`/tags/${tag.name}`} key={tag.id}>
+											<Chip
+												label={tag.name}
+												style={{
+													backgroundColor: '#4CC9B040',
+													color: '#4CC9B0',
+													borderRadius: 0,
+													margin: '0 3px',
+												}}
+											/>
+										</NextLink>
 									))}
 								</Box>
 								<Box display="flex" justifyContent="flex-end">
