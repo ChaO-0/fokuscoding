@@ -34,23 +34,18 @@ const MyPost = () => {
 				const { data } = await axios.get(
 					`/api/posts?offset=${offset}&limit=10&username=${username}`
 				);
+
+				if (data.docs?.length === 0) {
+					setHasMore(false);
+				}
+
+				setNextPosts(data.docs);
 				return data;
 			} catch {
-				return [];
+				setNextPosts([]);
 			}
 		};
-
-		const data = await getPosts();
-
-		// const { data } = await axios.get(
-		// 	`/api/posts?offset=${offset}&limit=10&username=${username}`
-		// );
-
-		if (data.docs?.length === 0) {
-			setHasMore(false);
-		}
-
-		setNextPosts(data.docs || []);
+		getPosts();
 		setOffset((prev) => prev + 10);
 	}, []);
 

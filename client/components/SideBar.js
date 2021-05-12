@@ -149,6 +149,15 @@ const SideBar = () => {
 		localStorage.removeItem('currentUser');
 	};
 	useEffect(() => {
+		const getTags = async () => {
+			try {
+				const { data } = await axios.get('/api/tags?search=true');
+				setTagList(data);
+			} catch {
+				setTagList([]);
+			}
+		};
+
 		try {
 			setCurrentUser(JSON.parse(localStorage.getItem('currentUser')));
 
@@ -170,20 +179,7 @@ const SideBar = () => {
 					},
 				]);
 			}
-
-			const getTags = async () => {
-				try {
-					const { data } = await axios.get('/api/tags?search=true');
-					return data;
-				} catch {
-					return [];
-				}
-			};
-
-			// const getTags = async () => await axios.get('/api/tags');
-			// const { data } = await getTags();
-			setTagList(await getTags());
-			// console.log(data);
+			getTags();
 		} catch {
 			router.push('/');
 		}
