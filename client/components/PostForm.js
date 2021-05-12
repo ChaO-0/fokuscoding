@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import TextInput from './TextInput';
 import { Form, Formik, ErrorMessage, useField } from 'formik';
 import {
@@ -103,6 +103,10 @@ const PostForm = ({ tags: tagsList, postValue, editForm }) => {
 			}, 1000),
 	});
 
+	useEffect(() => {
+		return () => setOpen(false);
+	}, []);
+
 	return (
 		<>
 			{errors ? (
@@ -122,7 +126,6 @@ const PostForm = ({ tags: tagsList, postValue, editForm }) => {
 				onSubmit={(values) => {
 					const tagIds = values.tags.map((tag) => tag.id);
 					values = { ...values, tags: tagIds };
-					console.log(values);
 					doRequest(values);
 					setLoading(true);
 					dispatch(open(true));

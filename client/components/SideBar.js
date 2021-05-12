@@ -246,7 +246,6 @@ const SideBar = () => {
 					<Formik
 						initialValues={{ query: '' }}
 						onSubmit={(values) => {
-							console.log(values);
 							router.push(`/search?query=${values.query}`);
 						}}
 					>
