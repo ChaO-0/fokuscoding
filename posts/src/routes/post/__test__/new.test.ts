@@ -72,7 +72,6 @@ it('have tags if the user add post with tags', async () => {
 	const cookie = await global.signin('prama');
 	const id1 = mongoose.Types.ObjectId().toHexString();
 	const id2 = mongoose.Types.ObjectId().toHexString();
-	// console.log(id);
 
 	const tag1 = Tag.build({
 		id: id1,
