@@ -178,16 +178,8 @@ export const getServerSideProps = async ({ req }) => {
 			return [];
 		}
 	};
-	// const { data: dataPost } = await axios.get(
-	// 	`${process.env.INGRESS_URI}/api/posts?offset=0&limit=5`,
-	// 	{
-	// 		headers: req.headers,
-	// 	}
-	// );
 
 	const posts = await getPosts();
-
-	// console.log(dataPost);
 
 	return {
 		props: {

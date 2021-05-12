@@ -61,12 +61,6 @@ export const getServerSideProps = async ({ req }) => {
 			return [];
 		}
 	};
-	// const { data } = await axios.get(
-	// 	`${process.env.INGRESS_URI}/api/tags/userTag`,
-	// 	{
-	// 		headers: req.headers,
-	// 	}
-	// );
 
 	const data = await getTags();
 

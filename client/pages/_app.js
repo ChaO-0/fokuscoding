@@ -52,28 +52,4 @@ MyApp.propTypes = {
 	pageProps: PropTypes.object.isRequired,
 };
 
-// MyApp.getInitialProps = async (appContext) => {
-// 	const client = buildClient(appContext.ctx);
-// 	// const { data } = await client.get('/api/users/currentuser');
-
-// 	if (typeof window === 'undefined') {
-// 		await axios.get(`${process.env.INGRESS_URI}/api/users/currentuser`, {
-// 			headers: appContext.ctx.req.headers,
-// 		});
-// 		console.log('asd');
-// 		// console.log(data);
-// 	}
-// 	// console.log(data);
-// 	let pageProps = {};
-// 	if (appContext.Component.getInitialProps) {
-// 		pageProps = await appContext.Component.getInitialProps(
-// 			appContext.ctx,
-// 			client
-// 			// data.currentUser
-// 		);
-// 	}
-
-// 	return { pageProps };
-// };
-
 export default wrapper.withRedux(MyApp);

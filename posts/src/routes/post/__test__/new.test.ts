@@ -107,7 +107,6 @@ it('emits a post created event if the post is created', async () => {
 	const cookie = await global.signin('prama');
 	const id1 = mongoose.Types.ObjectId().toHexString();
 	const id2 = mongoose.Types.ObjectId().toHexString();
-	// console.log(id);
 
 	const tag1 = Tag.build({
 		id: id1,

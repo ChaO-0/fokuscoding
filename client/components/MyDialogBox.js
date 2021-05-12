@@ -37,7 +37,6 @@ const MyDialogBox = ({
 	};
 	const handleRequest = async () => {
 		await request();
-		// console.log(text);
 		setOpen(false);
 	};
 

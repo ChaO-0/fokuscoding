@@ -21,7 +21,6 @@ const useRequest = ({ url, method, onSuccess }) => {
 
 			return response.data;
 		} catch (err) {
-			// console.log(err.response.data);
 			dispatch(open(true));
 			setErrors(
 				<Toast severity="error">
