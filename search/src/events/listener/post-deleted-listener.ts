@@ -1,9 +1,4 @@
-import {
-	Listener,
-	Subjects,
-	PostUpdatedEvent,
-	PostDeletedEvent,
-} from '@heapoverflow/common';
+import { Listener, Subjects, PostDeletedEvent } from '@heapoverflow/common';
 import { Message } from 'node-nats-streaming';
 import { Post } from '../../models/Post';
 import { queueGroupName } from './queue-group-name';

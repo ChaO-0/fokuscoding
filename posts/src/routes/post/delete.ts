@@ -16,7 +16,7 @@ router.delete(
 	async (req: Request, res: Response) => {
 		const { post_id } = req.params;
 		// find post by Id
-		const post: PostDoc = await Post.findById(post_id);
+		const post: PostDoc = await Post.findById(post_id).populate('tags');
 
 		// make sure if the post is exist
 		if (!post) {
@@ -31,13 +31,17 @@ router.delete(
 			throw new NotAuthorizedError();
 		}
 
-		// remove the post
-		post.remove();
+		console.log(post);
 
 		let tagList: string[] | undefined = post.tags?.map((tag) => tag.id);
 		if (!tagList) {
 			tagList = [];
 		}
+
+		console.log(tagList);
+
+		// remove the post
+		post.remove();
 
 		await new PostDeletedPublisher(natsWrapper.client).publish({
 			id: post.id,
