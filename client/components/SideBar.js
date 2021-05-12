@@ -16,7 +16,6 @@ import {
 	DialogTitle,
 	withStyles,
 	TextField,
-	FormControl,
 	InputLabel,
 } from '@material-ui/core';
 
@@ -136,7 +135,7 @@ const CustomAutocomplete = withStyles({
 
 const SideBar = () => {
 	const classes = useStyles();
-	const { doRequest, errors } = useRequest({
+	const { doRequest } = useRequest({
 		url: '/api/users/signout',
 		method: 'post',
 		onSuccess: () => Router.push('/'),

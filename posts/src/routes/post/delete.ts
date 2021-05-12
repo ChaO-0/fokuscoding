@@ -31,14 +31,10 @@ router.delete(
 			throw new NotAuthorizedError();
 		}
 
-		console.log(post);
-
 		let tagList: string[] | undefined = post.tags?.map((tag) => tag.id);
 		if (!tagList) {
 			tagList = [];
 		}
-
-		console.log(tagList);
 
 		// remove the post
 		post.remove();

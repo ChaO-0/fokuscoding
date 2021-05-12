@@ -76,7 +76,7 @@ const PostList = ({
 
 	const router = useRouter();
 
-	const { doRequest, errors } = useRequest({
+	const { doRequest } = useRequest({
 		url: `/api/posts/${postId}`,
 		method: 'delete',
 		onSuccess: () => router.reload(),
@@ -176,7 +176,7 @@ const PostList = ({
 											dialogTitle="Delete Post"
 											dialogText="Kamu yakin ingin menghapus postingan ini?"
 											acceptText="Delete"
-											request={() => handleDelete(handleDelete)}
+											request={() => handleDelete()}
 										/>
 									)}
 								</Box>

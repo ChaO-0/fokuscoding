@@ -1,7 +1,6 @@
 import { useState } from 'react';
 import Layout from '../../components/Layout';
 import {
-	Button,
 	Box,
 	Typography,
 	Grid,
@@ -73,38 +72,26 @@ const review = ({ tags }) => {
 						Oleh: {userName}
 					</Typography>
 				</Box>
-				{
-					tagStatus === 'awaiting' ? (
-						<>
-							<MyDialogBox
-								buttonText="Accept"
-								buttonColor="#4CC9B0"
-								dialogTitle="Accept Tags"
-								dialogText="Kamu yakin ingin accept tag ini?"
-								acceptText="Accept"
-								request={() => handleAccept(tagId)}
-							/>
-							<MyDialogBox
-								buttonText="Reject"
-								buttonColor="#F6506C"
-								dialogTitle="Reject Tags"
-								dialogText="Kamu yakin ingin reject tag ini?"
-								acceptText="Reject"
-								request={() => handleRejectDelete(tagId)}
-							/>
-						</>
-					) : null
-					// (
-					// 	<>
-					// 		<Button
-					// 			onClick={() => handleRejectDelete(tagId)}
-					// 			style={{ color: '#F6506C' }}
-					// 		>
-					// 			Delete
-					// 		</Button>
-					// 	</>
-					// )
-				}
+				{tagStatus === 'awaiting' ? (
+					<>
+						<MyDialogBox
+							buttonText="Accept"
+							buttonColor="#4CC9B0"
+							dialogTitle="Accept Tags"
+							dialogText="Kamu yakin ingin accept tag ini?"
+							acceptText="Accept"
+							request={() => handleAccept(tagId)}
+						/>
+						<MyDialogBox
+							buttonText="Reject"
+							buttonColor="#F6506C"
+							dialogTitle="Reject Tags"
+							dialogText="Kamu yakin ingin reject tag ini?"
+							acceptText="Reject"
+							request={() => handleRejectDelete(tagId)}
+						/>
+					</>
+				) : null}
 				{tagStatus === 'accepted' && active ? (
 					<MyDialogBox
 						buttonText="Deactivate"

@@ -1,5 +1,4 @@
 import {
-	NotAuthorizedError,
 	NotFoundError,
 	requireAuth,
 	validateRequest,

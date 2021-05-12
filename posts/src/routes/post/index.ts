@@ -1,6 +1,6 @@
 import express, { Request, Response } from 'express';
 import { Post } from '../../models/Post';
-import { Tag, TagDoc } from '../../models/Tag';
+import { Tag } from '../../models/Tag';
 const router = express.Router();
 
 router.get('/api/posts', async (req: Request, res: Response) => {
