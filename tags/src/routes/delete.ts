@@ -1,13 +1,10 @@
 import {
-	BadRequestError,
 	NotAuthorizedError,
 	NotFoundError,
 	requireAuth,
 } from '@heapoverflow/common';
 import express, { Request, Response } from 'express';
 import { Tag, TagDoc } from '../models/Tag';
-import { TagDeletedPublisher } from '../events/publishers/tag-deleted-publisher';
-import { natsWrapper } from '../nats-wrapper';
 import { TagStatus } from '../types/tag-status';
 
 const router = express.Router();

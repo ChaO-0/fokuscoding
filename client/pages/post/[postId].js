@@ -4,14 +4,7 @@ import { useRouter } from 'next/router';
 import dynamic from 'next/dynamic';
 import renderToString from 'next-mdx-remote/render-to-string';
 import hydrate from 'next-mdx-remote/hydrate';
-import {
-	Box,
-	Typography,
-	Button,
-	FormControl,
-	InputLabel,
-	FormHelperText,
-} from '@material-ui/core';
+import { Box, Typography, Button, FormHelperText } from '@material-ui/core';
 import { Form, Formik, useField } from 'formik';
 
 import Layout from '../../components/Layout';

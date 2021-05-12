@@ -1,16 +1,4 @@
-import {
-	Typography,
-	Box,
-	makeStyles,
-	Container,
-	Card,
-	CardContent,
-	FormGroup,
-	FormControl,
-	InputLabel,
-	InputBase,
-	Button,
-} from '@material-ui/core';
+import { Typography, makeStyles, Container } from '@material-ui/core';
 import RegisterForm from '../components/RegisterForm';
 
 const useStyles = makeStyles((theme) => ({

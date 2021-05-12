@@ -13,7 +13,7 @@ import {
 import { Formik, Form } from 'formik';
 import * as yup from 'yup';
 import NextLink from 'next/link';
-import { useRouter, Router } from 'next/router';
+import { useRouter } from 'next/router';
 import useRequest from '../hooks/use-request';
 import { useState } from 'react';
 import TextInput from './TextInput';

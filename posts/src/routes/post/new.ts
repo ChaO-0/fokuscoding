@@ -1,8 +1,4 @@
-import {
-	NotFoundError,
-	requireAuth,
-	validateRequest,
-} from '@heapoverflow/common';
+import { requireAuth, validateRequest } from '@heapoverflow/common';
 import express, { Request, Response } from 'express';
 import { body } from 'express-validator';
 import { Post } from '../../models/Post';

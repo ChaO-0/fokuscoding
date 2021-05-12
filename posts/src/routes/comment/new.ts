@@ -6,7 +6,7 @@ import {
 import express, { Request, Response } from 'express';
 import { body } from 'express-validator';
 import { Post, PostDoc } from '../../models/Post';
-import { Comment, CommentDoc } from '../../models/Comment';
+import { Comment } from '../../models/Comment';
 import { CommentCountUpdatedPublisher } from '../../events/publishers/comment-count-updated-publisher';
 import { natsWrapper } from '../../nats-wrapper';
 

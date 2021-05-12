@@ -1,5 +1,5 @@
 import { NotFoundError } from '@heapoverflow/common';
-import { Request, Response } from 'express';
+import { Request } from 'express';
 import { CommentDoc } from '../models/Comment';
 import { PostDoc } from '../models/Post';
 import { Vote, VoteDoc } from '../models/Vote';
