@@ -148,7 +148,7 @@ const SideBar = () => {
 		await doRequest();
 		localStorage.removeItem('currentUser');
 	};
-	useEffect(async () => {
+	useEffect(() => {
 		try {
 			setCurrentUser(JSON.parse(localStorage.getItem('currentUser')));
 

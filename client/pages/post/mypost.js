@@ -27,7 +27,7 @@ const MyPost = () => {
 		setOffset((prev) => prev + 10);
 	};
 
-	useEffect(async () => {
+	useEffect(() => {
 		const username = JSON.parse(localStorage.getItem('currentUser')).username;
 		const getPosts = async () => {
 			try {
