@@ -1,0 +1,7 @@
+component_depth: 4
+languages:
+  - name: javascript
+  - name: typescript
+    test:
+      include:
+        - .*\.test\.ts
