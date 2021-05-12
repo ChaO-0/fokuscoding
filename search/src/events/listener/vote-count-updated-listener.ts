@@ -1,6 +1,5 @@
 import {
 	Listener,
-	NotFoundError,
 	Subjects,
 	VoteUpdatedCountEvent,
 } from '@heapoverflow/common';
