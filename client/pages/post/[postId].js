@@ -6,12 +6,16 @@ import renderToString from 'next-mdx-remote/render-to-string';
 import hydrate from 'next-mdx-remote/hydrate';
 import { Box, Typography, Button, FormHelperText } from '@material-ui/core';
 import { Form, Formik, useField } from 'formik';
+import { useDispatch } from 'react-redux';
 
 import Layout from '../../components/Layout';
 import PostDetail from '../../components/PostDetail';
 import useRequest from '../../hooks/use-request';
 import CommentList from '../../components/CommentList';
+import Toast from '../../components/Toast';
+
 import * as Yup from 'yup';
+import { open } from '../../redux/ducks/openload';
 
 const SimpleMDE = dynamic(() => import('../../components/SimpleMDE'), {
 	ssr: false,
@@ -20,6 +24,7 @@ const SimpleMDE = dynamic(() => import('../../components/SimpleMDE'), {
 const SimpleMdeFormik = ({ onChange, onBlur, ...props }) => {
 	const [field, meta] = useField(props);
 	const margin = meta.touched && meta.error ? 0 : 2;
+
 	return (
 		<>
 			<Box mb={margin}>
@@ -61,10 +66,19 @@ const PostShow = ({ post, mdxContent, comments }) => {
 	const router = useRouter();
 	const [hasSolution, setHasSolution] = useState(post.has_solution);
 	const { postId } = router.query;
+
+	const dispatch = useDispatch();
+
 	const { doRequest } = useRequest({
 		url: `/api/posts/${postId}`,
 		method: 'post',
-		onSuccess: () => router.reload(),
+		onSuccess: () => {
+			dispatch(open(true));
+
+			setTimeout(() => {
+				router.reload();
+			}, 2000);
+		},
 	});
 
 	const content = hydrate(mdxContent);
@@ -77,6 +91,9 @@ const PostShow = ({ post, mdxContent, comments }) => {
 	return (
 		<Layout currentUser={{ username: 'admin' }}>
 			<>
+				<Toast severity="success">
+					{`Berhasil tambah Comment, Reloading...`}
+				</Toast>
 				<PostDetail post={post} content={content} />
 				<Box mt={3}>
 					<Typography variant="h4" color="secondary">
