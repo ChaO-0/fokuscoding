@@ -11,7 +11,6 @@ router.get(
 	async (req: Request, res: Response) => {
 		const tags = await Tag.findOne({
 			status: TagStatus.Accepted,
-			is_active: true,
 			name: req.params.tagName,
 		});
 

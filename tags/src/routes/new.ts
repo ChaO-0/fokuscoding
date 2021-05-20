@@ -30,6 +30,7 @@ router.post(
 			description: description.toLowerCase(),
 			username,
 			status,
+			is_active: true,
 		});
 
 		await tag.save();

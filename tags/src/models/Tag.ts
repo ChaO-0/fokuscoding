@@ -9,6 +9,7 @@ interface TagAttrs {
 	status: TagStatus;
 	description: string;
 	posts?: string[];
+	is_active?: boolean;
 }
 
 // An interface that describe the properties that a Tag Model has
