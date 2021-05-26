@@ -20,7 +20,6 @@ export class PostUpdatedListener extends Listener<PostUpdatedEvent> {
 
 		post.set({
 			title,
-			body,
 			username,
 			tags,
 			updatedAt,
