@@ -4,7 +4,7 @@ const dbSeeder = async () => {
 	const data = await User.find().exec();
 	if (data.length === 0) {
 		const seed = User.build({
-			email: 'admin@admin.com',
+			email: 'admin@fokuscoding.dev',
 			password: 'admin',
 			username: 'admin',
 		});
@@ -13,7 +13,7 @@ const dbSeeder = async () => {
 		});
 		await seed.save();
 		const seed2 = User.build({
-			email: 'fajar@fajar.com',
+			email: 'fajaralnito@gmail.com',
 			password: 'fajar',
 			username: 'fajar',
 		});
