@@ -93,7 +93,7 @@ const RegisterForm = () => {
 	const dispatch = useDispatch();
 
 	const [loading, setLoading] = useState(false);
-	const { doRequest } = useRequest({
+	const { doRequest, errors } = useRequest({
 		url: '/api/users/signup',
 		method: 'post',
 		onSuccess: () =>
@@ -105,7 +105,11 @@ const RegisterForm = () => {
 
 	return (
 		<Card className={classes.cardMargin}>
-			<Toast severity="success">Register success, redirecting...</Toast>
+			{errors ? (
+				errors
+			) : (
+				<Toast severity="success">Register success, redirecting...</Toast>
+			)}
 			<CardContent>
 				<Typography
 					component="div"
